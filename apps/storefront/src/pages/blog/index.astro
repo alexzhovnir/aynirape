@@ -1,0 +1,62 @@
+---
+export const prerender = true;
+
+import { getCollection } from "astro:content";
+import BlogLayout from "@layouts/BlogLayout.astro";
+
+const slugOf = (id: string) => id.replace(/\/index$/, "");
+
+const posts = (
+  await getCollection(
+    "blog",
+    ({ data }) => data.language === "en" && !data.draft,
+  )
+).sort(
+  (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
+);
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+---
+
+<BlogLayout
+  title="Journal"
+  description="Guides and rituals for rapé, tepi & kuripe, palo santo and Amazonian ceremony."
+  lang="en"
+  canonicalPath="/blog"
+>
+  <h1 class="mb-2 text-3xl font-semibold">Journal</h1>
+  <p class="mb-8 text-neutral-600 dark:text-neutral-400">
+    Preparation, care and meaning behind the sacred tools we offer.
+  </p>
+
+  {posts.length === 0 && (
+    <p class="text-neutral-500">No posts yet. Add one at <a href="/keystatic" class="underline">/keystatic</a>.</p>
+  )}
+
+  <ul class="grid gap-8 sm:grid-cols-2">
+    {posts.map((post) => (
+      <li class="group">
+        <a href={`/blog/${slugOf(post.id)}`} class="block no-underline">
+          {post.data.coverImage && (
+            <img
+              src={post.data.coverImage}
+              alt={post.data.title}
+              class="mb-3 aspect-[3/2] w-full rounded-xl object-cover"
+              loading="lazy"
+            />
+          )}
+          <time class="text-xs uppercase tracking-wide text-neutral-500">
+            {fmtDate(post.data.publishedDate)}
+          </time>
+          <h2 class="mt-1 text-lg font-medium group-hover:underline">{post.data.title}</h2>
+          {post.data.excerpt && (
+            <p class="mt-1 line-clamp-3 text-sm text-neutral-600 dark:text-neutral-400">
+              {post.data.excerpt}
+            </p>
+          )}
+        </a>
+      </li>
+    ))}
+  </ul>
+</BlogLayout>

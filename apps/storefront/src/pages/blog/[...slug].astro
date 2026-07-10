@@ -1,0 +1,70 @@
+---
+export const prerender = true;
+
+import { getCollection, render } from "astro:content";
+import BlogLayout from "@layouts/BlogLayout.astro";
+
+const slugOf = (id: string) => id.replace(/\/index$/, "");
+
+// hreflang path per language variant of the same article.
+const localizedPath = (lang: string, slug: string) =>
+  lang === "en" ? `/blog/${slug}` : `/${lang}/blog/${slug}`;
+
+export async function getStaticPaths() {
+  // getStaticPaths is hoisted and cannot see component-scope consts — define locally.
+  const toSlug = (id: string) => id.replace(/\/index$/, "");
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts
+    .filter((p) => p.data.language === "en")
+    .map((post) => ({ params: { slug: toSlug(post.id) }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// hreflang: siblings that share the same translationKey.
+const alternates = post.data.translationKey
+  ? (await getCollection("blog", ({ data }) => !data.draft))
+      .filter((p) => p.data.translationKey === post.data.translationKey)
+      .map((p) => ({ lang: p.data.language, href: localizedPath(p.data.language, slugOf(p.id)) }))
+  : [{ lang: "en", href: `/blog/${slugOf(post.id)}` }];
+
+const site = Astro.site ?? new URL(Astro.url.origin);
+const url = new URL(`/blog/${slugOf(post.id)}`, site).href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: post.data.title,
+  description: post.data.excerpt,
+  datePublished: post.data.publishedDate.toISOString(),
+  image: post.data.coverImage ? new URL(post.data.coverImage, site).href : undefined,
+  mainEntityOfPage: url,
+  publisher: { "@type": "Organization", name: "AyniRape" },
+};
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+---
+
+<BlogLayout
+  title={post.data.title}
+  description={post.data.excerpt}
+  canonicalPath={`/blog/${slugOf(post.id)}`}
+  image={post.data.coverImage}
+  lang={post.data.language}
+  type="article"
+  publishedTime={post.data.publishedDate.toISOString()}
+  alternates={alternates}
+  jsonLd={jsonLd}
+>
+  <article class="prose prose-neutral mx-auto max-w-none dark:prose-invert">
+    <a href="/blog" class="text-sm text-neutral-500 no-underline hover:underline">← Journal</a>
+    <h1 class="mt-4">{post.data.title}</h1>
+    <p class="text-sm text-neutral-500">{fmtDate(post.data.publishedDate)}</p>
+    {post.data.coverImage && (
+      <img src={post.data.coverImage} alt={post.data.title} class="w-full rounded-xl" />
+    )}
+    <Content />
+  </article>
+</BlogLayout>

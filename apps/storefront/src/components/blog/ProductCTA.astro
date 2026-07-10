@@ -1,0 +1,68 @@
+---
+import { sdk } from "@lib/sdk";
+import { getRegion } from "@lib/data/regions";
+import { getProductPrice } from "@lib/utils/get-product-price";
+
+interface Props {
+  handle: string;
+  label?: string;
+}
+
+const { handle, label } = Astro.props;
+
+// Blog is language-based; commerce is region-based. Resolve a default region so the
+// CTA can deep-link into the store. Middleware still adapts the region per visitor.
+const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "de";
+
+let product: any = null;
+try {
+  const region = await getRegion(DEFAULT_REGION);
+  if (region) {
+    const { products } = await sdk.store.product.list({
+      handle,
+      region_id: region.id,
+      fields: "id,title,thumbnail,handle,*variants.calculated_price",
+      limit: 1,
+    });
+    product = products?.[0] ?? null;
+  }
+} catch (e) {
+  console.warn(`ProductCTA: could not load product "${handle}"`, e);
+}
+
+const href = product
+  ? `/${DEFAULT_REGION}/store/${product.id}`
+  : `/${DEFAULT_REGION}/store`;
+
+let priceLabel: string | null = null;
+if (product) {
+  try {
+    const { cheapestPrice } = getProductPrice({ product });
+    priceLabel = cheapestPrice?.calculated_price ?? null;
+  } catch {
+    priceLabel = null;
+  }
+}
+---
+
+<a
+  href={href}
+  class="not-prose my-6 flex items-center gap-4 rounded-xl border border-neutral-200 bg-neutral-50 p-4 no-underline transition hover:border-neutral-400 dark:border-neutral-800 dark:bg-neutral-900"
+>
+  {product?.thumbnail && (
+    <img
+      src={product.thumbnail}
+      alt={product.title}
+      class="h-16 w-16 shrink-0 rounded-lg object-cover"
+      loading="lazy"
+    />
+  )}
+  <span class="flex flex-col">
+    <span class="text-xs uppercase tracking-wide text-neutral-500">
+      {label ?? "Featured product"}
+    </span>
+    <span class="font-medium">{product?.title ?? "Browse the shop"}</span>
+    {priceLabel && <span class="text-sm text-neutral-600 dark:text-neutral-400">{priceLabel}</span>}
+  </span>
+  <span class="ml-auto text-sm font-medium text-neutral-500">Shop →</span>
+</a>

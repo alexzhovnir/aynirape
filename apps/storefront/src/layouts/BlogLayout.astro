@@ -1,0 +1,87 @@
+---
+import "@styles/global.css";
+
+interface Alternate {
+  lang: string;
+  href: string;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  canonicalPath?: string;
+  image?: string;
+  lang?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+  alternates?: Alternate[];
+  jsonLd?: Record<string, unknown>;
+}
+
+const SITE_NAME = "AyniRape";
+const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "de";
+
+const {
+  title,
+  description,
+  canonicalPath,
+  image,
+  lang = "en",
+  type = "website",
+  publishedTime,
+  alternates = [],
+  jsonLd,
+} = Astro.props;
+
+const site = Astro.site ?? new URL(Astro.url.origin);
+const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, site);
+const ogImage = image ? new URL(image, site).href : undefined;
+const pageTitle = `${title} | ${SITE_NAME}`;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonicalUrl.href} />
+
+    {alternates.map((a) => (
+      <link rel="alternate" hreflang={a.lang} href={new URL(a.href, site).href} />
+    ))}
+
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonicalUrl.href} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+
+    <link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} blog`} href="/rss.xml" />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class="min-h-screen bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
+    <header class="border-b border-neutral-200 dark:border-neutral-800">
+      <div class="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
+        <a href="/blog" class="text-lg font-semibold no-underline">AyniRape</a>
+        <nav class="flex items-center gap-4 text-sm">
+          <a href="/blog" class="no-underline hover:underline">Journal</a>
+          <a href={`/${DEFAULT_REGION}/store`} class="no-underline hover:underline">Shop</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-3xl px-4 py-8">
+      <slot />
+    </main>
+
+    <footer class="mt-16 border-t border-neutral-200 py-8 text-center text-sm text-neutral-500 dark:border-neutral-800">
+      <p>© {new Date().getFullYear()} AyniRape · <a href={`/${DEFAULT_REGION}/store`} class="hover:underline">Shop</a> · <a href="/rss.xml" class="hover:underline">RSS</a></p>
+    </footer>
+  </body>
+</html>
