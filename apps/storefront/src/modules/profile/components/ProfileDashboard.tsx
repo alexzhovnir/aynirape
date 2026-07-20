@@ -159,7 +159,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={firstName}
                 onChange={e => setFirstName(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
               />
             </div>
             <div>
@@ -168,7 +168,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 type="text"
                 value={lastName}
                 onChange={e => setLastName(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
               />
             </div>
             <div>
@@ -178,7 +178,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
               />
             </div>
             <div>
@@ -188,18 +188,18 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
               />
             </div>
             <button
               type="submit"
-              className="w-full py-4 bg-amber-500 text-stone-950 font-bold rounded-full hover:bg-amber-400 transition-colors shadow-sm cursor-pointer mt-4"
+              className="w-full py-4 bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold rounded-full transition-colors shadow-sm cursor-pointer mt-4"
             >
               Sign Up
             </button>
             <p className="text-sm text-stone-500 text-center mt-4">
               Already have an account?{" "}
-              <button type="button" onClick={() => setIsRegistering(false)} className="text-amber-600 hover:underline font-medium">
+              <button type="button" onClick={() => setIsRegistering(false)} className="text-[#bdcd00] hover:underline font-medium">
                 Log In
               </button>
             </p>
@@ -213,7 +213,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
               />
             </div>
             <div>
@@ -223,7 +223,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
               />
             </div>
             <button
