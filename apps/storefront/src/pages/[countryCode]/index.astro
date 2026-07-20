@@ -383,16 +383,16 @@ const schemaData = {
   </dialog>
 
   <!-- Blog Posts Section -->
-  <section class="py-20 bg-stone-50 border-t border-stone-200/40">
-    <div class="px-8 md:px-16 lg:px-24 max-w-8xl mx-auto">
+  <section class="py-20 bg-stone-50 rounded-3xl max-w-8xl mx-auto my-12 border border-stone-200/40">
+    <div class="px-8 md:px-16 lg:px-24">
       <div class="flex justify-between items-end mb-16">
         <div>
-          <span class="text-amber-600 font-semibold tracking-wider text-xs uppercase">OUR JOURNAL</span>
+          <span class="text-stone-500 font-bold tracking-[0.2em] text-xs uppercase">OUR JOURNAL</span>
           <h2 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl mt-2">Blog</h2>
         </div>
         <a
           href="/blog"
-          class="px-6 py-3 bg-[#c6d71b] hover:bg-[#b0c016] text-stone-950 font-bold rounded-full text-sm transition-colors shadow-sm cursor-pointer"
+          class="px-6 py-3 bg-[#bdcd00] hover:bg-[#a6b400] text-[#222222] font-bold rounded-full text-xs uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
         >
           Read the blog
         </a>
@@ -400,7 +400,7 @@ const schemaData = {
 
       <div class="grid gap-8 md:grid-cols-3">
         {blogPosts.map((post) => (
-          <article class="flex flex-col gap-4 bg-white border border-stone-150 p-6 rounded-3xl hover:shadow-md transition-shadow">
+          <article class="flex flex-col gap-4 bg-white p-6 rounded-3xl shadow-[0_10px_30px_-15px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.12)] transition-shadow duration-300 border border-stone-100">
             <a href={`/blog/${slugOf(post.id)}`} class="aspect-[3/2] overflow-hidden rounded-2xl block bg-stone-100 relative">
               <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center select-none bg-stone-100 z-0">
                 <span class="font-serif italic text-lg text-stone-550 mb-1">Ayni Râpé</span>
