@@ -1,0 +1,34 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getRegionParams } from "@lib/params/region-params";
+
+export const getStaticPaths = getRegionParams;
+---
+
+<Layout
+  title="About Us"
+  description="Learn about Ayni Rapé and our mission to share authentic Amazonian shamanic supplies and traditional medicine in Europe."
+>
+  <section class="mx-auto max-w-3xl px-8 py-12 md:px-12 lg:px-16">
+    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-amber-600">
+      OUR STORY
+    </p>
+    <h1 class="mt-4 text-4xl font-bold tracking-tight text-stone-900">
+      About Ayni Râpé
+    </h1>
+    <div class="mt-8 space-y-6 text-base leading-8 text-stone-700">
+      <p>
+        The word <strong>Ayni</strong> finds its origins in Andean traditions and reflects a principle of ongoing reciprocity (“today for you, tomorrow for me”). It expresses the understanding that everything in the world is interconnected, and that a community, united around shared values and sacred goods, can accomplish far more than any single individual alone.
+      </p>
+      <p>
+        We, the founders of Ayni, were first introduced to Râpé in 2020. Since then, we have worked closely with this sacred herb and other sacred medicinal herbs, experiencing their role within shamanic plant medicine and personal healing practices. At a later stage, after receiving the blessing of a renowned Maestro Curandero, we began to share these sacred herbs with others, following the principles of respect and reciprocity.
+      </p>
+      <p>
+        Today, through the Ayni venture, our objective is to make this powerful ancestral medicine accessible to a wider audience in Europe, supporting individual healing and inner development through authentic shamanic supplies and indigenous spiritual goods.
+      </p>
+      <p>
+        For this purpose, we have carefully selected our products, directly sourced from Amazonian medicinal plants cultivated by indigenous tribes of Peru and Brazil. Each offering is prepared in strict respect of traditional practices, forming a curated shamanic supply that includes different blends with specific ceremonial characteristics, as well as the essential tools for application.
+      </p>
+    </div>
+  </section>
+</Layout>

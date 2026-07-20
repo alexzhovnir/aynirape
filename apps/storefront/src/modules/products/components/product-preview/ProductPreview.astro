@@ -23,7 +23,7 @@ const { cheapestPrice } = getProductPrice({
 
 <a
   href={`/${countryCode}/store/${id}`}
-  class="flex h-full flex-col gap-4 justify-between group"
+  class="flex h-full flex-col gap-4 justify-between group max-w-[240px] mx-auto w-full"
 >
   <Thumbnail imageUrl={thumbnailUrl || imageUrl} title={title} priority={priority} />
 

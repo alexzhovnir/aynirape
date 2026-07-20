@@ -1,0 +1,189 @@
+---
+import { getCollection } from "astro:content";
+import BlogLayout from "@layouts/BlogLayout.astro";
+import { getRegion } from "../../../lib/data/regions";
+import { listProducts } from "../../../lib/data/products";
+
+const slugOf = (id: string) => id.replace(/\/index$/, "");
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => data.language === "en" && !data.draft);
+  const categories = new Set(posts.map(p => p.data.category || "Rituals"));
+  
+  return Array.from(categories).map(cat => ({
+    params: { category: cat.toLowerCase() },
+    props: { categoryName: cat, posts: posts.filter(p => (p.data.category || "Rituals") === cat) }
+  }));
+}
+
+const { categoryName, posts } = Astro.props;
+const { category } = Astro.params;
+
+// Fetch all posts to build categories/authors list for sidebar
+const allPosts = await getCollection("blog", ({ data }) => data.language === "en" && !data.draft);
+const categoriesMap = new Map<string, number>();
+const authorsMap = new Map<string, { slug: string; count: number }>();
+
+allPosts.forEach((post) => {
+  const cat = post.data.category || "Rituals";
+  const author = post.data.author || "Ayni Team";
+  const authorSlug = post.data.authorSlug || "ayni-team";
+
+  categoriesMap.set(cat, (categoriesMap.get(cat) || 0) + 1);
+  authorsMap.set(author, {
+    slug: authorSlug,
+    count: (authorsMap.get(author)?.count || 0) + 1,
+  });
+});
+
+const sidebarCategories = Array.from(categoriesMap.entries()).map(([name, count]) => ({
+  name,
+  slug: name.toLowerCase(),
+  count,
+}));
+
+const sidebarAuthors = Array.from(authorsMap.entries()).map(([name, info]) => ({
+  name,
+  slug: info.slug,
+  count: info.count,
+}));
+
+const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "de";
+const region = await getRegion(DEFAULT_REGION);
+let featuredProducts: any[] = [];
+if (region) {
+  try {
+    const productsList = await listProducts(region.id);
+    featuredProducts = productsList.filter((p) => ['nukini-sansara', 'agua-de-florida'].includes(p.handle)).slice(0, 2);
+    if (featuredProducts.length === 0) {
+      featuredProducts = productsList.slice(0, 2);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+---
+
+<BlogLayout
+  title={`${categoryName} Articles`}
+  description={`Read our guides and articles about ${categoryName} in the Ayni Râpé journal.`}
+  canonicalPath={`/blog/category/${category}`}
+>
+  <h1 class="mb-2 text-3xl font-semibold">{categoryName}</h1>
+  <p class="mb-8 text-neutral-600">
+    Articles and guides categorized under {categoryName}.
+  </p>
+
+  <div class="grid gap-12 lg:grid-cols-[1fr_260px] w-full">
+    <!-- Posts list -->
+    <div>
+      <ul class="grid gap-12 grid-cols-1">
+        {posts.map((post) => (
+          <li class="group">
+            <a href={`/blog/${slugOf(post.id)}`} class="flex flex-col md:flex-row gap-6 no-underline items-start">
+              <div class="aspect-[3/2] w-full md:w-[300px] lg:w-[340px] rounded-xl overflow-hidden bg-stone-100 relative border border-stone-200/40 shrink-0">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center select-none bg-stone-100 z-0">
+                  <span class="font-serif italic text-lg text-stone-555 mb-1">Ayni Râpé</span>
+                  <span class="text-xs uppercase tracking-[0.2em] text-stone-400 font-semibold">Journal</span>
+                </div>
+                {post.data.coverImage && (
+                  <img
+                    src={post.data.coverImage}
+                    alt={post.data.title}
+                    class="absolute inset-0 w-full h-full object-cover z-10"
+                    loading="lazy"
+                    onerror="this.style.opacity='0'; this.style.pointerEvents='none';"
+                  />
+                )}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 mb-2">
+                  <time>{fmtDate(post.data.publishedDate)}</time>
+                  <span>&bull;</span>
+                  <span class="text-amber-600 font-medium">{post.data.category}</span>
+                </div>
+                <h2 class="text-xl font-semibold group-hover:underline text-stone-900 leading-snug mb-2">{post.data.title}</h2>
+                {post.data.excerpt && (
+                  <p class="text-sm text-neutral-600 leading-relaxed">
+                    {post.data.excerpt}
+                  </p>
+                )}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="self-start sticky top-28 space-y-10 lg:border-l lg:border-stone-200/60 lg:pl-8">
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-950 mb-4">Categories</h3>
+        <ul class="space-y-2">
+          {sidebarCategories.map((c) => (
+            <li>
+              <a
+                href={`/blog/category/${c.slug}`}
+                class={`text-sm font-medium transition-colors flex items-center justify-between ${c.slug === category ? 'text-amber-600 font-semibold' : 'text-stone-600 hover:text-amber-600'}`}
+              >
+                <span>{c.name}</span>
+                <span class="text-xs text-stone-400">({c.count})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-950 mb-4">Authors</h3>
+        <ul class="space-y-2">
+          {sidebarAuthors.map((a) => (
+            <li>
+              <a
+                href={`/blog/author/${a.slug}`}
+                class="text-stone-600 hover:text-amber-600 text-sm font-medium transition-colors flex items-center justify-between"
+              >
+                <span>{a.name}</span>
+                <span class="text-xs text-stone-400">({a.count})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Cross-sell block -->
+      {featuredProducts.length > 0 && (
+        <div class="border-t border-stone-200/60 pt-8">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-950 mb-4">Featured Products</h3>
+          <div class="space-y-4">
+            {featuredProducts.map((p) => (
+              <a href={`/${DEFAULT_REGION}/store/${p.id}`} class="flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-full overflow-hidden border border-stone-150 bg-stone-50 shrink-0">
+                  <img src={p.thumbnail} alt={p.title} class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-1 min-w-0 text-left">
+                  <h4 class="text-xs font-bold text-stone-900 truncate group-hover:text-amber-600 transition-colors leading-tight">{p.title}</h4>
+                  <p class="text-[10px] text-stone-500 mt-0.5">View details &rarr;</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </aside>
+  </div>
+
+  <!-- SEO Text Block at the Bottom -->
+  <section class="mt-20 pt-10 border-t border-stone-200/60 text-stone-600 text-sm leading-relaxed space-y-4 max-w-4xl">
+    <h2 class="text-xl font-semibold text-stone-900">Explore Shamanic {categoryName} Guides & Traditions</h2>
+    <p>
+      Delve deeper into our collection of educational guides and spiritual insights dedicated to {categoryName}. The Ayni Râpé editorial team compiles authentic historical facts, traditional indigenous usage, and safety guidelines to help you form a respectful relationship with sacred Amazonian supplies.
+    </p>
+    <p>
+      Integrate these insights into your purification practices, learn to clear spaces effectively, or explore the profound energetic dynamics of traditional mixtures.
+    </p>
+  </section>
+</BlogLayout>

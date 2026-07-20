@@ -1,0 +1,54 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getRegionParams } from "@lib/params/region-params";
+
+export const getStaticPaths = getRegionParams;
+---
+
+<Layout
+  title="Delivery and Payment"
+  description="Shipping costs, delivery estimates, available payment methods, and return policies for Ayni Rapé."
+>
+  <section class="mx-auto max-w-3xl px-8 py-12 md:px-12 lg:px-16">
+    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-amber-600">
+      SHIPPING INFO
+    </p>
+    <h1 class="mt-4 text-4xl font-bold tracking-tight text-stone-900">
+      Delivery & Payment Terms
+    </h1>
+    <div class="mt-8 space-y-6 text-base leading-8 text-stone-700">
+      <h2 class="text-2xl font-bold text-stone-900">Delivery Options</h2>
+      <p>
+        We deliver across Europe and propose two main shipping options:
+      </p>
+      <ul class="list-disc pl-6 space-y-2">
+        <li><strong>Standard Shipping:</strong> Delivery through traditional post services within 5-7 business days. Cost: €5 (Free for orders over €150).</li>
+        <li><strong>DHL Express:</strong> Premium courier services within 3-5 business days. Cost: €12.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-stone-900 pt-4">Payment Methods</h2>
+      <p>
+        For your convenience, we support a wide range of payment methods:
+      </p>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Credit and debit cards (Visa, Mastercard, Amex)</li>
+        <li>PayPal</li>
+        <li>Apple Pay / Google Pay</li>
+        <li>Manual Bank Transfer (details provided at checkout or via support)</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-stone-900 pt-4">CO2 Removal Initiative</h2>
+      <p>
+        Please note that <strong>1% of your purchase</strong> will always be donated to foster initiatives of CO2 removal from our atmosphere.
+      </p>
+
+      <h2 class="text-2xl font-bold text-stone-900 pt-4">Returns & Replacements</h2>
+      <p>
+        Returns are only accepted for products part of the categories "Tepi and Kuripe" and "Ornaments and decoration" in case of damage having occurred during shipping or defects not detected by our team upon order fulfillment.
+      </p>
+      <p>
+        In the unfortunate event where this occurred, please write to <a href="mailto:info@aynirape.com" class="text-amber-600 hover:underline">info@aynirape.com</a> describing the issue. We will provide you with a solution as soon as possible.
+      </p>
+    </div>
+  </section>
+</Layout>

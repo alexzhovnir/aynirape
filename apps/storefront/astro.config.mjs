@@ -28,7 +28,7 @@ export default defineConfig({
   // Order matters: react → markdoc → keystatic (per Keystatic's Astro guide).
   integrations: [react(), markdoc(), keystatic(), sitemap()],
   server: {
-    port: 8000,
+    port: 8100,
     host: true,
   },
   vite: {

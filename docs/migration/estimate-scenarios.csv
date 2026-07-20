@@ -1,0 +1,37 @@
+AyniRape — Work Estimate (MODX -> Medusa rebuild + migration)
+Rates: EUR 15/h and EUR 20/h. Hours are contractor hands-on ranges. Design (P3) is a placeholder pending brief.
+
+PHASE BREAKDOWN,,,,,,
+Phase,Scope,Manual hrs min,Manual hrs max,Claude Code hrs min,Claude Code hrs max,Notes
+P0,Kickoff & Access,11,25,9,20,"Accesses, dump verify, repo scaffold, PayPal kickoff"
+P1,Infrastructure (VPS + staging),37,73,19,37,"Docker stack, staging, manual deploy, backups"
+P2,Payments [BLOCKER],40,87,24,52,"PayPal + bank transfer; verification is calendar-bound"
+P3,Design (TBD placeholder),45,111,25,61,"Re-priced after design brief; ~11 templates"
+P4,Catalog & Data Migration,83,162,46,89,"Products/images/customers + ALL orders incl. abandoned"
+P5,Localization (EN/FR/IT/ES),135,244,65,117,"i18n + translate products x3 + 80 blog x3 + static"
+P6,Blog & SEO,48,89,24,45,"80 posts HTML->MD + 301 map + sitemap/hreflang"
+P7,Email Migration,13,27,10,20,"Zoho Free + IMAP migration + DNS + Resend"
+P8,QA & Acceptance,62,110,37,66,"Full QA on staging + fixes + acceptance"
+P9,Launch & Handover,61,118,40,77,"Cutover, training, handover, warranty period"
+,PM & coordination,55,110,47,94,"Cross-phase planning, vendor follow-up"
+,Client communication,25,55,23,50,"Status, reviews, scheduling"
+,Risk / contingency buffer,90,190,50,97,"PayPal verify, order-matching, translation volume"
+,Environment & dependency upkeep,15,30,11,21,"Staging refresh, version drift, ARM re-verify"
+,,,,,,
+SCENARIO SUMMARY,,,,,,
+Scenario,Hours min,Hours max,EUR@15 min,EUR@15 max,EUR@20 min,EUR@20 max
+Manual (incl. design),707,1403,10605,21045,14140,28060
+Manual (excl. design),662,1292,9930,19380,13240,25840
+With Claude Code (incl. design),420,830,6300,12450,8400,16600
+With Claude Code (excl. design),400,770,6000,11550,8000,15400
+Naive /3 of Claude Code — NOT recommended,140,280,2100,4200,2800,5600
+Aggressive realistic (floor held),220,440,3300,6600,4400,8800
+,,,,,,
+RECOMMENDED FIXED-PRICE ANCHOR,,,,,,
+Basis,Hours,,EUR@15,,EUR@20,
+Claude Code midpoint (excl. design),585,,8775,,11700,
+Aggressive midpoint (excl. design),330,,4950,,6600,
+,,,,,,
+Tooling (not labour): Claude Code Max ~EUR200/mo x ~2-4 project months = ~EUR400-800; plus minor DeepL/API.,,,,,,
+Contract caps to hold the low end: catalog <= ~500 SKU; limit design revision rounds; limit translation-tone revision rounds.,,,,,,
+Launch blocker: PayPal high-risk (herbs/rape) merchant verification — start day one; bank transfer is the fallback.,,,,,,

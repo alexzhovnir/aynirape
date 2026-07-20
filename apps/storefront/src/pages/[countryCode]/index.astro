@@ -1,60 +1,519 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import { getRegionParams } from "../../lib/params/region-params";
-import heroImage from "../../assets/hero.png";
+import { getRegion } from "../../lib/data/regions";
+import { listProducts } from "../../lib/data/products";
+import { getCollection } from "astro:content";
+import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
+import PlaceholderImage from "@modules/products/components/thumbnail/PlaceholderImage.astro";
+import { Image } from "astro:assets";
 
 export const getStaticPaths = getRegionParams;
 
 const { countryCode } = Astro.params;
+
+const region = await getRegion(countryCode);
+
+if (!region) {
+  return Astro.redirect("/not-found");
+}
+
+let products: Awaited<ReturnType<typeof listProducts>> = [];
+let dbReviews: any[] = [];
+let error: Error | undefined;
+
+try {
+  products = await listProducts(region.id);
+  
+  // Fetch approved reviews from the backend
+  const backendUrl = import.meta.env.PUBLIC_MEDUSA_BACKEND_URL || 'http://localhost:9009';
+  const res = await fetch(`${backendUrl}/store/feedback`);
+  if (res.ok) {
+    const data = await res.json();
+    dbReviews = data.feedbacks || [];
+  }
+} catch (e) {
+  error = e instanceof Error ? e : new Error("Unknown error");
+  console.error(error);
+}
+
+// Bestsellers list matching screenshots
+const bestsellerHandles = ['nukini-sansara', 'huni-kuin', 'yawanawa-tsunu', 'spiritual-cleanse'];
+const bestsellers = products.filter(p => bestsellerHandles.includes(p.handle));
+const bestsellersList = bestsellers.length > 0 ? bestsellers : products.slice(0, 4);
+
+// Category cards setup
+const rapeProduct = products.find(p => p.handle === 'nukini-sansara');
+const tepiProduct = products.find(p => p.handle === 'kuripe-colibri-teak') || products.find(p => p.handle === 'tepi-shipibo-large');
+const aromaticsProduct = products.find(p => p.handle === 'agua-de-florida') || products.find(p => p.handle === 'palo-santo');
+
+const featuredCategories = [
+  {
+    name: "Rapé",
+    desc: "A sacred traditional healing practice of the tribal peoples of Peru and Brazil.",
+    href: `/${countryCode}/store/category/rapé`,
+    color: "bg-stone-900 text-white border-stone-850",
+    textColor: "text-stone-300",
+    titleColor: "text-white",
+    btnColor: "text-amber-400 border-amber-400 hover:bg-amber-400 hover:text-stone-900",
+    imageUrl: rapeProduct?.images?.[0]?.url || rapeProduct?.thumbnail
+  },
+  {
+    name: "Tepi and Kuripe",
+    desc: "To blow the sacred mixture, you will need special accessories - Tepis and Kuripes.",
+    href: `/${countryCode}/store/category/tepi-and-kuripe`,
+    color: "bg-[#9cafb7] text-white border-transparent",
+    textColor: "text-stone-100",
+    titleColor: "text-white",
+    btnColor: "text-white border-white hover:bg-white hover:text-[#9cafb7]",
+    imageUrl: tepiProduct?.images?.[0]?.url || tepiProduct?.thumbnail
+  },
+  {
+    name: "Aromatics",
+    desc: "Palo Santo, Agua de Florida, and other sacred cleansing incenses.",
+    href: `/${countryCode}/store/category/aromatics`,
+    color: "bg-[#8b9fa7]/90 text-white border-transparent",
+    textColor: "text-stone-100",
+    titleColor: "text-white",
+    btnColor: "text-white border-white hover:bg-white hover:text-[#8b9fa7]",
+    imageUrl: aromaticsProduct?.images?.[0]?.url || aromaticsProduct?.thumbnail
+  }
+];
+
+// Feedback reviews fallback
+const defaultReviews = [
+  {
+    name: "Matthias D.",
+    rating: 5,
+    comment: "High quality products and a flawless order process. Great customer experience - highly recommended!",
+    created_at: "2026-06-27"
+  },
+  {
+    name: "Sarah L.",
+    rating: 5,
+    comment: "The Rapé blends are incredibly pure and grounding. Shipping was fast and the packaging was beautiful.",
+    created_at: "2026-07-02"
+  },
+  {
+    name: "Elena R.",
+    rating: 5,
+    comment: "Stunning Tepi applicator! Beautiful craftsmanship and works perfectly. Will definitely buy again.",
+    created_at: "2026-07-15"
+  }
+];
+const reviews = dbReviews.length > 0 ? dbReviews : defaultReviews;
+
+const fmtReviewDate = (dateStr: string) => {
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" });
+  } catch {
+    return dateStr;
+  }
+};
+
+// Blog Posts setup
+const blogPosts = (
+  await getCollection(
+    "blog",
+    ({ data }) => data.language === "en" && !data.draft,
+  )
+).sort(
+  (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
+).slice(0, 3);
+
+const fmtBlogDate = (d: Date) =>
+  d.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" });
+
+const slugOf = (id: string) => id.replace(/\/index$/, "");
+
+const heroImages = [
+  "/images/blog/rape/nukini-1504.23abece79ac5bad050fdc8779f1c5b53.webp",
+  "/images/blog/rape/huni-kuin-1404.c8a1014cf868eec84ebc440a5301bfcd.webp",
+  "/images/blog/rape/yavanawa-1504.aa960525f69629782ccf9275b27102c6.webp",
+  "/images/blog/rape/spiritual-cleanse-1504.acee2e127356f3967513c528b9ee0ad6.webp",
+  "/images/blog/kolibri-teak.c6c0e21a20358358ba4cfc9a759bfa19.webp",
+  "/images/blog/kuripe-wolf-sawo.02682445cd108ab57e6f69e9a16ce418.webp"
+];
 ---
 
 <Layout
-  description="E-commerce starter template built with Astro and Medusa for maximum performance. Browse our collection of products."
-  image={heroImage.src}
+  title="Sacred Amazonian Shamanic Supplies"
+  description="Explore sacred herb medicinals, shamanic plant medicine, and Amazonian shamanic supplies."
 >
-  <section
-    class="flex items-center gap-12 overflow-hidden px-8 py-10 md:px-12 lg:min-h-[calc(100vh-96px-2rem)] lg:px-16"
-  >
-    <div class="flex flex-col gap-6 w-full md:flex-1 md:max-w-2xl">
-      <h1 class="text-5xl font-bold leading-tight tracking-tight">
-        Astro + Medusa <span class="whitespace-nowrap">e-commerce</span> starter template
-      </h1>
-      <p class="text-gray-500 text-base leading-relaxed">
-        This template is a good way to start building your e-commerce store with
-        maximum performance in mind.
-      </p>
-      <div class="flex items-center gap-4 mt-2">
-        <a
-          href="https://github.com/Bystrol/astro-medusa-starter"
-          target="_blank"
-          class="px-6 py-3 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-colors"
+  <!-- Hero Section -->
+  <section class="relative bg-stone-900 text-white overflow-hidden py-16 md:py-24 px-8 md:px-16 lg:px-24">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-[1.2fr_0.8fr] gap-12 items-center relative z-10 w-full">
+      <!-- Left Column: Content -->
+      <div class="flex flex-col gap-6">
+        <span class="text-amber-400 font-semibold tracking-[0.2em] text-xs uppercase">AYNI RAPÉ</span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+          Authentic Amazonian <br/>Shamanic Supplies
+        </h1>
+        <p class="text-stone-300 text-base leading-relaxed max-w-xl">
+          A sacred traditional healing practice of the tribal peoples of Peru and Brazil. Ethically sourced, prepared in respect of indigenous traditions.
+        </p>
+        <div class="flex flex-wrap gap-4 mt-4">
+          <a
+            href={`/${countryCode}/store`}
+            class="px-8 py-4 bg-amber-500 text-stone-950 font-semibold text-sm rounded-full hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/20 cursor-pointer"
+          >
+            View Catalogue
+          </a>
+          <a
+            href={`/blog`}
+            class="px-8 py-4 border border-stone-700 text-white font-semibold text-sm rounded-full hover:bg-stone-800 transition-colors cursor-pointer"
+          >
+            Read Our Blog
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Auto Carousel -->
+      <div class="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 mx-auto flex items-center justify-center shrink-0">
+        <!-- Glow effect behind -->
+        <div class="absolute inset-0 bg-amber-500/10 rounded-full blur-3xl pointer-events-none scale-110"></div>
+        
+        <div class="relative w-full h-full rounded-full overflow-hidden border-2 border-stone-850 shadow-2xl bg-stone-950 flex items-center justify-center">
+          {heroImages.map((src, i) => (
+            <img
+              src={src}
+              alt="Shamanic Supply"
+              class={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out hero-carousel-img ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent pointer-events-none"></div>
+  </section>
+
+  <!-- Categories Grid -->
+  <section class="py-20 px-8 md:px-16 lg:px-24 max-w-8xl mx-auto">
+    <div class="text-center mb-16">
+      <span class="text-amber-600 font-semibold tracking-wider text-xs uppercase">OUR PRODUCTS</span>
+      <h2 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl mt-2">Browse Categories</h2>
+    </div>
+    
+    <div class="grid gap-8 md:grid-cols-3">
+      {featuredCategories.map((cat) => (
+        <div class={`flex flex-col items-center text-center p-8 rounded-3xl ${cat.color} border transition-all duration-300 hover:shadow-lg justify-between gap-6 min-h-[460px]`}>
+          <div class="flex flex-col items-center gap-4">
+            <h3 class="text-2xl font-bold">{cat.name}</h3>
+            <p class={`${cat.textColor} text-sm leading-relaxed max-w-xs`}>{cat.desc}</p>
+          </div>
+          
+          <div class="w-48 h-48 rounded-full overflow-hidden border border-white/20 bg-stone-150 flex items-center justify-center">
+            {cat.imageUrl ? (
+              <img src={cat.imageUrl} alt={cat.name} class="w-full h-full object-cover rounded-full" />
+            ) : (
+              <PlaceholderImage size={48} />
+            )}
+          </div>
+          
+          <a
+            href={cat.href}
+            class={`inline-flex items-center gap-2 border px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 ${cat.btnColor}`}
+          >
+            View products &rarr;
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Bestsellers Section -->
+  <section class="py-20 bg-stone-50 border-y border-stone-200/40">
+    <div class="px-8 md:px-16 lg:px-24 max-w-8xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="text-amber-600 font-semibold tracking-wider text-xs uppercase">POPULAR CHOICE</span>
+        <h2 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl mt-2">Bestsellers</h2>
+      </div>
+
+      <ul class="grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-16">
+        {bestsellersList.map((product) => (
+          <li>
+            <ProductPreview
+              id={product.id}
+              variants={product.variants ?? []}
+              thumbnailUrl={product.thumbnail ?? undefined}
+              imageUrl={product.images?.[0]?.url}
+              title={product.title}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Client Reviews / Feedback Slider -->
+  <section class="py-20 px-8 md:px-16 lg:px-24 max-w-8xl mx-auto overflow-hidden">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+      <div>
+        <span class="text-amber-600 font-semibold tracking-wider text-xs uppercase">FEEDBACK</span>
+        <h2 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl mt-2">Reviews from our clients</h2>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <button
+          id="btn-leave-feedback"
+          class="px-6 py-3 bg-[#c6d71b] hover:bg-[#b0c016] text-stone-950 font-bold rounded-full text-sm transition-colors shadow-sm cursor-pointer"
         >
-          Open Github
-        </a>
-        <a
-          href={`/${countryCode}/store`}
-          class="px-6 py-3 border border-black text-black text-sm font-medium rounded-full hover:bg-gray-100 transition-colors"
-        >
-          Browse products
-        </a>
+          Leave feedback
+        </button>
+        <div class="flex gap-2">
+          <button id="slider-prev" class="w-12 h-12 rounded-full border border-stone-200 hover:bg-stone-50 flex items-center justify-center cursor-pointer text-stone-700">&larr;</button>
+          <button id="slider-next" class="w-12 h-12 rounded-full border border-stone-200 hover:bg-stone-50 flex items-center justify-center cursor-pointer text-stone-700">&rarr;</button>
+        </div>
       </div>
     </div>
 
-    <div
-      class="relative hidden h-full min-h-[36rem] md:flex md:flex-1 md:items-center md:justify-end"
-    >
-      <Image
-        src={heroImage}
-        width={800}
-        height={900}
-        alt="Featured product"
-        widths={[400, 600, 800]}
-        sizes="(max-width: 1024px) 50vw, 40vw"
-        format="webp"
-        quality={80}
-        class="pointer-events-none absolute right-[-58%] top-1/2 z-10 h-auto max-h-none w-[66rem] max-w-none -translate-y-1/2 object-contain lg:right-[-64%] lg:w-[82rem] xl:right-[-62%] xl:w-[98rem]"
-      />
+    <!-- Scrollable container -->
+    <div id="reviews-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-4 scroll-smooth -mx-4 px-4">
+      {reviews.map((rev) => (
+        <div class="min-w-[290px] md:min-w-[380px] max-w-[380px] bg-white border border-stone-150 p-8 rounded-3xl flex flex-col justify-between gap-6 shrink-0 shadow-sm relative">
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-stone-900">{rev.name}</h4>
+              <span class="text-xs text-stone-400">{fmtReviewDate(rev.created_at)}</span>
+            </div>
+            <div class="flex text-amber-400 text-sm">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span>{i < rev.rating ? "★" : "☆"}</span>
+              ))}
+            </div>
+            <p class="text-stone-600 text-sm leading-relaxed">{rev.comment}</p>
+          </div>
+          <!-- Quote background icon -->
+          <span class="absolute bottom-6 right-8 text-stone-100 text-7xl font-serif pointer-events-none select-none">”</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Leave Feedback Dialog -->
+  <dialog id="feedback-dialog" class="backdrop:bg-stone-950/40 rounded-3xl p-8 max-w-md w-full border border-stone-200 bg-white shadow-2xl">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-bold text-stone-900">Leave Feedback</h3>
+      <button id="close-feedback-dialog" class="text-stone-400 hover:text-stone-600 text-2xl font-semibold cursor-pointer">&times;</button>
+    </div>
+    
+    <form id="feedback-form" class="space-y-4" data-backend-url={import.meta.env.PUBLIC_MEDUSA_BACKEND_URL}>
+      <div>
+        <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Your Name</label>
+        <input
+          type="text"
+          name="name"
+          required
+          placeholder="Name"
+          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none text-stone-900 transition-colors"
+        />
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Rating</label>
+        <select
+          name="rating"
+          required
+          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none text-stone-900 transition-colors bg-white"
+        >
+          <option value="5">5 Stars (Excellent)</option>
+          <option value="4">4 Stars (Good)</option>
+          <option value="3">3 Stars (Average)</option>
+          <option value="2">2 Stars (Poor)</option>
+          <option value="1">1 Star (Very Poor)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Your Comment</label>
+        <textarea
+          name="comment"
+          required
+          rows="4"
+          placeholder="Leave a review..."
+          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none text-stone-900 transition-colors resize-none"
+        ></textarea>
+      </div>
+      
+      <button
+        type="submit"
+        class="w-full py-4 px-6 bg-amber-500 text-stone-950 font-bold rounded-full hover:bg-amber-400 transition-colors mt-6 shadow-md cursor-pointer text-center"
+      >
+        Submit Review
+      </button>
+      
+      <p class="text-[10px] text-stone-400 text-center leading-normal mt-4">
+        Reviews are moderated before showing up on the homepage.
+      </p>
+    </form>
+    
+    <div id="feedback-success" class="hidden text-center py-8 text-stone-700">
+      <p class="font-bold text-lg text-emerald-600 mb-2">Feedback submitted!</p>
+      <p class="text-sm">Thank you, your review will be published after moderation.</p>
+    </div>
+  </dialog>
+
+  <!-- Blog Posts Section -->
+  <section class="py-20 bg-stone-50 border-t border-stone-200/40">
+    <div class="px-8 md:px-16 lg:px-24 max-w-8xl mx-auto">
+      <div class="flex justify-between items-end mb-16">
+        <div>
+          <span class="text-amber-600 font-semibold tracking-wider text-xs uppercase">OUR JOURNAL</span>
+          <h2 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl mt-2">Blog</h2>
+        </div>
+        <a
+          href="/blog"
+          class="px-6 py-3 bg-[#c6d71b] hover:bg-[#b0c016] text-stone-950 font-bold rounded-full text-sm transition-colors shadow-sm cursor-pointer"
+        >
+          Read the blog
+        </a>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-3">
+        {blogPosts.map((post) => (
+          <article class="flex flex-col gap-4 bg-white border border-stone-150 p-6 rounded-3xl hover:shadow-md transition-shadow">
+            <a href={`/blog/${slugOf(post.id)}`} class="aspect-[3/2] overflow-hidden rounded-2xl block bg-stone-100 relative">
+              <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center select-none bg-stone-100 z-0">
+                <span class="font-serif italic text-lg text-stone-550 mb-1">Ayni Râpé</span>
+                <span class="text-xs uppercase tracking-[0.2em] text-stone-400 font-semibold">Journal</span>
+              </div>
+              {post.data.coverImage && (
+                <img
+                  src={post.data.coverImage}
+                  alt={post.data.title}
+                  class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-all duration-300 z-10"
+                  loading="lazy"
+                  onerror="this.style.opacity='0'; this.style.pointerEvents='none';"
+                />
+              )}
+            </a>
+            <time class="text-xs uppercase tracking-wide text-neutral-400">
+              {fmtBlogDate(post.data.publishedDate)}
+            </time>
+            <h3 class="text-lg font-bold text-stone-900 leading-snug hover:underline">
+              <a href={`/blog/${slugOf(post.id)}`}>{post.data.title}</a>
+            </h3>
+            {post.data.excerpt && (
+              <p class="text-stone-500 text-sm line-clamp-3 leading-relaxed">
+                {post.data.excerpt}
+              </p>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- What is Rapé Info -->
+  <section class="bg-stone-950 text-white py-20 px-8 md:px-16 lg:px-24 border-y border-stone-850">
+    <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="text-amber-400 font-semibold tracking-wider text-xs uppercase">ANCIENT WISDOM</span>
+        <h2 class="text-3xl font-bold tracking-tight text-white mt-2 mb-6">What is Râpé?</h2>
+        <div class="space-y-4 text-stone-300 text-sm leading-relaxed">
+          <p>
+            Râpé is a natural medicine and should be treated and used as such. Its main component is Mapacho. It is mixed with different herbs, seeds, bark, flowers, leaves, roots and their ashes, resulting in a variety of blends with different characteristics and benefits.
+          </p>
+          <p>
+            The tribes of the Amazon use the sacred mixture in all areas of life: in initiation rites, healing ceremonies, before hunting, and at tribal festivals. After use, thoughts slow down, and calmness and relaxation appear.
+          </p>
+        </div>
+      </div>
+      <div class="bg-stone-900 p-8 rounded-3xl border border-stone-800">
+        <h3 class="font-bold text-white text-lg mb-3">Legal & Safe</h3>
+        <p class="text-stone-300 text-sm leading-relaxed mb-6">
+          The sacred mixtures offered do not contain any narcotic or prohibited substances. All the recipes presented are completely legal and are not prohibited for circulation in the European Union.
+        </p>
+        <div class="bg-stone-800 p-4 rounded-xl text-stone-300 text-xs leading-normal">
+          <strong>Notice:</strong> Offered for historical and ethnographic value as a raw botanical specimen.
+        </div>
+      </div>
     </div>
   </section>
 </Layout>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    // Slider horizontal scroll control
+    const slider = document.getElementById('reviews-slider');
+    const nextBtn = document.getElementById('slider-next');
+    const prevBtn = document.getElementById('slider-prev');
+    
+    if (slider) {
+      nextBtn?.addEventListener('click', () => {
+        slider.scrollLeft += 350;
+      });
+      prevBtn?.addEventListener('click', () => {
+        slider.scrollLeft -= 350;
+      });
+    }
+
+    // Modal dialog control
+    const dialog = document.getElementById('feedback-dialog');
+    const leaveFeedbackBtn = document.getElementById('btn-leave-feedback');
+    const closeDialogBtn = document.getElementById('close-feedback-dialog');
+    const feedbackForm = document.getElementById('feedback-form');
+    const feedbackSuccess = document.getElementById('feedback-success');
+
+    leaveFeedbackBtn?.addEventListener('click', () => {
+      dialog?.showModal();
+    });
+
+    closeDialogBtn?.addEventListener('click', () => {
+      dialog?.close();
+      // reset form
+      if (feedbackForm && feedbackSuccess) {
+        feedbackForm.classList.remove('hidden');
+        feedbackSuccess.classList.add('hidden');
+        feedbackForm.reset();
+      }
+    });
+
+    // Handle feedback submit
+    feedbackForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(feedbackForm);
+      const data = {
+        name: formData.get('name'),
+        rating: Number(formData.get('rating')),
+        comment: formData.get('comment'),
+      };
+
+      const backendUrl = feedbackForm.getAttribute('data-backend-url') || 'http://localhost:9009';
+
+      try {
+        const response = await fetch(`${backendUrl}/store/feedback`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          feedbackForm.classList.add('hidden');
+          feedbackSuccess.classList.remove('hidden');
+        } else {
+          alert('Failed to submit feedback. Please try again.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('An error occurred. Please try again.');
+      }
+    });
+
+    // Hero carousel auto sliding
+    const carouselImgs = document.querySelectorAll('.hero-carousel-img');
+    if (carouselImgs.length > 0) {
+      let currentIdx = 0;
+      setInterval(() => {
+        carouselImgs[currentIdx].classList.remove('opacity-100');
+        carouselImgs[currentIdx].classList.add('opacity-0');
+        
+        currentIdx = (currentIdx + 1) % carouselImgs.length;
+        
+        carouselImgs[currentIdx].classList.remove('opacity-0');
+        carouselImgs[currentIdx].classList.add('opacity-100');
+      }, 3000);
+    }
+  });
+</script>

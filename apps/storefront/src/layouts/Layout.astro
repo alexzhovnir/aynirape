@@ -85,7 +85,7 @@ const regionId = region?.id || null;
     {image && <meta name="twitter:image" content={image} />}
   </head>
   <body class="min-h-screen bg-white text-black">
-    <div class="mx-auto flex min-h-screen w-full max-w-[1800px] flex-col">
+    <div class="mx-auto flex min-h-screen w-full max-w-[1440px] px-4 md:px-8 flex-col">
       <Nav client:load countryCode={countryCode} regionId={regionId} />
       <main class="flex-1 min-h-[calc(100vh-72px)]">
         <slot />

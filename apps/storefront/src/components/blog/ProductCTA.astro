@@ -47,7 +47,7 @@ if (product) {
 
 <a
   href={href}
-  class="not-prose my-6 flex items-center gap-4 rounded-xl border border-neutral-200 bg-neutral-50 p-4 no-underline transition hover:border-neutral-400 dark:border-neutral-800 dark:bg-neutral-900"
+  class="not-prose my-6 flex items-center gap-4 rounded-xl border border-stone-200 bg-stone-50 p-4 no-underline transition hover:border-stone-300 hover:bg-stone-100/50"
 >
   {product?.thumbnail && (
     <img
@@ -58,11 +58,11 @@ if (product) {
     />
   )}
   <span class="flex flex-col">
-    <span class="text-xs uppercase tracking-wide text-neutral-500">
+    <span class="text-xs uppercase tracking-wide text-stone-500">
       {label ?? "Featured product"}
     </span>
-    <span class="font-medium">{product?.title ?? "Browse the shop"}</span>
-    {priceLabel && <span class="text-sm text-neutral-600 dark:text-neutral-400">{priceLabel}</span>}
+    <span class="font-medium text-stone-900">{product?.title ?? "Browse the shop"}</span>
+    {priceLabel && <span class="text-sm text-stone-600">{priceLabel}</span>}
   </span>
-  <span class="ml-auto text-sm font-medium text-neutral-500">Shop →</span>
+  <span class="ml-auto text-sm font-medium text-amber-700">Shop →</span>
 </a>

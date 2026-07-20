@@ -3,10 +3,14 @@ export const prerender = true;
 
 import { getCollection } from "astro:content";
 import BlogLayout from "@layouts/BlogLayout.astro";
+import { getRegion } from "../../lib/data/regions";
+import { listProducts } from "../../lib/data/products";
+
+const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "de";
 
 const slugOf = (id: string) => id.replace(/\/index$/, "");
 
-const posts = (
+const allPosts = (
   await getCollection(
     "blog",
     ({ data }) => data.language === "en" && !data.draft,
@@ -14,6 +18,48 @@ const posts = (
 ).sort(
   (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
 );
+
+// Calculate categories and authors dynamically
+const categoriesMap = new Map<string, number>();
+const authorsMap = new Map<string, { slug: string; count: number }>();
+
+allPosts.forEach((post) => {
+  const cat = post.data.category || "Rituals";
+  const author = post.data.author || "Ayni Team";
+  const authorSlug = post.data.authorSlug || "ayni-team";
+
+  categoriesMap.set(cat, (categoriesMap.get(cat) || 0) + 1);
+  authorsMap.set(author, {
+    slug: authorSlug,
+    count: (authorsMap.get(author)?.count || 0) + 1,
+  });
+});
+
+const categories = Array.from(categoriesMap.entries()).map(([name, count]) => ({
+  name,
+  slug: name.toLowerCase(),
+  count,
+}));
+
+const authors = Array.from(authorsMap.entries()).map(([name, info]) => ({
+  name,
+  slug: info.slug,
+  count: info.count,
+}));
+
+const region = await getRegion(DEFAULT_REGION);
+let featuredProducts: any[] = [];
+if (region) {
+  try {
+    const productsList = await listProducts(region.id);
+    featuredProducts = productsList.filter((p) => ['nukini-sansara', 'agua-de-florida'].includes(p.handle)).slice(0, 2);
+    if (featuredProducts.length === 0) {
+      featuredProducts = productsList.slice(0, 2);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 const fmtDate = (d: Date) =>
   d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
@@ -26,37 +72,121 @@ const fmtDate = (d: Date) =>
   canonicalPath="/blog"
 >
   <h1 class="mb-2 text-3xl font-semibold">Journal</h1>
-  <p class="mb-8 text-neutral-600 dark:text-neutral-400">
+  <p class="mb-8 text-neutral-600">
     Preparation, care and meaning behind the sacred tools we offer.
   </p>
 
-  {posts.length === 0 && (
-    <p class="text-neutral-500">No posts yet. Add one at <a href="/keystatic" class="underline">/keystatic</a>.</p>
-  )}
+  <div class="grid gap-12 lg:grid-cols-[1fr_260px] w-full">
+    <!-- Main content: posts list -->
+    <div>
+      {allPosts.length === 0 && (
+        <p class="text-neutral-500">No posts yet. Add one at <a href="/keystatic" class="underline">/keystatic</a>.</p>
+      )}
 
-  <ul class="grid gap-8 sm:grid-cols-2">
-    {posts.map((post) => (
-      <li class="group">
-        <a href={`/blog/${slugOf(post.id)}`} class="block no-underline">
-          {post.data.coverImage && (
-            <img
-              src={post.data.coverImage}
-              alt={post.data.title}
-              class="mb-3 aspect-[3/2] w-full rounded-xl object-cover"
-              loading="lazy"
-            />
-          )}
-          <time class="text-xs uppercase tracking-wide text-neutral-500">
-            {fmtDate(post.data.publishedDate)}
-          </time>
-          <h2 class="mt-1 text-lg font-medium group-hover:underline">{post.data.title}</h2>
-          {post.data.excerpt && (
-            <p class="mt-1 line-clamp-3 text-sm text-neutral-600 dark:text-neutral-400">
-              {post.data.excerpt}
-            </p>
-          )}
-        </a>
-      </li>
-    ))}
-  </ul>
+      <ul class="grid gap-12 grid-cols-1">
+        {allPosts.map((post) => (
+          <li class="group">
+            <a href={`/blog/${slugOf(post.id)}`} class="flex flex-col md:flex-row gap-6 no-underline items-start">
+              <div class="aspect-[3/2] w-full md:w-[300px] lg:w-[340px] rounded-xl overflow-hidden bg-stone-100 relative border border-stone-200/40 shrink-0">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center select-none bg-stone-100 z-0">
+                  <span class="font-serif italic text-lg text-stone-555 mb-1">Ayni Râpé</span>
+                  <span class="text-xs uppercase tracking-[0.2em] text-stone-400 font-semibold">Journal</span>
+                </div>
+                {post.data.coverImage && (
+                  <img
+                    src={post.data.coverImage}
+                    alt={post.data.title}
+                    class="absolute inset-0 w-full h-full object-cover z-10"
+                    loading="lazy"
+                    onerror="this.style.opacity='0'; this.style.pointerEvents='none';"
+                  />
+                )}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 mb-2">
+                  <time>{fmtDate(post.data.publishedDate)}</time>
+                  <span>&bull;</span>
+                  <span class="text-amber-600 font-medium">{post.data.category}</span>
+                </div>
+                <h2 class="text-xl font-semibold group-hover:underline text-stone-900 leading-snug mb-2">{post.data.title}</h2>
+                {post.data.excerpt && (
+                  <p class="text-sm text-neutral-600 leading-relaxed">
+                    {post.data.excerpt}
+                  </p>
+                )}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Right Sidebar -->
+    <aside class="self-start sticky top-28 space-y-10 lg:border-l lg:border-stone-200/60 lg:pl-8">
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-950 mb-4">Categories</h3>
+        <ul class="space-y-2">
+          {categories.map((c) => (
+            <li>
+              <a
+                href={`/blog/category/${c.slug}`}
+                class="text-stone-600 hover:text-amber-600 text-sm font-medium transition-colors flex items-center justify-between"
+              >
+                <span>{c.name}</span>
+                <span class="text-xs text-stone-400">({c.count})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-950 mb-4">Authors</h3>
+        <ul class="space-y-2">
+          {authors.map((a) => (
+            <li>
+              <a
+                href={`/blog/author/${a.slug}`}
+                class="text-stone-600 hover:text-amber-600 text-sm font-medium transition-colors flex items-center justify-between"
+              >
+                <span>{a.name}</span>
+                <span class="text-xs text-stone-400">({a.count})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Cross-sell block -->
+      {featuredProducts.length > 0 && (
+        <div class="border-t border-stone-200/60 pt-8">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-950 mb-4">Featured Products</h3>
+          <div class="space-y-4">
+            {featuredProducts.map((p) => (
+              <a href={`/${DEFAULT_REGION}/store/${p.id}`} class="flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-full overflow-hidden border border-stone-150 bg-stone-50 shrink-0">
+                  <img src={p.thumbnail} alt={p.title} class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-1 min-w-0 text-left">
+                  <h4 class="text-xs font-bold text-stone-900 truncate group-hover:text-amber-600 transition-colors leading-tight">{p.title}</h4>
+                  <p class="text-[10px] text-stone-500 mt-0.5">View details &rarr;</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </aside>
+  </div>
+
+  <!-- SEO Text Block at the Bottom -->
+  <section class="mt-20 pt-10 border-t border-stone-200/60 text-stone-600 text-sm leading-relaxed space-y-4 max-w-4xl">
+    <h2 class="text-xl font-semibold text-stone-900">Ayni Râpé Shamanic Knowledge & Ceremonial Guides</h2>
+    <p>
+      Welcome to the Ayni Râpé Journal, your comprehensive resource for learning about authentic Amazonian shamanic supplies, ceremonial plant preparations, and ancestral traditions. Here, we share guides on the history and spiritual properties of Mapacho-based mixtures, proper usage of traditional Tepi and Kuripe pipes, and energy-cleansing rituals using Palo Santo and Agua de Florida.
+    </p>
+    <p>
+      Our mission is to support personal growth, healing, and spiritual connection by offering ethically-sourced botanical specimens and handmade accessories. Explore our articles written by the Ayni Team to deepen your understanding of Amazonian sacred medicines and integrate their teachings respectfully into your daily practice.
+    </p>
+  </section>
 </BlogLayout>

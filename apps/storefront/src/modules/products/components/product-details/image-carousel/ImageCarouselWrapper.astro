@@ -1,6 +1,7 @@
 ---
 import { getImage } from "astro:assets";
 import { ImageCarousel, type OptimizedCarouselImage } from "./ImageCarousel";
+import PlaceholderImage from "../../thumbnail/PlaceholderImage.astro";
 
 interface Props {
   images: { url: string }[];
@@ -53,4 +54,12 @@ const optimizedImages: OptimizedCarouselImage[] = await Promise.all(
 );
 ---
 
-<ImageCarousel images={optimizedImages} alt={alt} client:visible />
+{
+  images.length > 0 ? (
+    <ImageCarousel images={optimizedImages} alt={alt} client:visible />
+  ) : (
+    <div class="flex items-center justify-center w-full aspect-square bg-stone-50 border border-stone-200/60 rounded-full max-w-md md:max-w-lg mx-auto text-stone-300">
+      <PlaceholderImage size={96} />
+    </div>
+  )
+}

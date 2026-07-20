@@ -1,0 +1,45 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getRegionParams } from "@lib/params/region-params";
+
+export const getStaticPaths = getRegionParams;
+---
+
+<Layout
+  title="Privacy Policy"
+  description="Privacy policy and data protection terms for Ayni Rapé."
+>
+  <section class="mx-auto max-w-3xl px-8 py-12 md:px-12 lg:px-16">
+    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
+      LEGAL
+    </p>
+    <h1 class="mt-4 text-4xl font-bold tracking-tight text-stone-900">
+      Privacy Policy
+    </h1>
+    <div class="mt-8 space-y-6 text-base leading-8 text-stone-700">
+      <p>
+        At Ayni Râpé, we take your privacy seriously. This privacy policy explains how we collect, use, and protect your personal information when you use our website.
+      </p>
+
+      <h2 class="text-2xl font-bold text-stone-900 pt-4">Data Collection</h2>
+      <p>
+        We collect personal data to complete your purchases and run our website:
+      </p>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Contact information (e.g. name, email address, phone number).</li>
+        <li>Billing and shipping addresses.</li>
+        <li>Order history and cart state to provide accurate pricing and fulfillment.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-stone-900 pt-4">Data Sharing</h2>
+      <p>
+        We do not sell your personal data. We only share information with third-party service providers (such as shipping couriers and payment processors) to the extent necessary to fulfill your orders.
+      </p>
+
+      <h2 class="text-2xl font-bold text-stone-900 pt-4">Your Rights</h2>
+      <p>
+        You have the right to request access to the personal data we hold about you, request corrections, or request deletion of your personal data at any time by contacting us at <a href="mailto:info@aynirape.com" class="text-amber-600 hover:underline">info@aynirape.com</a>.
+      </p>
+    </div>
+  </section>
+</Layout>

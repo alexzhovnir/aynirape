@@ -12,25 +12,28 @@ const { imageUrl, title, priority = false } = Astro.props;
 ---
 
 <div
-  class="hover:shadow-sm ease-in-out duration-200 h-full flex items-center justify-center"
+  class="hover:shadow-sm ease-in-out duration-200 w-full flex items-center justify-center"
 >
-  <div class="overflow-hidden rounded-xl">
+  <div class="overflow-hidden rounded-full w-full aspect-square">
     {
       imageUrl ? (
         <Image
           src={imageUrl}
           width={512}
-          height={640}
+          height={512}
           alt={title}
           widths={[256, 384, 512]}
           sizes="(max-width: 768px) 50vw, (max-width: 1536px) 33vw, 25vw"
           format="webp"
           quality={45}
+          class="w-full h-full object-cover rounded-full"
           loading={priority ? "eager" : "lazy"}
           fetchpriority={priority ? "high" : "auto"}
         />
       ) : (
-        <PlaceholderImage size={24} />
+        <div class="w-full h-full bg-stone-50 border border-stone-200/60 flex items-center justify-center text-stone-300 group-hover:bg-stone-100/80 transition-colors duration-200 rounded-full">
+          <PlaceholderImage size={48} />
+        </div>
       )
     }
   </div>

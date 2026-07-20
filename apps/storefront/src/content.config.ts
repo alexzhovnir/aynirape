@@ -13,6 +13,9 @@ const blog = defineCollection({
     draft: z.boolean().default(false),
     coverImage: z.string().optional(),
     relatedProducts: z.array(z.string()).default([]),
+    category: z.string().default("Rituals"),
+    author: z.string().default("Ayni Team"),
+    authorSlug: z.string().default("ayni-team"),
   }),
 });
 

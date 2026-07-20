@@ -1,0 +1,40 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getRegionParams } from "@lib/params/region-params";
+
+export const getStaticPaths = getRegionParams;
+---
+
+<Layout
+  title="Impressum"
+  description="Impressum and legal information for Ayni Rapé."
+>
+  <section class="mx-auto max-w-3xl px-8 py-12 md:px-12 lg:px-16">
+    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
+      LEGAL NOTICE
+    </p>
+    <h1 class="mt-4 text-4xl font-bold tracking-tight text-stone-900">
+      Impressum / Legal Notice
+    </h1>
+    <div class="mt-8 space-y-6 text-base leading-8 text-stone-700">
+      <p>
+        Legal information required for European Union merchants.
+      </p>
+
+      <h2 class="text-2xl font-bold text-stone-900 pt-4">Company Details</h2>
+      <p class="leading-relaxed">
+        <strong>Ayni Râpé Co.</strong><br/>
+        Authorized Representative: Alex Zhovnir<br/>
+        Email: <a href="mailto:info@aynirape.com" class="text-amber-600 hover:underline">info@aynirape.com</a><br/>
+        Website: <a href="https://aynirape.com" class="text-amber-600 hover:underline">aynirape.com</a>
+      </p>
+
+      <h2 class="text-2xl font-bold text-stone-900 pt-4">Online Dispute Resolution</h2>
+      <p>
+        The European Commission provides a platform for online dispute resolution (ODR), which you can find at:
+        <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noreferrer" class="text-amber-600 hover:underline">https://ec.europa.eu/consumers/odr</a>.
+        We are neither obligated nor willing to participate in dispute resolution proceedings before a consumer arbitration board.
+      </p>
+    </div>
+  </section>
+</Layout>

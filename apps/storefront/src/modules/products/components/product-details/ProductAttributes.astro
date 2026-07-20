@@ -7,36 +7,57 @@ interface Props {
   length?: number | null;
   width?: number | null;
   height?: number | null;
+  metadata?: Record<string, any> | null;
 }
 
-const { material, origin_country, type, weight, length, width, height } =
+const { material, origin_country, type, weight, length, width, height, metadata } =
   Astro.props;
 ---
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
   <div class="grid grid-cols-2 gap-x-8">
     <div class="flex flex-col gap-y-4">
+      {metadata?.tribe && (
+        <div>
+          <span class="font-semibold text-stone-700">Tribe / Origin</span>
+          <p>{metadata.tribe}</p>
+        </div>
+      )}
+      {metadata?.strength && (
+        <div>
+          <span class="font-semibold text-stone-700">Strength</span>
+          <p class="inline-block bg-stone-100 text-stone-800 text-xs px-2.5 py-1 rounded-full font-medium mt-1">
+            {metadata.strength}
+          </p>
+        </div>
+      )}
+      {metadata?.ingredients && (
+        <div>
+          <span class="font-semibold text-stone-700">Ingredients</span>
+          <p>{metadata.ingredients}</p>
+        </div>
+      )}
       <div>
-        <span class="font-semibold">Material</span>
+        <span class="font-semibold text-stone-700">Material</span>
         <p>{material || "-"}</p>
       </div>
       <div>
-        <span class="font-semibold">Country of origin</span>
+        <span class="font-semibold text-stone-700">Country of origin</span>
         <p>{origin_country || "-"}</p>
-      </div>
-      <div>
-        <span class="font-semibold">Type</span>
-        <p>{type?.value || "-"}</p>
       </div>
     </div>
 
     <div class="flex flex-col gap-y-4">
       <div>
-        <span class="font-semibold">Weight</span>
+        <span class="font-semibold text-stone-700">Type</span>
+        <p>{type?.value || "-"}</p>
+      </div>
+      <div>
+        <span class="font-semibold text-stone-700">Weight</span>
         <p>{weight ? `${weight}g` : "-"}</p>
       </div>
       <div>
-        <span class="font-semibold">Dimensions</span>
+        <span class="font-semibold text-stone-700">Dimensions</span>
         <p>
           {
             length && width && height

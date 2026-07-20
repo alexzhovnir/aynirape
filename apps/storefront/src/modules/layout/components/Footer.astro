@@ -9,18 +9,17 @@ const currentYear = new Date().getFullYear();
 const shopLinks = [
   { href: `/${countryCode}`, label: "Home" },
   { href: `/${countryCode}/store`, label: "All products" },
+  { href: `/blog`, label: "Blog" },
   { href: `/${countryCode}/cart`, label: "Cart" },
   { href: `/${countryCode}/checkout`, label: "Checkout" },
 ];
 
 const companyLinks = [
-  { href: `/${countryCode}/privacy`, label: "Privacy" },
-  { href: `/${countryCode}/terms`, label: "Terms" },
-  {
-    href: "https://github.com/Bystrol/astro-medusa-starter",
-    label: "GitHub",
-    external: true,
-  },
+  { href: `/${countryCode}/about`, label: "About Us" },
+  { href: `/${countryCode}/contact`, label: "Contact" },
+  { href: `/${countryCode}/delivery-and-payment`, label: "Delivery & Payment" },
+  { href: `/${countryCode}/privacy-policy`, label: "Privacy Policy" },
+  { href: `/${countryCode}/impressum`, label: "Impressum" },
 ];
 ---
 
@@ -31,16 +30,15 @@ const companyLinks = [
     >
       <section class="max-w-md">
         <p
-          class="text-xs font-semibold uppercase tracking-[0.28em] text-black/55"
+          class="text-xl font-serif italic text-stone-750"
         >
-          Astro Medusa Starter
+          Ayni Râpé
         </p>
-        <h2 class="mt-4 text-3xl font-semibold tracking-tight text-black">
-          A storefront that feels ready to ship.
+        <h2 class="mt-4 text-3xl font-semibold tracking-tight text-stone-900">
+          Sacred Amazonian Shamanic Supplies
         </h2>
-        <p class="mt-4 text-sm leading-6 text-black/65">
-          Built for fast browsing, clean checkout, and a polished shopping flow
-          from first click to confirmed order.
+        <p class="mt-4 text-sm leading-6 text-stone-600">
+          Ethically sourced rapé, tepi & kuripe applicators, aromatics, and ornaments, prepared in strict respect of traditional indigenous practices.
         </p>
       </section>
 
@@ -80,14 +78,13 @@ const companyLinks = [
       </nav>
 
       <section>
-        <p class="text-sm font-semibold text-black">Customer Care</p>
-        <div class="mt-4 space-y-4 text-sm text-black/65">
-          <p>
-            Need help with the starter? Browse the catalog, test the cart, and
-            explore the full purchase flow end to end.
+        <p class="text-sm font-semibold text-stone-900">Age Restriction</p>
+        <div class="mt-4 space-y-4 text-sm text-stone-600">
+          <p class="text-xs border border-amber-200 bg-amber-50/50 p-3 rounded-lg text-amber-800">
+            <strong>Warning:</strong> To shop at AyniRape, you must be at least 18 years old. All products are supplied for ethnographic, scientific, and incense/ritual burning purposes.
           </p>
           <a
-            class="inline-flex rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-black/85"
+            class="inline-flex rounded-full bg-stone-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-stone-800"
             href={`/${countryCode}/store`}
           >
             Start shopping
@@ -96,8 +93,8 @@ const companyLinks = [
       </section>
     </div>
 
-    <p class="text-sm text-black/55 pt-6">
-      &copy; {currentYear} Astro Medusa Starter. Built by Michał Bystryk.
+    <p class="text-sm text-stone-500 pt-6">
+      &copy; {currentYear} Ayni Râpé. All rights reserved.
     </p>
   </div>
 </footer>

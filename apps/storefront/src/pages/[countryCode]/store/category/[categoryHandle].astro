@@ -1,0 +1,137 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getRegion } from "@lib/data/regions";
+import { listProducts, listCategories } from "@lib/data/products";
+import { getCategoryParams } from "@lib/params/category-params";
+import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
+
+export const getStaticPaths = getCategoryParams;
+
+const { countryCode, categoryHandle } = Astro.params;
+
+const region = await getRegion(countryCode);
+
+if (!region) {
+  return Astro.redirect("/not-found");
+}
+
+let products: Awaited<ReturnType<typeof listProducts>> = [];
+let categories: Awaited<ReturnType<typeof listCategories>> = [];
+let currentCategory: any = null;
+let error: Error | undefined;
+
+try {
+  categories = await listCategories();
+  currentCategory = categories.find((c) => c.handle === categoryHandle);
+  
+  if (currentCategory) {
+    products = await listProducts(region.id, currentCategory.id);
+  } else {
+    return Astro.redirect(`/${countryCode}/store`);
+  }
+} catch (e) {
+  error = e instanceof Error ? e : new Error("Unknown error");
+  console.error(error);
+}
+
+const pageTitle = currentCategory ? `${currentCategory.name}` : "Category";
+---
+
+<Layout
+  title={pageTitle}
+  description={`Browse our collection of ${pageTitle} products.`}
+>
+  <div class="px-8 py-6 md:px-12 lg:px-16 max-w-8xl mx-auto">
+    <h1 class="mb-8 text-4xl font-bold">{pageTitle}</h1>
+    {error && <p class="text-red-700 mb-6">{error.message}</p>}
+
+    <div class="flex flex-col md:flex-row gap-10">
+      <!-- Sidebar / Category Filter -->
+      <aside class="w-full md:w-64 shrink-0">
+        <!-- Desktop Sidebar -->
+        <div class="hidden md:flex flex-col gap-6 sticky top-24">
+          <h2 class="text-sm font-semibold text-stone-400 uppercase tracking-wider">Categories</h2>
+          <nav class="flex flex-col gap-1">
+            <a
+              href={`/${countryCode}/store`}
+              class="text-left px-3 py-2 rounded-lg text-stone-500 hover:text-stone-900 hover:bg-stone-50/80 transition-all duration-200 cursor-pointer font-medium"
+            >
+              All Products
+            </a>
+            {
+              categories?.map((cat) => {
+                const isActive = cat.id === currentCategory?.id;
+                return (
+                  <a
+                    href={`/${countryCode}/store/category/${cat.handle}`}
+                    class={`text-left px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer font-medium ${
+                      isActive
+                        ? "text-stone-900 bg-stone-100 font-semibold"
+                        : "text-stone-500 hover:text-stone-900 hover:bg-stone-50/80"
+                    }`}
+                  >
+                    {cat.name}
+                  </a>
+                );
+              })
+            }
+          </nav>
+        </div>
+
+        <!-- Mobile Categories Horizontal Scroll -->
+        <div class="md:hidden -mx-8 px-8 overflow-x-auto scrollbar-none flex gap-2 pb-4">
+          <a
+            href={`/${countryCode}/store`}
+            class="whitespace-nowrap px-4 py-2 rounded-full text-sm text-stone-500 bg-stone-100/50 hover:bg-stone-100 transition-all duration-200 cursor-pointer font-medium"
+          >
+            All Products
+          </a>
+          {
+            categories?.map((cat) => {
+              const isActive = cat.id === currentCategory?.id;
+              return (
+                <a
+                  href={`/${countryCode}/store/category/${cat.handle}`}
+                  class={`whitespace-nowrap px-4 py-2 rounded-full text-sm transition-all duration-200 cursor-pointer font-medium ${
+                    isActive
+                      ? "text-stone-900 bg-stone-100 font-semibold"
+                      : "text-stone-500 bg-stone-100/50 hover:bg-stone-100"
+                  }`}
+                >
+                  {cat.name}
+                </a>
+              );
+            })
+          }
+        </div>
+      </aside>
+
+      <!-- Products Grid -->
+      <div class="flex-1">
+        {products.length === 0 && !error && (
+          <p class="text-stone-500 py-8">No products found in this category.</p>
+        )}
+        <ul
+          class="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 w-full gap-x-10 gap-y-16"
+        >
+          {
+            products?.map((product, index) => (
+              <li
+                class="transition-all duration-250 ease-out origin-center"
+              >
+                <ProductPreview
+                  id={product.id}
+                  variants={product.variants ?? []}
+                  thumbnailUrl={product.thumbnail ?? undefined}
+                  imageUrl={product.images?.[0]?.url}
+                  title={product.title}
+                  priority={index < 4}
+                />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</Layout>

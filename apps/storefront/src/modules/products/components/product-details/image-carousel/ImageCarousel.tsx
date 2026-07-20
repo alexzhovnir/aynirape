@@ -70,7 +70,7 @@ export const ImageCarousel = ({ images, alt }: Props) => {
 
       <div className="flex flex-col gap-4">
         {renderOptimizedImg(currentImage.main, {
-          className: "w-full object-cover cursor-pointer",
+          className: "w-full aspect-square object-cover cursor-pointer rounded-full",
           onClick: handlePreview,
           loading: "eager",
         })}
