@@ -52,10 +52,10 @@ const featuredCategories = [
     name: "Rapé",
     desc: "A sacred traditional healing practice of the tribal peoples of Peru and Brazil.",
     href: `/${countryCode}/store/category/rapé`,
-    color: "bg-[#1e2d24] text-white border-[#2d3f34]",
-    textColor: "text-stone-300",
+    color: "bg-[#9db0ba] text-white border-transparent",
+    textColor: "text-stone-100",
     titleColor: "text-white",
-    btnColor: "text-amber-400 border-amber-400 hover:bg-amber-400 hover:text-stone-900",
+    btnColor: "text-white border-white hover:bg-white hover:text-[#9db0ba]",
     imageUrl: rapeProduct?.images?.[0]?.url || rapeProduct?.thumbnail
   },
   {
@@ -172,7 +172,7 @@ const schemaData = {
   <!-- SEO JSON-LD Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
   <!-- Hero Section -->
-  <section class="relative bg-[#1e2d24] text-white overflow-hidden py-16 md:py-24 px-8 md:px-16 lg:px-24 rounded-3xl">
+  <section class="relative bg-[#9db0ba] text-white overflow-hidden py-16 md:py-24 px-8 md:px-16 lg:px-24 rounded-3xl">
     <div class="max-w-7xl mx-auto grid md:grid-cols-[1.2fr_0.8fr] gap-12 items-center relative z-10 w-full">
       <!-- Left Column: Content -->
       <div class="flex flex-col gap-6">
@@ -180,19 +180,19 @@ const schemaData = {
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
           Authentic Amazonian <br/>Shamanic Supplies
         </h1>
-        <p class="text-stone-300 text-base leading-relaxed max-w-xl">
+        <p class="text-stone-100 text-base leading-relaxed max-w-xl">
           A sacred traditional healing practice of the tribal peoples of Peru and Brazil. Ethically sourced, prepared in respect of indigenous traditions.
         </p>
         <div class="flex flex-wrap gap-4 mt-4">
           <a
             href={`/${countryCode}/store`}
-            class="px-8 py-4 bg-amber-500 text-stone-950 font-semibold text-sm rounded-full hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/20 cursor-pointer"
+            class="px-8 py-4 bg-white text-stone-900 font-semibold text-sm rounded-full hover:bg-stone-50 transition-colors shadow-lg cursor-pointer"
           >
             View Catalogue
           </a>
           <a
             href={`/blog`}
-            class="px-8 py-4 border border-stone-700 text-white font-semibold text-sm rounded-full hover:bg-[#2c3d33] transition-colors cursor-pointer"
+            class="px-8 py-4 border border-white/40 text-white font-semibold text-sm rounded-full hover:bg-white/10 transition-colors cursor-pointer"
           >
             Read Our Blog
           </a>
@@ -202,9 +202,9 @@ const schemaData = {
       <!-- Right Column: Auto Carousel -->
       <div class="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 mx-auto flex items-center justify-center shrink-0">
         <!-- Glow effect behind -->
-        <div class="absolute inset-0 bg-amber-500/10 rounded-full blur-3xl pointer-events-none scale-110"></div>
+        <div class="absolute inset-0 bg-white/10 rounded-full blur-3xl pointer-events-none scale-110"></div>
         
-        <div class="relative w-full h-full rounded-full overflow-hidden border-2 border-[#2c3d33] shadow-2xl bg-[#142019] flex items-center justify-center">
+        <div class="relative w-full h-full rounded-full overflow-hidden border-2 border-white/20 shadow-2xl bg-white/10 flex items-center justify-center">
           {heroImages.map((src, i) => (
             <img
               src={src}
@@ -434,12 +434,12 @@ const schemaData = {
   </section>
 
   <!-- What is Rapé Info -->
-  <section class="bg-[#142019] text-white py-20 px-8 md:px-16 lg:px-24 rounded-3xl my-12 border border-[#1e2d24]">
+  <section class="bg-[#9db0ba] text-white py-20 px-8 md:px-16 lg:px-24 rounded-3xl my-12 border border-white/20">
     <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center">
       <div>
-        <span class="text-amber-400 font-semibold tracking-wider text-xs uppercase">ANCIENT WISDOM</span>
+        <span class="text-white/80 font-semibold tracking-wider text-xs uppercase">ANCIENT WISDOM</span>
         <h2 class="text-3xl font-bold tracking-tight text-white mt-2 mb-6">What is Râpé?</h2>
-        <div class="space-y-4 text-stone-300 text-sm leading-relaxed">
+        <div class="space-y-4 text-stone-100 text-sm leading-relaxed">
           <p>
             Râpé is a natural medicine and should be treated and used as such. Its main component is Mapacho. It is mixed with different herbs, seeds, bark, flowers, leaves, roots and their ashes, resulting in a variety of blends with different characteristics and benefits.
           </p>
@@ -448,12 +448,12 @@ const schemaData = {
           </p>
         </div>
       </div>
-      <div class="bg-[#1e2d24] p-8 rounded-3xl border border-[#2c3d33]">
+      <div class="bg-white/10 p-8 rounded-3xl border border-white/25">
         <h3 class="font-bold text-white text-lg mb-3">Legal & Safe</h3>
-        <p class="text-stone-300 text-sm leading-relaxed mb-6">
+        <p class="text-stone-100 text-sm leading-relaxed mb-6">
           The sacred mixtures offered do not contain any narcotic or prohibited substances. All the recipes presented are completely legal and are not prohibited for circulation in the European Union.
         </p>
-        <div class="bg-[#142019]/50 p-4 rounded-xl text-stone-300 text-xs leading-normal">
+        <div class="bg-[#222222]/30 p-4 rounded-xl text-stone-100 text-xs leading-normal">
           <strong>Notice:</strong> Offered for historical and ethnographic value as a raw botanical specimen.
         </div>
       </div>

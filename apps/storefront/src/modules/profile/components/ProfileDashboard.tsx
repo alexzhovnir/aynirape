@@ -1,4 +1,3 @@
-import type { StoreCart } from "@medusajs/types";
 import { useEffect, useState } from "react";
 
 interface ProfileDashboardProps {
@@ -26,6 +25,8 @@ interface FeedbackItem {
   is_approved: boolean;
 }
 
+type TabType = "orders" | "favorites" | "reviews";
+
 export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
   const [user, setUser] = useState<{ email: string; first_name?: string; last_name?: string } | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -38,6 +39,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
   const [favorites, setFavorites] = useState<{ id: string; title: string; handle: string; thumbnail?: string }[]>([]);
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<TabType>("orders");
 
   // Initialize
   useEffect(() => {
@@ -59,7 +61,6 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
   useEffect(() => {
     if (!user) return;
 
-    // Simulate loading order history & feedbacks linked to this user's email/account
     const mockOrders: OrderHistory[] = [
       {
         id: "ord_01J35D8YZE",
@@ -104,7 +105,6 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
       return;
     }
 
-    // Direct simulated registration/login for local storage
     const userInfo = { email, first_name: email.split("@")[0] };
     localStorage.setItem("ayni_user", JSON.stringify(userInfo));
     setUser(userInfo);
@@ -228,13 +228,13 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
             </div>
             <button
               type="submit"
-              className="w-full py-4 bg-amber-500 text-stone-950 font-bold rounded-full hover:bg-amber-400 transition-colors shadow-sm cursor-pointer mt-4"
+              className="w-full py-4 bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold rounded-full transition-colors shadow-sm cursor-pointer mt-4"
             >
               Sign In
             </button>
             <p className="text-sm text-stone-500 text-center mt-4">
               Don't have an account?{" "}
-              <button type="button" onClick={() => setIsRegistering(true)} className="text-amber-600 hover:underline font-medium">
+              <button type="button" onClick={() => setIsRegistering(true)} className="text-[#bdcd00] hover:underline font-medium">
                 Register
               </button>
             </p>
@@ -244,10 +244,11 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
     );
   }
 
-  // Logged In screen
+  // Logged In screen with Left Sidebar Menu and cleaned up borders
   return (
     <div className="max-w-6xl mx-auto my-12 px-4">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-stone-150 pb-8 mb-10">
+      {/* Header section (Borderless, minimal structure) */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 mb-8 border-b border-stone-100">
         <div>
           <span className="text-xs uppercase tracking-widest text-stone-400 font-semibold">Welcome back</span>
           <h1 className="text-3xl font-bold text-stone-950 mt-1">
@@ -256,144 +257,176 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
         </div>
         <button
           onClick={handleLogout}
-          className="px-6 py-2.5 border border-stone-200 hover:bg-stone-50 text-stone-700 rounded-full text-sm font-medium transition-colors cursor-pointer"
+          className="px-6 py-2 border border-stone-200 hover:bg-stone-50 text-stone-600 rounded-full text-xs font-semibold tracking-wider uppercase transition-colors cursor-pointer"
         >
           Sign Out
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-12">
-        {/* Left column: Orders & Reviews */}
-        <div className="space-y-12">
-          {/* Order history */}
-          <section className="bg-white border border-stone-150 rounded-3xl p-8 shadow-sm">
-            <h2 className="text-2xl font-bold text-stone-950 mb-6 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-stone-500">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-              </svg>
-              Order History
-            </h2>
+      <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-10 items-start">
+        {/* Left Sidebar Menu */}
+        <aside className="flex flex-col gap-1.5" aria-label="Profile navigation sidebar">
+          <button
+            onClick={() => setActiveTab("orders")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+              activeTab === "orders"
+                ? "bg-[#9db0ba] text-white"
+                : "text-stone-600 hover:bg-stone-50"
+            }`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+            </svg>
+            <span>Order History</span>
+          </button>
 
-            {orders.length === 0 ? (
-              <p className="text-stone-500 text-sm">You haven't placed any orders yet.</p>
-            ) : (
-              <div className="space-y-6">
-                {orders.map(order => (
-                  <div key={order.id} className="border border-stone-150 rounded-2xl p-6">
-                    <div className="flex justify-between items-center border-b border-stone-100 pb-4 mb-4 text-sm flex-wrap gap-2">
-                      <div>
-                        <span className="text-stone-400 font-semibold block text-xs uppercase">Order ID</span>
-                        <span className="font-semibold text-stone-900">{order.id}</span>
-                      </div>
-                      <div>
-                        <span className="text-stone-400 font-semibold block text-xs uppercase">Date</span>
-                        <span className="text-stone-700">{new Date(order.created_at).toLocaleDateString()}</span>
-                      </div>
-                      <div>
-                        <span className="text-stone-400 font-semibold block text-xs uppercase">Total</span>
-                        <span className="font-bold text-stone-950">{(order.total / 100).toFixed(2)} {order.currency_code.toUpperCase()}</span>
-                      </div>
-                      <div>
-                        <span className="text-stone-400 font-semibold block text-xs uppercase">Status</span>
-                        <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-xs font-semibold">{order.status}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      {order.items.map((item, idx) => (
-                        <div key={idx} className="flex items-center gap-4">
-                          {item.thumbnail ? (
-                            <img src={item.thumbnail} alt={item.title} className="w-12 h-12 object-cover rounded-xl border border-stone-100" />
-                          ) : (
-                            <div className="w-12 h-12 bg-stone-100 border border-stone-100 rounded-xl" />
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-sm text-stone-900 truncate">{item.title}</h4>
-                            <p className="text-xs text-stone-500">Qty: {item.quantity}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-
-          {/* Feedback section */}
-          <section className="bg-white border border-stone-150 rounded-3xl p-8 shadow-sm">
-            <h2 className="text-2xl font-bold text-stone-950 mb-6 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-stone-500">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379L12 21l3.62-3.134c1.154-.086 2.294-.213 3.423-.379 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-              </svg>
-              My Reviews
-            </h2>
-
-            {feedbacks.length === 0 ? (
-              <p className="text-stone-500 text-sm">You haven't left any feedback yet.</p>
-            ) : (
-              <div className="space-y-4">
-                {feedbacks.map(fb => (
-                  <div key={fb.id} className="border border-stone-100 rounded-2xl p-6 bg-stone-50/50">
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="flex text-amber-400 text-xs">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <span key={i}>{i < fb.rating ? "★" : "☆"}</span>
-                        ))}
-                      </div>
-                      <span className="text-xs text-stone-400">{new Date(fb.created_at).toLocaleDateString()}</span>
-                    </div>
-                    <p className="text-stone-700 text-sm leading-relaxed mb-3">"{fb.comment}"</p>
-                    <span className={`inline-flex items-center text-xs font-semibold ${fb.is_approved ? 'text-emerald-700' : 'text-amber-700'}`}>
-                      {fb.is_approved ? "✓ Published" : "⟳ Under Moderation"}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        </div>
-
-        {/* Right column: Favorites */}
-        <section className="bg-white border border-stone-150 rounded-3xl p-8 shadow-sm h-fit">
-          <h2 className="text-2xl font-bold text-stone-950 mb-6 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-stone-500">
+          <button
+            onClick={() => setActiveTab("favorites")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+              activeTab === "favorites"
+                ? "bg-[#9db0ba] text-white"
+                : "text-stone-600 hover:bg-stone-50"
+            }`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
             </svg>
-            My Favorites
-          </h2>
+            <span>My Favorites</span>
+          </button>
 
-          {favorites.length === 0 ? (
-            <p className="text-stone-500 text-sm">No items in your favorites list yet.</p>
-          ) : (
-            <div className="divide-y divide-stone-100">
-              {favorites.map(fav => (
-                <div key={fav.id} className="flex gap-4 py-4 first:pt-0 last:pb-0 items-center justify-between">
-                  <a href={`/${countryCode}/store/${fav.id}`} className="flex gap-4 items-center group">
-                    {fav.thumbnail ? (
-                      <img src={fav.thumbnail} alt={fav.title} className="w-14 h-14 object-cover rounded-xl border border-stone-100" />
-                    ) : (
-                      <div className="w-14 h-14 bg-stone-100 border border-stone-100 rounded-xl" />
-                    )}
-                    <span className="font-semibold text-sm text-stone-900 group-hover:text-amber-600 transition-colors truncate max-w-[160px]">
-                      {fav.title}
-                    </span>
-                  </a>
-                  
-                  <button
-                    onClick={() => handleRemoveFavorite(fav.id)}
-                    className="text-stone-400 hover:text-red-500 p-1.5 rounded-full hover:bg-stone-50 transition-colors cursor-pointer"
-                    aria-label="Remove from favorites"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                    </svg>
-                  </button>
+          <button
+            onClick={() => setActiveTab("reviews")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+              activeTab === "reviews"
+                ? "bg-[#9db0ba] text-white"
+                : "text-stone-600 hover:bg-stone-50"
+            }`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379L12 21l3.62-3.134c1.154-.086 2.294-.213 3.423-.379 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+            </svg>
+            <span>My Reviews</span>
+          </button>
+        </aside>
+
+        {/* Tab Contents - borderless details */}
+        <main className="w-full">
+          {activeTab === "orders" && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-bold text-stone-900 pb-4 border-b border-stone-100">Order History</h2>
+              {orders.length === 0 ? (
+                <p className="text-stone-500 text-sm">You haven't placed any orders yet.</p>
+              ) : (
+                <div className="space-y-6">
+                  {orders.map(order => (
+                    <div key={order.id} className="border border-stone-100 rounded-2xl p-6 bg-white shadow-sm">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-4 mb-4 border-b border-stone-100 text-xs">
+                        <div>
+                          <span className="text-stone-400 font-medium block uppercase tracking-wider">Order ID</span>
+                          <span className="font-semibold text-stone-900 mt-1 block">{order.id}</span>
+                        </div>
+                        <div>
+                          <span className="text-stone-400 font-medium block uppercase tracking-wider">Date</span>
+                          <span className="text-stone-700 mt-1 block">{new Date(order.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <div>
+                          <span className="text-stone-400 font-medium block uppercase tracking-wider">Total</span>
+                          <span className="font-bold text-stone-950 mt-1 block">{(order.total / 100).toFixed(2)} {order.currency_code.toUpperCase()}</span>
+                        </div>
+                        <div>
+                          <span className="text-stone-400 font-medium block uppercase tracking-wider">Status</span>
+                          <span className="mt-1 inline-block px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-bold uppercase">{order.status}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        {order.items.map((item, idx) => (
+                          <div key={idx} className="flex items-center gap-4">
+                            {item.thumbnail ? (
+                              <img src={item.thumbnail} alt={item.title} className="w-12 h-12 object-cover rounded-xl border border-stone-100" />
+                            ) : (
+                              <div className="w-12 h-12 bg-stone-50 border border-stone-100 rounded-xl" />
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-sm text-stone-900 truncate">{item.title}</h4>
+                              <p className="text-xs text-stone-400 mt-0.5">Quantity: {item.quantity}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           )}
-        </section>
+
+          {activeTab === "favorites" && (
+            <div>
+              <h2 className="text-xl font-bold text-stone-900 pb-4 border-b border-stone-100 mb-6">My Favorites</h2>
+              {favorites.length === 0 ? (
+                <p className="text-stone-500 text-sm">No items in your favorites list yet.</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {favorites.map(fav => (
+                    <div key={fav.id} className="flex items-center justify-between p-4 bg-white border border-stone-100 rounded-2xl shadow-sm">
+                      <a href={`/${countryCode}/store/${fav.id}`} className="flex gap-4 items-center group flex-1 min-w-0">
+                        {fav.thumbnail ? (
+                          <img src={fav.thumbnail} alt={fav.title} className="w-14 h-14 object-cover rounded-xl border border-stone-100 shrink-0" />
+                        ) : (
+                          <div className="w-14 h-14 bg-stone-50 border border-stone-100 rounded-xl shrink-0" />
+                        )}
+                        <span className="font-semibold text-sm text-stone-900 group-hover:text-[#9db0ba] transition-colors truncate">
+                          {fav.title}
+                        </span>
+                      </a>
+                      
+                      <button
+                        onClick={() => handleRemoveFavorite(fav.id)}
+                        className="text-stone-400 hover:text-red-500 p-2 rounded-full hover:bg-stone-50 transition-colors cursor-pointer shrink-0 ml-2"
+                        aria-label="Remove from favorites"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === "reviews" && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-bold text-stone-900 pb-4 border-b border-stone-100">My Reviews</h2>
+              {feedbacks.length === 0 ? (
+                <p className="text-stone-500 text-sm">You haven't left any feedback yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {feedbacks.map(fb => (
+                    <div key={fb.id} className="border border-stone-100 rounded-2xl p-6 bg-white shadow-sm">
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="flex text-amber-400 text-sm">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <span key={i}>{i < fb.rating ? "★" : "☆"}</span>
+                          ))}
+                        </div>
+                        <span className="text-xs text-stone-400">{new Date(fb.created_at).toLocaleDateString()}</span>
+                      </div>
+                      <p className="text-stone-700 text-sm leading-relaxed mb-4">"{fb.comment}"</p>
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase ${
+                        fb.is_approved ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                      }`}>
+                        {fb.is_approved ? "✓ Published" : "⟳ Under Moderation"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );

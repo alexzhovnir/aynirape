@@ -151,7 +151,7 @@ export const ProductActions = ({
                   className={clsx(
                     "py-2.5 px-5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-200 min-h-[44px] box-border border",
                     isSelected
-                      ? "bg-[#1e2d24] text-white border-[#1e2d24] shadow-sm"
+                      ? "bg-[#9db0ba] text-white border-[#9db0ba] shadow-sm"
                       : "bg-stone-50 text-stone-750 border-stone-200 hover:bg-stone-100 hover:border-stone-300"
                   )}
                   onClick={() => handleOptionSelect(option.id, value.id)}
