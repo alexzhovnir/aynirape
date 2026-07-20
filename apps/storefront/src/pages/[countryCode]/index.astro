@@ -301,7 +301,7 @@ const schemaData = {
     <!-- Scrollable container -->
     <div id="reviews-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-4 scroll-smooth -mx-4 px-4">
       {reviews.map((rev) => (
-        <div class="min-w-[290px] md:min-w-[380px] max-w-[380px] bg-white border border-stone-150 p-8 rounded-3xl flex flex-col justify-between gap-6 shrink-0 shadow-sm relative">
+        <div class="min-w-[290px] md:min-w-[380px] max-w-[380px] bg-white p-8 rounded-3xl flex flex-col justify-between gap-6 shrink-0 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.12)] transition-shadow duration-300 relative border border-stone-100">
           <div class="space-y-4">
             <div class="flex justify-between items-center">
               <h4 class="font-bold text-stone-900">{rev.name}</h4>
@@ -336,7 +336,7 @@ const schemaData = {
           name="name"
           required
           placeholder="Name"
-          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none text-stone-900 transition-colors"
+          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none text-stone-900 transition-colors"
         />
       </div>
       <div>
@@ -344,7 +344,7 @@ const schemaData = {
         <select
           name="rating"
           required
-          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none text-stone-900 transition-colors bg-white"
+          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none text-stone-900 transition-colors bg-white"
         >
           <option value="5">5 Stars (Excellent)</option>
           <option value="4">4 Stars (Good)</option>
@@ -360,7 +360,7 @@ const schemaData = {
           required
           rows="4"
           placeholder="Leave a review..."
-          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-amber-500 focus:outline-none text-stone-900 transition-colors resize-none"
+          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none text-stone-900 transition-colors resize-none"
         ></textarea>
       </div>
       
