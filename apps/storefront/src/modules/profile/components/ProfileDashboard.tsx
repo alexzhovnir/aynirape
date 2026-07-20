@@ -143,7 +143,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
   // Not Logged In screen
   if (!user) {
     return (
-      <div className="max-w-md mx-auto my-16 p-8 bg-white border border-stone-150 rounded-3xl shadow-sm">
+      <div className="max-w-md mx-auto my-16 p-8 bg-white rounded-3xl shadow-[0_2px_20px_-4px_rgba(0,0,0,0.08)]">
         <h2 className="text-3xl font-serif italic text-stone-900 mb-6 text-center">
           {isRegistering ? "Create Account" : "Sign In"}
         </h2>
@@ -159,7 +159,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={firstName}
                 onChange={e => setFirstName(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
+                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
               />
             </div>
             <div>
@@ -168,7 +168,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 type="text"
                 value={lastName}
                 onChange={e => setLastName(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
+                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
               />
             </div>
             <div>
@@ -178,7 +178,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
+                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
               />
             </div>
             <div>
@@ -188,7 +188,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
+                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
               />
             </div>
             <button
@@ -213,7 +213,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
+                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
               />
             </div>
             <div>
@@ -223,7 +223,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none"
+                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
               />
             </div>
             <button
