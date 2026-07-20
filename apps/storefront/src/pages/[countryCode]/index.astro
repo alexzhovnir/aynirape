@@ -485,6 +485,12 @@ const schemaData = {
     const feedbackSuccess = document.getElementById('feedback-success');
 
     leaveFeedbackBtn?.addEventListener('click', () => {
+      const savedUser = localStorage.getItem("ayni_user");
+      if (!savedUser) {
+        alert("Only registered users can leave feedback. Redirecting you to register/login page...");
+        window.location.href = `/${window.location.pathname.split('/')[1] || 'de'}/profile`;
+        return;
+      }
       dialog?.showModal();
     });
 

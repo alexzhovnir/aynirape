@@ -1,0 +1,18 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getRegionParams } from "@lib/params/region-params";
+import { ProfileDashboard } from "@modules/profile/components/ProfileDashboard";
+
+export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
+---
+
+<Layout
+  title="My Profile - Ayni Rapé"
+  description="Manage your order history, favorite Amazonian supplies, and reviews in your Ayni Rapé account."
+>
+  <div class="px-4 py-8 md:px-8 lg:px-12 max-w-7xl mx-auto min-h-[calc(100vh-140px)]">
+    <ProfileDashboard client:load countryCode={countryCode!} />
+  </div>
+</Layout>

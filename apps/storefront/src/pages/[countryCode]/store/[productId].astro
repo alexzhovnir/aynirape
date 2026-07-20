@@ -136,6 +136,23 @@ const schemaData = {
                 client:visible
               />
 
+              <!-- Favorite Button -->
+              <div class="mt-4">
+                <button
+                  id="btn-add-favorite"
+                  data-id={productId}
+                  data-title={title}
+                  data-thumbnail={thumbnail}
+                  data-handle={product?.handle}
+                  class="w-full py-3.5 px-6 border border-stone-200 text-stone-700 hover:bg-stone-50 font-bold rounded-full transition-colors flex items-center justify-center gap-2 cursor-pointer text-sm shadow-sm"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-stone-400 fav-heart-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                  </svg>
+                  <span id="fav-btn-label">Add to Favorites</span>
+                </button>
+              </div>
+
               <ProductAttributes
                 material={material}
                 origin_country={origin_country}
@@ -174,3 +191,64 @@ const schemaData = {
     }
   </div>
 </Layout>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    const favBtn = document.getElementById('btn-add-favorite');
+    const label = document.getElementById('fav-btn-label');
+    const icon = favBtn?.querySelector('.fav-heart-icon');
+
+    if (!favBtn) return;
+
+    const prodId = favBtn.getAttribute('data-id');
+    const title = favBtn.getAttribute('data-title');
+    const thumbnail = favBtn.getAttribute('data-thumbnail');
+    const handle = favBtn.getAttribute('data-handle');
+
+    function getFavorites() {
+      try {
+        return JSON.parse(localStorage.getItem('ayni_favorites') || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function isFavorite() {
+      const favs = getFavorites();
+      return favs.some(item => item.id === prodId);
+    }
+
+    function updateUI() {
+      if (isFavorite()) {
+        if (label) label.textContent = 'Remove from Favorites';
+        if (icon) {
+          icon.setAttribute('fill', '#ef4444');
+          icon.setAttribute('stroke', '#ef4444');
+          icon.classList.remove('text-stone-400');
+          icon.classList.add('text-red-500');
+        }
+      } else {
+        if (label) label.textContent = 'Add to Favorites';
+        if (icon) {
+          icon.setAttribute('fill', 'none');
+          icon.setAttribute('stroke', 'currentColor');
+          icon.classList.remove('text-red-500');
+          icon.classList.add('text-stone-400');
+        }
+      }
+    }
+
+    updateUI();
+
+    favBtn.addEventListener('click', () => {
+      let favs = getFavorites();
+      if (isFavorite()) {
+        favs = favs.filter(item => item.id !== prodId);
+      } else {
+        favs.push({ id: prodId, title, thumbnail, handle });
+      }
+      localStorage.setItem('ayni_favorites', JSON.stringify(favs));
+      updateUI();
+    });
+  });
+</script>
