@@ -48,10 +48,10 @@ export const ConfirmedFallbackPage = ({
       {/* Success header */}
       <div className="text-center mb-12">
         <div
-          className="inline-flex items-center justify-center w-16 h-16 bg-black rounded-full mb-6"
+          className="inline-flex items-center justify-center w-16 h-16 bg-[#bdcd00] rounded-full mb-6"
           aria-hidden="true"
         >
-          <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none">
+          <svg className="w-8 h-8 text-stone-950" viewBox="0 0 24 24" fill="none">
             <path
               d="M5 13l4 4L19 7"
               stroke="currentColor"
