@@ -382,7 +382,7 @@ export const ShippingAddressStep = ({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-black text-white py-3 px-8 rounded-md hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-3.5 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs shadow-sm cursor-pointer"
         >
           {isSubmitting ? "Saving..." : "Continue to delivery"}
         </button>

@@ -241,7 +241,7 @@ export const CartPage = ({ countryCode }: CartPageProps) => {
 
                 <a
                   href={`/${countryCode}/checkout`}
-                  className="w-full block text-center bg-black text-white py-4 px-6 rounded-md hover:bg-gray-800 transition-colors mt-6"
+                  className="w-full block text-center bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-4 px-6 rounded-full transition-colors mt-6 uppercase tracking-wider text-xs shadow-sm"
                 >
                   Go to checkout
                 </a>
