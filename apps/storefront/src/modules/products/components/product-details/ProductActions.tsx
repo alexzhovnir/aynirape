@@ -166,7 +166,7 @@ export const ProductActions = ({
 
       <button
         className={clsx(
-          "bg-black text-white py-4 px-8 rounded-md cursor-pointer hover:shadow-md ease-in-out duration-200",
+          "bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-4 px-8 rounded-full cursor-pointer hover:shadow-md transition-all duration-200 uppercase tracking-wider text-xs",
           {
             "opacity-50 cursor-not-allowed": isAddToCardButtonDisabled,
           },
