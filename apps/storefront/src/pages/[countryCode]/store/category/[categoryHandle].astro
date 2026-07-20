@@ -64,13 +64,87 @@ function getCategoryIcon(name: string, handle: string) {
 }
 
 const pageTitle = currentCategory ? `${currentCategory.name}` : "Category";
+
+/* ---------- SEO copy per category ---------- */
+function getCategorySeoText(handle: string): { heading: string; body: string } {
+  const h = handle?.toLowerCase() ?? "";
+  if (h.includes("tepi") || h.includes("kuripe")) {
+    return {
+      heading: "Handcrafted Tepi & Kuripe Applicators",
+      body: "Tepi and Kuripe are the traditional tools used for administering Rapé, a sacred snuff medicine of the Amazon. A Tepi is a long double-ended pipe used by a practitioner to blow Rapé into another person's nostrils during ceremony, while a Kuripe is a smaller V-shaped self-applicator. Each piece in our collection is hand-carved by indigenous artisans from sustainably harvested hardwoods, bone, and bamboo — often decorated with tribal patterns and natural pigments that carry cultural significance. Whether you are new to shamanic practice or an experienced curandero, choosing the right applicator is essential for a respectful and effective ceremony.",
+    };
+  }
+  if (h.includes("rape")) {
+    return {
+      heading: "Authentic Amazonian Rapé Blends",
+      body: "Rapé (pronounced 'ha-PEH') is a sacred snuff preparation made from finely ground Nicotiana rustica tobacco blended with medicinal tree barks, ashes, and aromatic herbs gathered from the Amazon rainforest. Used for thousands of years by indigenous tribes of Brazil and Peru — including the Yawanawá, Katukina, and Huni Kuin — Rapé plays a central role in shamanic healing, meditation, and ceremonial rites. Our blends are ethically sourced directly from indigenous communities, ensuring that traditional knowledge and sustainable harvesting practices are respected and preserved.",
+    };
+  }
+  if (h.includes("aromat")) {
+    return {
+      heading: "Sacred Aromatics & Incense",
+      body: "Aromatic herbs and resins have been used across Amazonian and Andean traditions for space cleansing, prayer, and ceremony. Our collection includes sustainably harvested Palo Santo sticks, Copal resin, and hand-rolled herbal incense — each selected for its purity and energetic qualities. Palo Santo ('Holy Wood') is traditionally burned to clear negative energy, invite positive intentions, and prepare a space for meditation or healing work. All aromatics are sourced with care from responsible suppliers who support reforestation and fair-trade practices.",
+    };
+  }
+  if (h.includes("suppl")) {
+    return {
+      heading: "Natural Supplements & Herbal Remedies",
+      body: "Rooted in centuries of indigenous plant medicine, our supplements bring the healing wisdom of the Amazon to your daily wellness routine. From concentrated herbal tinctures to adaptogenic plant extracts, every product is formulated using traditional recipes and ethically wildcrafted or cultivated botanicals. These supplements are intended to support physical vitality, mental clarity, and spiritual balance as part of a holistic approach to health.",
+    };
+  }
+  if (h.includes("ornament") || h.includes("decor")) {
+    return {
+      heading: "Tribal Ornaments & Ceremonial Decoration",
+      body: "Adorn your sacred space with authentic tribal ornaments and hand-crafted ceremonial decorations from indigenous Amazonian communities. Each piece — from beaded necklaces and feather accessories to carved figurines and woven textiles — carries deep cultural meaning and is made using techniques passed down through generations. These items serve not only as beautiful décor but as tangible connections to the traditions and spiritual world of the Amazon.",
+    };
+  }
+  return {
+    heading: `Explore Our ${pageTitle} Collection`,
+    body: `Discover a curated selection of ${pageTitle.toLowerCase()} from Ayni Rapé. Every product in our catalogue is ethically sourced from indigenous Amazonian communities, crafted with respect for ancestral traditions, and delivered across Europe with care. Browse the collection to find authentic shamanic supplies for your practice.`,
+  };
+}
+
+const seo = getCategorySeoText(categoryHandle);
+
+/* ---------- BreadcrumbList JSON-LD ---------- */
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `https://aynirape.com/${countryCode}` },
+    { "@type": "ListItem", position: 2, name: "Shop", item: `https://aynirape.com/${countryCode}/store` },
+    { "@type": "ListItem", position: 3, name: pageTitle, item: `https://aynirape.com/${countryCode}/store/category/${categoryHandle}` },
+  ],
+};
 ---
 
 <Layout
   title={`${pageTitle} - Shamanic Supplies & Tools`}
   description={`Shop high quality, ethically sourced ${pageTitle} products. Find authentic tribal remedies and ceremony accessories at Ayni Rapé.`}
 >
+  <!-- BreadcrumbList structured data -->
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+
   <div class="px-8 py-6 md:px-12 lg:px-16 max-w-8xl mx-auto">
+    <!-- Breadcrumbs -->
+    <nav aria-label="Breadcrumb" class="mb-6">
+      <ol class="flex items-center gap-1.5 text-xs text-stone-400 font-medium">
+        <li>
+          <a href={`/${countryCode}`} class="hover:text-stone-700 transition-colors">Home</a>
+        </li>
+        <li class="select-none" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>
+        </li>
+        <li>
+          <a href={`/${countryCode}/store`} class="hover:text-stone-700 transition-colors">Shop</a>
+        </li>
+        <li class="select-none" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>
+        </li>
+        <li aria-current="page" class="text-stone-700 truncate max-w-[200px]">{pageTitle}</li>
+      </ol>
+    </nav>
+
     <h1 class="mb-8 text-4xl font-bold">{pageTitle}</h1>
     {error && <p class="text-red-700 mb-6">{error.message}</p>}
 
@@ -166,5 +240,11 @@ const pageTitle = currentCategory ? `${currentCategory.name}` : "Category";
         </ul>
       </div>
     </div>
+
+    <!-- SEO Text Block -->
+    <section class="mt-16 mb-8 border-t border-stone-200/60 pt-10 max-w-3xl">
+      <h2 class="text-xl font-bold text-stone-900 mb-4">{seo.heading}</h2>
+      <p class="text-sm text-stone-500 leading-relaxed">{seo.body}</p>
+    </section>
   </div>
 </Layout>
