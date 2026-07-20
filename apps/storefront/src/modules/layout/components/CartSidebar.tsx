@@ -207,7 +207,7 @@ export const CartSidebar = ({ countryCode }: CartSidebarProps) => {
               <a
                 href={`/${countryCode}/cart`}
                 onClick={closeCartSidebar}
-                className="block w-full bg-black text-white py-3 px-6 rounded-md text-center hover:bg-gray-800 transition-colors"
+                className="block w-full bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-3.5 px-6 rounded-full text-center transition-colors uppercase tracking-wider text-xs shadow-sm"
               >
                 Go to cart
               </a>
