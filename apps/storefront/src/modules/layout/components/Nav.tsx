@@ -51,9 +51,25 @@ export const Nav = ({ countryCode, regionId }: NavProps) => {
       
       <a
         href={`/${countryCode}`}
-        className="text-2xl font-serif italic text-stone-750 hover:opacity-85 transition-opacity"
+        className="text-2xl font-serif italic text-stone-750 hover:opacity-85 transition-opacity flex items-center gap-2.5"
       >
-        Ayni Râpé
+        <svg
+          className="w-7 h-7 text-[#9db0ba]"
+          viewBox="0 0 100 100"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* A unique tribal geometric flower/leaf emblem */}
+          <path d="M50 15 C55 35, 65 45, 85 50 C65 55, 55 65, 50 85 C45 65, 35 55, 15 50 C35 45, 45 35, 50 15 Z" />
+          <circle cx="50" cy="50" r="8" className="text-white" fill="currentColor" />
+          <circle cx="50" cy="50" r="3" className="text-[#9db0ba]" fill="currentColor" />
+          {/* Subtle surrounding tribal dots */}
+          <circle cx="50" cy="28" r="2.5" />
+          <circle cx="50" cy="72" r="2.5" />
+          <circle cx="28" cy="50" r="2.5" />
+          <circle cx="72" cy="50" r="2.5" />
+        </svg>
+        <span>Ayni Râpé</span>
       </a>
 
       <div className="flex items-center gap-6 flex-1 justify-end">
