@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest run"
   },
   "dependencies": {
     "@astrojs/markdoc": "^2.0.3",
@@ -44,6 +45,7 @@
     "prettier-plugin-astro": "0.14.1",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "vite": "^7.3.6"
+    "vite": "^7.3.6",
+    "vitest": "^4.1.10"
   }
 }
