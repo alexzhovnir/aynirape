@@ -75,7 +75,7 @@ export const Nav = ({ countryCode, regionId }: NavProps) => {
       <div className="flex items-center gap-6 flex-1 justify-end">
         <a
           href={`/${countryCode}/profile`}
-          className="text-sm hover:text-amber-700 transition-colors flex items-center gap-1.5 text-stone-700"
+          className="text-sm hover:text-[#7a5c00] transition-colors flex items-center gap-1.5 text-stone-700"
           aria-label="View user profile account"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4.5 h-4.5">
@@ -86,7 +86,7 @@ export const Nav = ({ countryCode, regionId }: NavProps) => {
 
         <button
           onClick={handleCartClick}
-          className="text-sm hover:text-amber-700 transition-colors flex items-center gap-1.5 text-stone-700 cursor-pointer"
+          className="text-sm hover:text-[#7a5c00] transition-colors flex items-center gap-1.5 text-stone-700 cursor-pointer"
           aria-label={`Shopping cart with ${cartItemCount} item${cartItemCount !== 1 ? "s" : ""}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4.5 h-4.5">

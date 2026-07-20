@@ -416,7 +416,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                       </div>
                       <p className="text-stone-700 text-sm leading-relaxed mb-4">"{fb.comment}"</p>
                       <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase ${
-                        fb.is_approved ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                        fb.is_approved ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-900'
                       }`}>
                         {fb.is_approved ? "✓ Published" : "⟳ Under Moderation"}
                       </span>

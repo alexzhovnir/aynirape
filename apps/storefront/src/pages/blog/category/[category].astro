@@ -121,7 +121,7 @@ function getAuthorIcon() {
                 <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 mb-2">
                   <time>{fmtDate(post.data.publishedDate)}</time>
                   <span>&bull;</span>
-                  <span class="text-amber-600 font-medium">{post.data.category}</span>
+                  <span class="text-[#7a5c00] font-medium">{post.data.category}</span>
                 </div>
                 <h2 class="text-xl font-semibold group-hover:underline text-stone-900 leading-snug mb-2">{post.data.title}</h2>
                 {post.data.excerpt && (
@@ -145,7 +145,7 @@ function getAuthorIcon() {
             <li>
               <a
                 href={`/blog/category/${c.slug}`}
-                class={`text-sm font-medium transition-colors flex items-center justify-between ${c.slug === category ? 'text-amber-600 font-semibold' : 'text-stone-600 hover:text-amber-600'}`}
+                class={`text-sm font-medium transition-colors flex items-center justify-between ${c.slug === category ? 'text-[#7a5c00] font-semibold' : 'text-stone-600 hover:text-[#7a5c00]'}`}
               >
                 <span class="flex items-center gap-2">
                   <Fragment set:html={getBlogCategoryIcon(c.name)} />
@@ -165,7 +165,7 @@ function getAuthorIcon() {
             <li>
               <a
                 href={`/blog/author/${a.slug}`}
-                class="text-stone-600 hover:text-amber-600 text-sm font-medium transition-colors flex items-center justify-between"
+                class="text-stone-600 hover:text-[#7a5c00] text-sm font-medium transition-colors flex items-center justify-between"
               >
                 <span class="flex items-center gap-2">
                   <Fragment set:html={getAuthorIcon()} />
@@ -189,7 +189,7 @@ function getAuthorIcon() {
                   <img src={p.thumbnail} alt={p.title} class="w-full h-full object-cover" />
                 </div>
                 <div class="flex-1 min-w-0 text-left">
-                  <h4 class="text-xs font-bold text-stone-900 truncate group-hover:text-amber-600 transition-colors leading-tight">{p.title}</h4>
+                  <h4 class="text-xs font-bold text-stone-900 truncate group-hover:text-[#7a5c00] transition-colors leading-tight">{p.title}</h4>
                   <p class="text-[10px] text-stone-500 mt-0.5">View details &rarr;</p>
                 </div>
               </a>

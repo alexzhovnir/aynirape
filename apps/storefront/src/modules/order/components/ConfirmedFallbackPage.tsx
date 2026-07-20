@@ -307,7 +307,7 @@ export const ConfirmedFallbackPage = ({
       <div className="text-center">
         <a
           href={`/${countryCode}/store`}
-          className="inline-block bg-black text-white py-3 px-10 rounded-md hover:bg-gray-800 transition-colors"
+          className="inline-block bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-3 px-10 rounded-full transition-colors uppercase tracking-wider text-sm"
         >
           Continue Shopping
         </a>
