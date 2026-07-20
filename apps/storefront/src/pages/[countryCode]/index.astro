@@ -135,12 +135,42 @@ const heroImages = [
   "/images/blog/kolibri-teak.c6c0e21a20358358ba4cfc9a759bfa19.webp",
   "/images/blog/kuripe-wolf-sawo.02682445cd108ab57e6f69e9a16ce418.webp"
 ];
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${Astro.site ?? Astro.url.origin}#organization`,
+      "name": "Ayni Rapé",
+      "url": Astro.site ?? Astro.url.origin,
+      "logo": {
+        "@type": "ImageObject",
+        "url": new URL("/favicon.svg", Astro.site ?? Astro.url.origin).href
+      },
+      "sameAs": [
+        "https://www.instagram.com/ayni_rapeh"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${Astro.site ?? Astro.url.origin}#website`,
+      "url": Astro.site ?? Astro.url.origin,
+      "name": "Ayni Rapé",
+      "description": "Ethically sourced, premium Amazonian shamanic supplies, Rapé blends, Tepi & Kuripe applicators, and sacred aromatics.",
+      "publisher": {
+        "@id": `${Astro.site ?? Astro.url.origin}#organization`
+      }
+    }
+  ]
+};
 ---
 
 <Layout
   title="Sacred Amazonian Shamanic Supplies"
   description="Explore sacred herb medicinals, shamanic plant medicine, and Amazonian shamanic supplies."
 >
+  <!-- SEO JSON-LD Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
   <!-- Hero Section -->
   <section class="relative bg-[#1e2d24] text-white overflow-hidden py-16 md:py-24 px-8 md:px-16 lg:px-24 rounded-3xl">
     <div class="max-w-7xl mx-auto grid md:grid-cols-[1.2fr_0.8fr] gap-12 items-center relative z-10 w-full">
