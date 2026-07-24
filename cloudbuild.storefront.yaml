@@ -1,0 +1,19 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-f"
+      - "apps/storefront/Dockerfile"
+      - "-t"
+      - "europe-west1-docker.pkg.dev/project-46ed8783-a1b4-42b9-9f5/aynirape/storefront:latest"
+      - "--build-arg"
+      - "PUBLIC_MEDUSA_BACKEND_URL=${_PUBLIC_MEDUSA_BACKEND_URL}"
+      - "--build-arg"
+      - "PUBLIC_MEDUSA_PUBLISHABLE_KEY=${_PUBLIC_MEDUSA_PUBLISHABLE_KEY}"
+      - "--build-arg"
+      - "DEFAULT_REGION=${_DEFAULT_REGION}"
+      - "--build-arg"
+      - "PUBLIC_SITE_URL=${_PUBLIC_SITE_URL}"
+      - "."
+images:
+  - "europe-west1-docker.pkg.dev/project-46ed8783-a1b4-42b9-9f5/aynirape/storefront:latest"
