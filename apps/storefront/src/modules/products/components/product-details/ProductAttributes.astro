@@ -14,58 +14,66 @@ const { material, origin_country, type, weight, length, width, height, metadata 
   Astro.props;
 ---
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-  <div class="grid grid-cols-2 gap-x-8">
-    <div class="flex flex-col gap-y-4">
-      {metadata?.tribe && (
-        <div>
-          <span class="font-semibold text-stone-700">Tribe / Origin</span>
-          <p>{metadata.tribe}</p>
-        </div>
-      )}
-      {metadata?.strength && (
-        <div>
-          <span class="font-semibold text-stone-700">Strength</span>
-          <p class="inline-block bg-stone-100 text-stone-800 text-xs px-2.5 py-1 rounded-full font-medium mt-1">
-            {metadata.strength}
-          </p>
-        </div>
-      )}
-      {metadata?.ingredients && (
-        <div>
-          <span class="font-semibold text-stone-700">Ingredients</span>
-          <p>{metadata.ingredients}</p>
-        </div>
-      )}
-      <div>
-        <span class="font-semibold text-stone-700">Material</span>
-        <p>{material || "-"}</p>
+<div class="border-t border-[var(--color-border-subtle)] pt-6 mt-4">
+  <h3 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-4">Specifications & Origin</h3>
+  
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+    {metadata?.tribe && (
+      <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Tribe / Origin</span>
+        <strong class="text-[var(--color-text-primary)]">{metadata.tribe}</strong>
       </div>
-      <div>
-        <span class="font-semibold text-stone-700">Country of origin</span>
-        <p>{origin_country || "-"}</p>
+    )}
+    
+    {metadata?.strength && (
+      <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Strength</span>
+        <span class="inline-block bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] font-bold px-2 py-0.5 rounded-md mt-0.5">
+          {metadata.strength}
+        </span>
       </div>
-    </div>
+    )}
+    
+    {metadata?.ingredients && (
+      <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)] col-span-2 sm:col-span-1">
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Ingredients</span>
+        <strong class="text-[var(--color-text-primary)]">{metadata.ingredients}</strong>
+      </div>
+    )}
 
-    <div class="flex flex-col gap-y-4">
-      <div>
-        <span class="font-semibold text-stone-700">Type</span>
-        <p>{type?.value || "-"}</p>
+    {material && (
+      <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Material</span>
+        <strong class="text-[var(--color-text-primary)]">{material}</strong>
       </div>
-      <div>
-        <span class="font-semibold text-stone-700">Weight</span>
-        <p>{weight ? `${weight}g` : "-"}</p>
+    )}
+
+    {origin_country && (
+      <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Country of Origin</span>
+        <strong class="text-[var(--color-text-primary)]">{origin_country}</strong>
       </div>
-      <div>
-        <span class="font-semibold text-stone-700">Dimensions</span>
-        <p>
-          {
-            length && width && height
-              ? `${length}L x ${width}W x ${height}H`
-              : "-"
-          }
-        </p>
+    )}
+
+    {type?.value && (
+      <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Category Type</span>
+        <strong class="text-[var(--color-text-primary)]">{type.value}</strong>
       </div>
-    </div>
+    )}
+
+    {weight && (
+      <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Weight</span>
+        <strong class="text-[var(--color-text-primary)]">{weight}g</strong>
+      </div>
+    )}
+
+    {(length || width || height) && (
+      <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Dimensions</span>
+        <strong class="text-[var(--color-text-primary)]">{length || '-'}L x {width || '-'}W x {height || '-'}H</strong>
+      </div>
+    )}
   </div>
 </div>

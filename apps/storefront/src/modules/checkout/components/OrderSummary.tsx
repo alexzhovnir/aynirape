@@ -9,45 +9,54 @@ export const OrderSummary = ({ cart }: OrderSummaryProps) => {
   const currencyCode = cart.currency_code || "USD";
 
   return (
-    <div className="sticky top-8">
-      <h2 className="text-2xl font-bold mb-6">In your Cart</h2>
+    <div className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 sticky top-8">
+      <div>
+        <span className="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-[10px] uppercase block mb-1">
+          SUMMARY
+        </span>
+        <h2 className="text-xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+          In Your Cart
+        </h2>
+      </div>
 
-      <div className="space-y-3 mb-6">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">
-            Subtotal (excl. shipping and taxes)
-          </span>
-          <span>
+      <div className="space-y-3 pb-4 border-b border-[var(--color-border-subtle)] text-xs">
+        <div className="flex justify-between text-[var(--color-text-secondary)]">
+          <span>Subtotal (excl. shipping & taxes)</span>
+          <span className="font-semibold text-[var(--color-text-primary)]">
             {convertToLocale({ amount: cart.item_subtotal || 0, currencyCode })}
           </span>
         </div>
 
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Shipping</span>
-          <span>
-            {convertToLocale({
-              amount: cart.shipping_total || 0,
-              currencyCode,
-            })}
+        <div className="flex justify-between text-[var(--color-text-secondary)]">
+          <span>Shipping</span>
+          <span className="font-semibold text-[var(--color-text-primary)]">
+            {cart.shipping_total === 0 ? (
+              <span className="text-[var(--color-accent-gold)] font-bold">FREE</span>
+            ) : (
+              convertToLocale({
+                amount: cart.shipping_total || 0,
+                currencyCode,
+              })
+            )}
           </span>
         </div>
 
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Taxes</span>
-          <span>
+        <div className="flex justify-between text-[var(--color-text-secondary)]">
+          <span>Taxes</span>
+          <span className="font-semibold text-[var(--color-text-primary)]">
             {convertToLocale({ amount: cart.tax_total || 0, currencyCode })}
           </span>
         </div>
 
-        <div className="pt-4 border-t border-gray-200 flex justify-between font-bold text-base">
-          <span>Total</span>
-          <span>
+        <div className="pt-4 border-t border-[var(--color-border-subtle)] flex justify-between items-baseline font-bold text-base">
+          <span className="text-[var(--color-text-primary)] font-serif-heading text-lg">Total</span>
+          <span className="text-xl font-bold text-[var(--color-accent-gold)] font-serif-heading">
             {convertToLocale({ amount: cart.total || 0, currencyCode })}
           </span>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 pt-4 space-y-4">
+      <div className="space-y-4 max-h-[380px] overflow-y-auto scrollbar-none pr-1">
         {cart.items?.map((item) => {
           const thumbnailUrl =
             item.variant?.product?.thumbnail ||
@@ -59,31 +68,31 @@ export const OrderSummary = ({ cart }: OrderSummaryProps) => {
           const lineTotal = unitPrice * quantity;
 
           return (
-            <div key={item.id} className="flex gap-3">
+            <div key={item.id} className="flex gap-3 bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)] items-center">
               {thumbnailUrl ? (
                 <img
                   src={thumbnailUrl}
                   alt={productTitle}
-                  className="w-14 h-14 object-cover rounded border border-gray-200 flex-shrink-0"
+                  className="w-14 h-14 object-cover rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] shrink-0"
                   loading="lazy"
                 />
               ) : (
-                <div className="w-14 h-14 bg-gray-100 rounded border border-gray-200 flex-shrink-0" />
+                <div className="w-14 h-14 bg-[var(--color-bg-surface-elevated)] rounded-xl border border-[var(--color-border-subtle)] shrink-0 flex items-center justify-center text-lg">🌿</div>
               )}
 
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm truncate">{productTitle}</p>
+                <p className="font-semibold text-xs text-[var(--color-text-primary)] truncate">{productTitle}</p>
                 {variantTitle && (
-                  <p className="text-xs text-gray-500">
+                  <p className="text-[10px] text-[var(--color-text-muted)] mt-0.5">
                     Variant: {variantTitle}
                   </p>
                 )}
-                <div className="flex justify-between mt-1 text-sm">
-                  <span className="text-gray-500">
+                <div className="flex justify-between mt-1 text-xs">
+                  <span className="text-[var(--color-text-muted)]">
                     {quantity}x{" "}
                     {convertToLocale({ amount: unitPrice, currencyCode })}
                   </span>
-                  <span className="font-medium">
+                  <span className="font-bold text-[var(--color-accent-gold)]">
                     {convertToLocale({ amount: lineTotal, currencyCode })}
                   </span>
                 </div>

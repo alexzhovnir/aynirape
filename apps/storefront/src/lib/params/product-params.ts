@@ -21,9 +21,22 @@ export const getProductParams = async (): Promise<ProductParams[]> => {
             return;
           }
 
+          const countryCode = country.iso_2.toLowerCase();
+
+          // 1. Push SEO-friendly human-readable handle URL (e.g. /de/store/huni-kuin)
+          if (product.handle) {
+            paths.push({
+              params: {
+                countryCode,
+                productId: product.handle,
+              },
+            });
+          }
+
+          // 2. Push raw Medusa product ID as fallback (e.g. /de/store/prod_01KX...)
           paths.push({
             params: {
-              countryCode: country.iso_2.toLowerCase(),
+              countryCode,
               productId: product.id,
             },
           });

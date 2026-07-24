@@ -10,8 +10,6 @@ interface Props {
 
 const { handle, label } = Astro.props;
 
-// Blog is language-based; commerce is region-based. Resolve a default region so the
-// CTA can deep-link into the store. Middleware still adapts the region per visitor.
 const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "de";
 
 let product: any = null;
@@ -31,7 +29,7 @@ try {
 }
 
 const href = product
-  ? `/${DEFAULT_REGION}/store/${product.id}`
+  ? `/${DEFAULT_REGION}/store/${product.handle || product.id}`
   : `/${DEFAULT_REGION}/store`;
 
 let priceLabel: string | null = null;
@@ -47,22 +45,22 @@ if (product) {
 
 <a
   href={href}
-  class="not-prose my-6 flex items-center gap-4 rounded-xl border border-stone-200 bg-stone-50 p-4 no-underline transition hover:border-stone-300 hover:bg-stone-100/50"
+  class="not-prose my-6 flex items-center gap-4 rounded-2xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] p-4 no-underline transition-all duration-300 hover:border-[var(--color-accent-gold)] shadow-sm hover:shadow-md"
 >
   {product?.thumbnail && (
     <img
       src={product.thumbnail}
       alt={product.title}
-      class="h-16 w-16 shrink-0 rounded-lg object-cover"
+      class="h-16 w-16 shrink-0 rounded-xl object-cover border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)]"
       loading="lazy"
     />
   )}
   <span class="flex flex-col">
-    <span class="text-xs uppercase tracking-wide text-stone-500">
+    <span class="text-xs uppercase tracking-wide text-[var(--color-accent-gold)] font-bold">
       {label ?? "Featured product"}
     </span>
-    <span class="font-medium text-stone-900">{product?.title ?? "Browse the shop"}</span>
-    {priceLabel && <span class="text-sm text-stone-600">{priceLabel}</span>}
+    <span class="font-serif-heading font-semibold text-[var(--color-text-primary)]">{product?.title ?? "Browse the shop"}</span>
+    {priceLabel && <span class="text-sm font-bold text-[var(--color-accent-gold)]">{priceLabel}</span>}
   </span>
-  <span class="ml-auto text-sm font-medium text-amber-700">Shop →</span>
+  <span class="ml-auto text-sm font-bold text-[var(--color-accent-gold)]">Shop →</span>
 </a>

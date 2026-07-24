@@ -1,54 +1,198 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 
 export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
 ---
 
 <Layout
-  title="Delivery & Payment Terms"
+  title="Delivery & Payment Terms - Fast EU Express Shipping"
   description="Learn about our shipping options, delivery times, accepted secure payment methods, and return policy at Ayni Rapé."
 >
-  <section class="mx-auto max-w-3xl px-8 py-12 md:px-12 lg:px-16">
-    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
-      SHIPPING INFO
-    </p>
-    <h1 class="mt-4 text-4xl font-bold tracking-tight text-stone-900">
-      Delivery & Payment Terms
-    </h1>
-    <div class="mt-8 space-y-6 text-base leading-8 text-stone-700">
-      <h2 class="text-2xl font-bold text-stone-900">Delivery Options</h2>
-      <p>
-        We deliver across Europe and propose two main shipping options:
-      </p>
-      <ul class="list-disc pl-6 space-y-2">
-        <li><strong>Standard Shipping:</strong> Delivery through traditional post services within 5-7 business days. Cost: €5 (Free for orders over €150).</li>
-        <li><strong>DHL Express:</strong> Premium courier services within 3-5 business days. Cost: €12.</li>
-      </ul>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
+    <!-- Breadcrumbs Nav -->
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: `/${countryCode}` },
+        { label: "Delivery & Payment" }
+      ]}
+    />
 
-      <h2 class="text-2xl font-bold text-stone-900 pt-4">Payment Methods</h2>
-      <p>
-        For your convenience, we support a wide range of payment methods:
-      </p>
-      <ul class="list-disc pl-6 space-y-2">
-        <li>Credit and debit cards (Visa, Mastercard, Amex)</li>
-        <li>PayPal</li>
-        <li>Apple Pay / Google Pay</li>
-        <li>Manual Bank Transfer (details provided at checkout or via support)</li>
-      </ul>
-
-      <h2 class="text-2xl font-bold text-stone-900 pt-4">CO2 Removal Initiative</h2>
-      <p>
-        Please note that <strong>1% of your purchase</strong> will always be donated to foster initiatives of CO2 removal from our atmosphere.
-      </p>
-
-      <h2 class="text-2xl font-bold text-stone-900 pt-4">Returns & Replacements</h2>
-      <p>
-        Returns are only accepted for products part of the categories "Tepi and Kuripe" and "Ornaments and decoration" in case of damage having occurred during shipping or defects not detected by our team upon order fulfillment.
-      </p>
-      <p>
-        In the unfortunate event where this occurred, please write to <a href="mailto:info@aynirape.com" class="text-[#7a5c00] hover:underline">info@aynirape.com</a> describing the issue. We will provide you with a solution as soon as possible.
+    <!-- Header Section -->
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
+        TRANSPARENCY & FULFILLMENT
+      </span>
+      <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
+        Delivery & Payment <span class="italic font-normal text-[var(--color-accent-gold)]">Terms</span>
+      </h1>
+      <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
+        Everything you need to know about our EU express shipping, secure payment options, and climate commitments.
       </p>
     </div>
-  </section>
+
+    <!-- Main Content Container -->
+    <div class="space-y-16">
+      <!-- Section 1: Delivery Options -->
+      <div>
+        <div class="mb-8">
+          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">SHIPPING METHODS</span>
+          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-1">Delivery Options</h2>
+          <p class="text-xs text-[var(--color-text-secondary)] mt-1">We deliver across Europe with tracked, discreet packaging.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- Standard Shipping Card -->
+          <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors flex flex-col justify-between gap-6">
+            <div>
+              <div class="flex justify-between items-center mb-4">
+                <span class="text-3xl">📦</span>
+                <span class="bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-[var(--color-accent-gold)]/20">
+                  RELIABLE
+                </span>
+              </div>
+              <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-2">Standard Postal Shipping</h3>
+              <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed mb-6">
+                Delivery through national postal services across the EU. Discreet and safe.
+              </p>
+              
+              <div class="space-y-2 border-t border-[var(--color-border-subtle)] pt-4 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-[var(--color-text-muted)]">Delivery Time:</span>
+                  <strong class="text-[var(--color-text-primary)]">5 – 7 business days</strong>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--color-text-muted)]">Shipping Fee:</span>
+                  <strong class="text-[var(--color-text-primary)]">€5.00</strong>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--color-text-muted)]">Free Shipping:</span>
+                  <strong class="text-[var(--color-accent-gold)]">Free for orders over €150</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DHL Express Shipping Card -->
+          <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border-2 border-[var(--color-accent-gold)] shadow-md flex flex-col justify-between gap-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-[var(--color-accent-gold)] text-stone-950 text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-bl-2xl">
+              RECOMMENDED
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center mb-4">
+                <span class="text-3xl">⚡</span>
+              </div>
+              <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-2">DHL Express Courier</h3>
+              <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed mb-6">
+                Premium priority courier service with live step-by-step tracking to your door.
+              </p>
+              
+              <div class="space-y-2 border-t border-[var(--color-border-subtle)] pt-4 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-[var(--color-text-muted)]">Delivery Time:</span>
+                  <strong class="text-[var(--color-text-primary)]">3 – 5 business days</strong>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--color-text-muted)]">Shipping Fee:</span>
+                  <strong class="text-[var(--color-text-primary)]">€12.00</strong>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--color-text-muted)]">Tracking:</span>
+                  <strong class="text-emerald-500">Live SMS & Email Alerts</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Payment Methods -->
+      <div>
+        <div class="mb-8">
+          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">PAYMENT SECURITY</span>
+          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-1">Accepted Payment Methods</h2>
+          <p class="text-xs text-[var(--color-text-secondary)] mt-1">All transactions are encrypted with 256-bit SSL security.</p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] text-center flex flex-col items-center gap-3 shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+            <span class="text-3xl">💳</span>
+            <div>
+              <strong class="block text-sm font-bold text-[var(--color-text-primary)]">Cards</strong>
+              <span class="text-[10px] text-[var(--color-text-muted)]">Visa, Mastercard, Amex</span>
+            </div>
+          </div>
+
+          <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] text-center flex flex-col items-center gap-3 shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+            <span class="text-3xl">🅿️</span>
+            <div>
+              <strong class="block text-sm font-bold text-[var(--color-text-primary)]">PayPal</strong>
+              <span class="text-[10px] text-[var(--color-text-muted)]">1-Click Checkout</span>
+            </div>
+          </div>
+
+          <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] text-center flex flex-col items-center gap-3 shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+            <span class="text-3xl">📱</span>
+            <div>
+              <strong class="block text-sm font-bold text-[var(--color-text-primary)]">Apple / Google Pay</strong>
+              <span class="text-[10px] text-[var(--color-text-muted)]">Mobile Wallet</span>
+            </div>
+          </div>
+
+          <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] text-center flex flex-col items-center gap-3 shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+            <span class="text-3xl">🏛️</span>
+            <div>
+              <strong class="block text-sm font-bold text-[var(--color-text-primary)]">Bank Transfer</strong>
+              <span class="text-[10px] text-[var(--color-text-muted)]">SEPA Transfer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Climate & CO2 Removal Box -->
+      <div class="bg-gradient-to-r from-[var(--color-bg-surface-elevated)] via-[var(--color-bg-surface)] to-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm flex flex-col md:flex-row items-center gap-8 justify-between">
+        <div class="flex items-center gap-6">
+          <div class="w-16 h-16 rounded-full bg-[var(--color-accent-gold)]/15 flex items-center justify-center text-3xl shrink-0 border border-[var(--color-accent-gold)]/30">
+            🌱
+          </div>
+          <div>
+            <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">
+              1% CO₂ Climate Removal Initiative
+            </h3>
+            <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed max-w-xl">
+              At Ayni Rapé, <strong>1% of your purchase</strong> is directly donated to support atmospheric carbon removal initiatives and Amazonian rainforest restoration.
+            </p>
+          </div>
+        </div>
+        <a
+          href={`/${countryCode}/store`}
+          class="px-6 py-3 bg-[var(--color-accent-gold)] text-stone-950 font-bold rounded-full text-xs uppercase tracking-wider hover:bg-[var(--color-accent-gold-hover)] transition-colors shrink-0 shadow-sm"
+        >
+          Shop Responsibly
+        </a>
+      </div>
+
+      <!-- Section 4: Returns & Replacements -->
+      <div class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">🛡️</span>
+          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+            Returns & Replacements Policy
+          </h2>
+        </div>
+        <div class="space-y-3 text-xs text-[var(--color-text-secondary)] leading-relaxed max-w-3xl">
+          <p>
+            Returns are accepted for products in the categories <strong>"Tepi and Kuripe"</strong> and <strong>"Ornaments and decoration"</strong> in the event of damage having occurred during shipping or manufacturing defects.
+          </p>
+          <p>
+            If you receive a damaged item, please email us at <a href="mailto:info@aynirape.com" class="text-[var(--color-accent-gold)] font-bold hover:underline">info@aynirape.com</a> within 7 days of delivery with photos of the issue. Our support team will resolve it promptly with a replacement or full refund.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </Layout>

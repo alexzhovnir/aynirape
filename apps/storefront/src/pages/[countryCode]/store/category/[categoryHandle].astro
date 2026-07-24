@@ -2,10 +2,71 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegion } from "@lib/data/regions";
 import { listProducts, listCategories } from "@lib/data/products";
-import { getCategoryParams } from "@lib/params/category-params";
+import { listRegions } from "@lib/data/regions";
 import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 
-export const getStaticPaths = getCategoryParams;
+export async function getStaticPaths() {
+  const defaultCountries = ["de", "dk", "fr", "it", "es", "se", "gb"];
+  const defaultHandles = [
+    "tepi-and-kuripe",
+    "rapé",
+    "rape",
+    "rap%C3%A9",
+    "aromatics",
+    "supplements",
+    "ornaments-and-decoration",
+  ];
+
+  const paths: Array<{ params: { countryCode: string; categoryHandle: string } }> = [];
+  const added = new Set<string>();
+
+  const pushPath = (c: string, h: string) => {
+    if (!c || !h) return;
+    const country = c.toLowerCase();
+    const key = `${country}:${h}`;
+    if (!added.has(key)) {
+      added.add(key);
+      paths.push({ params: { countryCode: country, categoryHandle: h } });
+    }
+  };
+
+  // 1. Pre-seed default combinations for instant matching in dev & prod
+  for (const country of defaultCountries) {
+    for (const handle of defaultHandles) {
+      pushPath(country, handle);
+      try {
+        pushPath(country, encodeURIComponent(handle));
+        pushPath(country, decodeURIComponent(handle));
+      } catch {}
+    }
+  }
+
+  // 2. Fetch dynamic categories & regions from Medusa SDK
+  try {
+    const regions = await listRegions();
+    const categories = await listCategories();
+
+    for (const region of regions) {
+      if (!region.countries) continue;
+      for (const country of region.countries) {
+        if (!country.iso_2) continue;
+        for (const cat of categories) {
+          if (!cat.handle) continue;
+          pushPath(country.iso_2, cat.handle);
+          try {
+            pushPath(country.iso_2, encodeURIComponent(cat.handle));
+            pushPath(country.iso_2, decodeURIComponent(cat.handle));
+          } catch {}
+        }
+      }
+    }
+  } catch (err) {
+    console.error("categoryHandle getStaticPaths error:", err);
+  }
+
+  return paths;
+}
 
 const { countryCode, categoryHandle } = Astro.params;
 
@@ -17,191 +78,207 @@ if (!region) {
 
 let products: Awaited<ReturnType<typeof listProducts>> = [];
 let categories: Awaited<ReturnType<typeof listCategories>> = [];
-let currentCategory: any = null;
 let error: Error | undefined;
 
 try {
+  products = await listProducts(region.id);
   categories = await listCategories();
-  currentCategory = categories.find((c) => c.handle === categoryHandle);
-  
-  if (currentCategory) {
-    products = await listProducts(region.id, currentCategory.id);
-  } else {
-    return Astro.redirect(`/${countryCode}/store`);
-  }
 } catch (e) {
   error = e instanceof Error ? e : new Error("Unknown error");
   console.error(error);
 }
+
+const targetHandle = categoryHandle ? decodeURIComponent(categoryHandle).toLowerCase() : "";
+const targetAscii = targetHandle.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const isCategoryMatch = (catHandle?: string, catName?: string) => {
+  if (!catHandle && !catName) return false;
+  const hNorm = (catHandle || "").toLowerCase();
+  const hDecoded = decodeURIComponent(hNorm);
+  const hAscii = hNorm.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const nNorm = (catName || "").toLowerCase();
+
+  if (hNorm === targetHandle || hDecoded === targetHandle || hAscii === targetAscii) {
+    return true;
+  }
+
+  if (targetAscii.includes("rape") && (hAscii.includes("rape") || nNorm.includes("rape"))) return true;
+  if (targetAscii.includes("tepi") || targetAscii.includes("kuripe")) {
+    if (hAscii.includes("tepi") || hAscii.includes("kuripe") || nNorm.includes("tepi") || nNorm.includes("kuripe")) return true;
+  }
+  if (targetAscii.includes("aromat") && (hAscii.includes("aromat") || nNorm.includes("aromat"))) return true;
+  if (targetAscii.includes("suppl") && (hAscii.includes("suppl") || nNorm.includes("suppl"))) return true;
+  if (targetAscii.includes("ornament") || targetAscii.includes("decor")) {
+    if (hAscii.includes("ornament") || hAscii.includes("decor") || nNorm.includes("ornament") || nNorm.includes("decor")) return true;
+  }
+
+  return false;
+};
+
+const currentCategory = categories.find((c) => isCategoryMatch(c.handle, c.name));
+
+const fallbackNameMap: Record<string, string> = {
+  "rapé": "Rapé",
+  "rape": "Rapé",
+  "tepi-and-kuripe": "Tepi and Kuripe",
+  "aromatics": "Aromatics",
+  "supplements": "Supplements",
+  "ornaments-and-decoration": "Ornaments and decoration",
+};
+
+const displayCategoryName = currentCategory?.name || fallbackNameMap[targetAscii] || fallbackNameMap[targetHandle] || (categoryHandle ? categoryHandle.charAt(0).toUpperCase() + categoryHandle.slice(1) : "Category");
+
+const categoryProducts = products.filter((p) => {
+  if (!p.categories || p.categories.length === 0) return false;
+  return p.categories.some((c) => isCategoryMatch(c.handle, c.name));
+});
 
 function getCategoryIcon(name: string, handle: string) {
   const normName = name.toLowerCase();
   const normHandle = handle.toLowerCase();
 
   if (normName.includes("tepi") || normName.includes("kuripe") || normHandle.includes("tepi") || normHandle.includes("kuripe")) {
-    // Tepi and Kuripe (wind/blow symbol: two diagonal lines/arrows)
     return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M3 12h18M12 3l4 4M12 3L8 7M12 21l4-4M12 21l-4-4" /></svg>`;
   }
   if (normName.includes("rapé") || normName.includes("rape") || normHandle.includes("rape")) {
-    // Rapé (botanical leaf)
     return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925-3.546 5.974 5.974 0 0 0-2.133-1A3.75 3.75 0 0 0 4.5 12a3.75 3.75 0 0 0 3.75 3.75h3.75Z" /></svg>`;
   }
   if (normName.includes("aromat") || normHandle.includes("aromat")) {
-    // Aromatics (burning fire/spirit)
     return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" /></svg>`;
   }
   if (normName.includes("suppl") || normHandle.includes("suppl")) {
-    // Supplements (liquid droplet)
     return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>`;
   }
   if (normName.includes("ornament") || normName.includes("decor") || normHandle.includes("ornament") || normHandle.includes("decor")) {
-    // Ornaments/Decor (sparkle/gem)
     return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499c.174-.29.619-.29.792 0l1.836 3.064c.08.134.195.247.332.327l3.064 1.836c.29.174.29.619 0 .792l-3.064 1.836a.717.717 0 0 1-.332.327l-1.836 3.064c-.174.29-.619.29-.792 0l-1.836-3.064a.717.717 0 0 1-.332-.327L4.568 11.52c-.29-.174-.29-.619 0-.792l3.064-1.836a.717.717 0 0 1 .332-.327L9.8 3.5Z" /></svg>`;
   }
   
-  // Default - All products / Grid
   return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" /></svg>`;
 }
-
-const pageTitle = currentCategory ? `${currentCategory.name}` : "Category";
-
-/* ---------- SEO copy per category ---------- */
-function getCategorySeoText(handle: string): { heading: string; body: string } {
-  const h = handle?.toLowerCase() ?? "";
-  if (h.includes("tepi") || h.includes("kuripe")) {
-    return {
-      heading: "Handcrafted Tepi & Kuripe Applicators",
-      body: "Tepi and Kuripe are the traditional tools used for administering Rapé, a sacred snuff medicine of the Amazon. A Tepi is a long double-ended pipe used by a practitioner to blow Rapé into another person's nostrils during ceremony, while a Kuripe is a smaller V-shaped self-applicator. Each piece in our collection is hand-carved by indigenous artisans from sustainably harvested hardwoods, bone, and bamboo — often decorated with tribal patterns and natural pigments that carry cultural significance. Whether you are new to shamanic practice or an experienced curandero, choosing the right applicator is essential for a respectful and effective ceremony.",
-    };
-  }
-  if (h.includes("rape")) {
-    return {
-      heading: "Authentic Amazonian Rapé Blends",
-      body: "Rapé (pronounced 'ha-PEH') is a sacred snuff preparation made from finely ground Nicotiana rustica tobacco blended with medicinal tree barks, ashes, and aromatic herbs gathered from the Amazon rainforest. Used for thousands of years by indigenous tribes of Brazil and Peru — including the Yawanawá, Katukina, and Huni Kuin — Rapé plays a central role in shamanic healing, meditation, and ceremonial rites. Our blends are ethically sourced directly from indigenous communities, ensuring that traditional knowledge and sustainable harvesting practices are respected and preserved.",
-    };
-  }
-  if (h.includes("aromat")) {
-    return {
-      heading: "Sacred Aromatics & Incense",
-      body: "Aromatic herbs and resins have been used across Amazonian and Andean traditions for space cleansing, prayer, and ceremony. Our collection includes sustainably harvested Palo Santo sticks, Copal resin, and hand-rolled herbal incense — each selected for its purity and energetic qualities. Palo Santo ('Holy Wood') is traditionally burned to clear negative energy, invite positive intentions, and prepare a space for meditation or healing work. All aromatics are sourced with care from responsible suppliers who support reforestation and fair-trade practices.",
-    };
-  }
-  if (h.includes("suppl")) {
-    return {
-      heading: "Natural Supplements & Herbal Remedies",
-      body: "Rooted in centuries of indigenous plant medicine, our supplements bring the healing wisdom of the Amazon to your daily wellness routine. From concentrated herbal tinctures to adaptogenic plant extracts, every product is formulated using traditional recipes and ethically wildcrafted or cultivated botanicals. These supplements are intended to support physical vitality, mental clarity, and spiritual balance as part of a holistic approach to health.",
-    };
-  }
-  if (h.includes("ornament") || h.includes("decor")) {
-    return {
-      heading: "Tribal Ornaments & Ceremonial Decoration",
-      body: "Adorn your sacred space with authentic tribal ornaments and hand-crafted ceremonial decorations from indigenous Amazonian communities. Each piece — from beaded necklaces and feather accessories to carved figurines and woven textiles — carries deep cultural meaning and is made using techniques passed down through generations. These items serve not only as beautiful décor but as tangible connections to the traditions and spiritual world of the Amazon.",
-    };
-  }
-  return {
-    heading: `Explore Our ${pageTitle} Collection`,
-    body: `Discover a curated selection of ${pageTitle.toLowerCase()} from Ayni Rapé. Every product in our catalogue is ethically sourced from indigenous Amazonian communities, crafted with respect for ancestral traditions, and delivered across Europe with care. Browse the collection to find authentic shamanic supplies for your practice.`,
-  };
-}
-
-const seo = getCategorySeoText(categoryHandle);
-
-/* ---------- BreadcrumbList JSON-LD ---------- */
-const breadcrumbLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: `https://aynirape.com/${countryCode}` },
-    { "@type": "ListItem", position: 2, name: "Shop", item: `https://aynirape.com/${countryCode}/store` },
-    { "@type": "ListItem", position: 3, name: pageTitle, item: `https://aynirape.com/${countryCode}/store/category/${categoryHandle}` },
-  ],
-};
 ---
 
 <Layout
-  title={`${pageTitle} - Shamanic Supplies & Tools`}
-  description={`Shop high quality, ethically sourced ${pageTitle} products. Find authentic tribal remedies and ceremony accessories at Ayni Rapé.`}
+  title={`${displayCategoryName} - Sacred Amazonian Supplies`}
+  description={`Browse authentic ${displayCategoryName} ethically sourced from Amazonian tribes at Ayni Rapé.`}
 >
-  <!-- BreadcrumbList structured data -->
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `https://aynirape.com/${countryCode}` },
+      { "@type": "ListItem", position: 2, name: "Shop", item: `https://aynirape.com/${countryCode}/store` },
+      { "@type": "ListItem", position: 3, name: displayCategoryName, item: `https://aynirape.com/${countryCode}/store/category/${categoryHandle}` },
+    ],
+  })} />
 
-  <div class="px-8 py-6 md:px-12 lg:px-16 max-w-8xl mx-auto">
-    <!-- Breadcrumbs -->
-    <nav aria-label="Breadcrumb" class="mb-6">
-      <ol class="flex items-center gap-1.5 text-xs text-stone-400 font-medium">
-        <li>
-          <a href={`/${countryCode}`} class="hover:text-stone-700 transition-colors">Home</a>
-        </li>
-        <li class="select-none" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>
-        </li>
-        <li>
-          <a href={`/${countryCode}/store`} class="hover:text-stone-700 transition-colors">Shop</a>
-        </li>
-        <li class="select-none" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>
-        </li>
-        <li aria-current="page" class="text-stone-700 truncate max-w-[200px]">{pageTitle}</li>
-      </ol>
-    </nav>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
+    <!-- Breadcrumbs Nav -->
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: `/${countryCode}` },
+        { label: "Shop", href: `/${countryCode}/store` },
+        { label: displayCategoryName }
+      ]}
+    />
 
-    <h1 class="mb-8 text-4xl font-bold">{pageTitle}</h1>
-    {error && <p class="text-red-700 mb-6">{error.message}</p>}
+    <!-- Header Banner -->
+    <div class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-12 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div>
+        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
+          CATEGORY SELECTION
+        </span>
+        <h1 class="mt-2 text-3xl sm:text-4xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight capitalize">
+          {displayCategoryName}
+        </h1>
+        <p class="mt-2 text-xs sm:text-sm text-[var(--color-text-secondary)] max-w-xl leading-relaxed">
+          {currentCategory?.description || `Explore our handpicked selection of authentic ${displayCategoryName} supplies.`}
+        </p>
+      </div>
 
-    <div class="flex flex-col md:flex-row gap-10">
+      <div class="flex items-center gap-3 bg-[var(--color-bg-surface)] px-4 py-2.5 rounded-2xl border border-[var(--color-border-subtle)]">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-xs font-semibold text-[var(--color-text-primary)]">
+          {categoryProducts.length} Items Available
+        </span>
+      </div>
+    </div>
+
+    {error && <p class="text-red-500 mb-6">{error.message}</p>}
+
+    <div class="flex flex-col lg:flex-row gap-10">
       <!-- Sidebar / Category Filter -->
-      <aside class="w-full md:w-64 shrink-0">
-        <!-- Desktop Sidebar -->
-        <div class="hidden md:flex flex-col gap-6 sticky top-24">
-          <h2 class="text-sm font-semibold text-stone-400 uppercase tracking-wider">Categories</h2>
-          <nav class="flex flex-col gap-1">
+      <aside class="w-full lg:w-64 shrink-0">
+        <!-- Desktop Sidebar Card -->
+        <div class="hidden lg:flex flex-col gap-6 sticky top-28 bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
+          <div class="flex justify-between items-center pb-3 border-b border-[var(--color-border-subtle)]">
+            <h2 class="text-xs font-bold text-[var(--color-accent-gold)] uppercase tracking-wider">Categories</h2>
+            <span class="text-[10px] text-[var(--color-text-muted)] font-mono">{categories.length}</span>
+          </div>
+
+          <nav class="flex flex-col gap-2">
             <a
               href={`/${countryCode}/store`}
-              class="flex items-center gap-2 text-left px-3 py-2 rounded-lg text-stone-500 hover:text-stone-900 hover:bg-stone-50/80 transition-all duration-200 cursor-pointer font-medium"
+              class="flex items-center justify-between text-left px-4 py-3 rounded-2xl text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] border border-transparent hover:border-[var(--color-border-subtle)] transition-all duration-200 cursor-pointer font-medium"
             >
-              <Fragment set:html={getCategoryIcon("all", "all")} />
-              <span>All Products</span>
+              <div class="flex items-center gap-2.5">
+                <Fragment set:html={getCategoryIcon("all", "all")} />
+                <span>All Products</span>
+              </div>
             </a>
             {
               categories?.map((cat) => {
-                const isActive = cat.id === currentCategory?.id;
+                const isActive = cat.handle === categoryHandle;
                 return (
                   <a
                     href={`/${countryCode}/store/category/${cat.handle}`}
-                    class={`flex items-center gap-2 text-left px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer font-medium ${
+                    class={`flex items-center justify-between text-left px-4 py-3 rounded-2xl font-bold transition-all duration-200 cursor-pointer shadow-sm ${
                       isActive
-                        ? "text-stone-900 bg-stone-100 font-semibold"
-                        : "text-stone-500 hover:text-stone-900 hover:bg-stone-50/80"
+                        ? "text-stone-950 bg-[var(--color-accent-gold)] shadow-sm"
+                        : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] border border-transparent hover:border-[var(--color-border-subtle)]"
                     }`}
                   >
-                    <Fragment set:html={getCategoryIcon(cat.name, cat.handle)} />
-                    <span>{cat.name}</span>
+                    <div class="flex items-center gap-2.5">
+                      <Fragment set:html={getCategoryIcon(cat.name, cat.handle)} />
+                      <span>{cat.name}</span>
+                    </div>
                   </a>
                 );
               })
             }
           </nav>
+
+          <!-- Sidebar Trust Banner -->
+          <div class="pt-4 border-t border-[var(--color-border-subtle)] space-y-2 text-[10px] text-[var(--color-text-muted)]">
+            <div class="flex items-center gap-2">
+              <span>🌿</span>
+              <span>100% Authentic Tribal Recipe</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span>📦</span>
+              <span>DHL Express 3–5 Days</span>
+            </div>
+          </div>
         </div>
 
         <!-- Mobile Categories Horizontal Scroll -->
-        <div class="md:hidden -mx-8 px-8 overflow-x-auto scrollbar-none flex gap-2 pb-4">
+        <div class="lg:hidden -mx-4 px-4 overflow-x-auto scrollbar-none flex gap-2 pb-4">
           <a
             href={`/${countryCode}/store`}
-            class="flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-sm text-stone-500 bg-stone-100/50 hover:bg-stone-100 transition-all duration-200 cursor-pointer font-medium"
+            class="flex items-center gap-1.5 whitespace-nowrap px-4 py-2.5 rounded-full text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface-elevated)] hover:text-[var(--color-text-primary)] border border-[var(--color-border-subtle)] transition-all duration-200 cursor-pointer font-medium"
           >
             <Fragment set:html={getCategoryIcon("all", "all")} />
             <span>All Products</span>
           </a>
           {
             categories?.map((cat) => {
-              const isActive = cat.id === currentCategory?.id;
+              const isActive = cat.handle === categoryHandle;
               return (
                 <a
                   href={`/${countryCode}/store/category/${cat.handle}`}
-                  class={`flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-sm transition-all duration-200 cursor-pointer font-medium ${
+                  class={`flex items-center gap-1.5 whitespace-nowrap px-4 py-2.5 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? "text-stone-900 bg-stone-100 font-semibold"
-                      : "text-stone-500 bg-stone-100/50 hover:bg-stone-100"
+                      ? "text-stone-950 bg-[var(--color-accent-gold)] shadow-sm"
+                      : "text-[var(--color-text-secondary)] bg-[var(--color-bg-surface-elevated)] hover:text-[var(--color-text-primary)] border border-[var(--color-border-subtle)]"
                   }`}
                 >
                   <Fragment set:html={getCategoryIcon(cat.name, cat.handle)} />
@@ -213,37 +290,41 @@ const breadcrumbLd = {
         </div>
       </aside>
 
-      <!-- Products Grid -->
+      <!-- Products Grid Column -->
       <div class="flex-1">
-        {products.length === 0 && !error && (
-          <p class="text-stone-500 py-8">No products found in this category.</p>
+        {categoryProducts.length === 0 ? (
+          <div class="p-12 text-center bg-[var(--color-bg-surface-elevated)] rounded-3xl border border-[var(--color-border-subtle)]">
+            <p class="text-sm text-[var(--color-text-secondary)] mb-4">No products found in this category.</p>
+            <a
+              href={`/${countryCode}/store`}
+              class="inline-block px-6 py-3 bg-[var(--color-accent-gold)] text-stone-950 text-xs font-bold uppercase rounded-full"
+            >
+              Browse All Products &rarr;
+            </a>
+          </div>
+        ) : (
+          <ul
+            class="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 w-full gap-6"
+          >
+            {
+              categoryProducts.map((product, index) => (
+                <li
+                  class="transition-all duration-250 ease-out origin-center"
+                >
+                  <ProductPreview
+                    id={product.id}
+                    handle={product.handle}
+                    variants={product.variants ?? []}
+                    thumbnailUrl={product.thumbnail ?? undefined}
+                    imageUrl={product.images?.[0]?.url}
+                    title={product.title}
+                    priority={index < 4}
+                  />
+                </li>
+              ))
+            }
+          </ul>
         )}
-        <ul
-          class="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 w-full gap-x-10 gap-y-16"
-        >
-          {
-            products?.map((product, index) => (
-              <li
-                class="transition-all duration-250 ease-out origin-center"
-              >
-                <ProductPreview
-                  id={product.id}
-                  variants={product.variants ?? []}
-                  thumbnailUrl={product.thumbnail ?? undefined}
-                  imageUrl={product.images?.[0]?.url}
-                  title={product.title}
-                  priority={index < 4}
-                />
-              </li>
-            ))
-          }
-        </ul>
-
-        <!-- SEO Text Block -->
-        <section class="mt-16 border-t border-stone-200/60 pt-10 max-w-2xl">
-          <h2 class="text-xl font-bold text-stone-900 mb-4">{seo.heading}</h2>
-          <p class="text-sm text-stone-500 leading-relaxed">{seo.body}</p>
-        </section>
       </div>
     </div>
   </div>

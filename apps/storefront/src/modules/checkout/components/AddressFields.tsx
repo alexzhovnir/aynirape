@@ -17,8 +17,6 @@ export interface AddressValues {
   province: string;
 }
 
-// Shared form shape — defined here so AddressFields can type `register` correctly
-// without creating a circular dependency with ShippingAddressStep
 export interface CheckoutFormValues {
   email: string;
   phone: string;
@@ -28,7 +26,7 @@ export interface CheckoutFormValues {
 }
 
 const INPUT_BASE =
-  "w-full border rounded px-4 py-3 text-sm outline-none focus:border-gray-500 transition-colors";
+  "w-full bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] border rounded-2xl px-4 py-3 text-sm outline-none focus:border-[var(--color-accent-gold)] transition-colors placeholder:text-[var(--color-text-muted)]";
 const ERROR = "text-red-500 text-xs mt-1 min-h-4";
 const SPACER = "min-h-4 mt-1";
 
@@ -57,7 +55,7 @@ export const AddressFields = ({
             type="text"
             placeholder="First name*"
             {...register(f("firstName"))}
-            className={`${INPUT_BASE} ${errors.firstName ? "border-red-400" : "border-gray-300"}`}
+            className={`${INPUT_BASE} ${errors.firstName ? "border-red-500/70" : "border-[var(--color-border-subtle)]"}`}
           />
           <p className={ERROR}>{errors.firstName?.message ?? ""}</p>
         </div>
@@ -66,7 +64,7 @@ export const AddressFields = ({
             type="text"
             placeholder="Last name*"
             {...register(f("lastName"))}
-            className={`${INPUT_BASE} ${errors.lastName ? "border-red-400" : "border-gray-300"}`}
+            className={`${INPUT_BASE} ${errors.lastName ? "border-red-500/70" : "border-[var(--color-border-subtle)]"}`}
           />
           <p className={ERROR}>{errors.lastName?.message ?? ""}</p>
         </div>
@@ -79,7 +77,7 @@ export const AddressFields = ({
             type="text"
             placeholder="Address*"
             {...register(f("address"))}
-            className={`${INPUT_BASE} ${errors.address ? "border-red-400" : "border-gray-300"}`}
+            className={`${INPUT_BASE} ${errors.address ? "border-red-500/70" : "border-[var(--color-border-subtle)]"}`}
           />
           <p className={ERROR}>{errors.address?.message ?? ""}</p>
         </div>
@@ -88,7 +86,7 @@ export const AddressFields = ({
             type="text"
             placeholder="Company"
             {...register(f("company"))}
-            className={`${INPUT_BASE} border-gray-300`}
+            className={`${INPUT_BASE} border-[var(--color-border-subtle)]`}
           />
           <p className={SPACER} />
         </div>
@@ -101,7 +99,7 @@ export const AddressFields = ({
             type="text"
             placeholder="Postal code*"
             {...register(f("postalCode"))}
-            className={`${INPUT_BASE} ${errors.postalCode ? "border-red-400" : "border-gray-300"}`}
+            className={`${INPUT_BASE} ${errors.postalCode ? "border-red-500/70" : "border-[var(--color-border-subtle)]"}`}
           />
           <p className={ERROR}>{errors.postalCode?.message ?? ""}</p>
         </div>
@@ -110,7 +108,7 @@ export const AddressFields = ({
             type="text"
             placeholder="City*"
             {...register(f("city"))}
-            className={`${INPUT_BASE} ${errors.city ? "border-red-400" : "border-gray-300"}`}
+            className={`${INPUT_BASE} ${errors.city ? "border-red-500/70" : "border-[var(--color-border-subtle)]"}`}
           />
           <p className={ERROR}>{errors.city?.message ?? ""}</p>
         </div>
@@ -121,13 +119,13 @@ export const AddressFields = ({
         <div>
           <select
             {...register(f("country"))}
-            className={`${INPUT_BASE} ${errors.country ? "border-red-400" : "border-gray-300"} bg-white`}
+            className={`${INPUT_BASE} ${errors.country ? "border-red-500/70" : "border-[var(--color-border-subtle)]"}`}
           >
             <option disabled value="">
               Country
             </option>
             {countries.map((c) => (
-              <option key={c.iso_2} value={c.iso_2}>
+              <option key={c.iso_2} value={c.iso_2} className="bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)]">
                 {c.display_name ?? c.name}
               </option>
             ))}
@@ -139,7 +137,7 @@ export const AddressFields = ({
             type="text"
             placeholder="State / Province"
             {...register(f("province"))}
-            className={`${INPUT_BASE} border-gray-300`}
+            className={`${INPUT_BASE} border-[var(--color-border-subtle)]`}
           />
           <p className={SPACER} />
         </div>

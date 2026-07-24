@@ -8,6 +8,9 @@ import ImageCarouselWrapper from "@modules/products/components/product-details/i
 import { ProductActions } from "@modules/products/components/product-details/ProductActions";
 import ProductAttributes from "@modules/products/components/product-details/ProductAttributes.astro";
 import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
+import CeremonyGuide from "@components/CeremonyGuide.astro";
+
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 
 export const getStaticPaths = getProductParams;
 
@@ -25,12 +28,13 @@ if (!region) {
 
 let product: Awaited<ReturnType<typeof retrieveProduct>> | undefined;
 let relatedProducts: Awaited<ReturnType<typeof listProducts>> = [];
+let allProducts: Awaited<ReturnType<typeof listProducts>> = [];
 let error: Error | undefined;
 
 try {
   product = await retrieveProduct(productId, region.id);
-  const allProducts = await listProducts(region.id);
-  relatedProducts = allProducts.filter((p) => p.id !== productId).slice(0, 4);
+  allProducts = await listProducts(region.id);
+  relatedProducts = allProducts.filter((p) => p.id !== productId);
 } catch (e) {
   error = e instanceof Error ? e : new Error("Unknown error");
   console.error(error);
@@ -57,6 +61,15 @@ const { cheapestPrice } = getProductPrice({
   productVariants: variants ?? [],
 });
 
+// Split description into short selling snippet vs full detailed text
+const descriptionParagraphs = (description ?? "").split("\n\n").filter(Boolean);
+const shortSellingDescription = descriptionParagraphs[0] || description || "";
+const detailedStoryParagraphs = descriptionParagraphs.length > 1 ? descriptionParagraphs.slice(1) : [shortSellingDescription];
+
+// Find bundle / set items (e.g., Kuripe pipe + Agua de Florida + Palo Santo)
+const kuripeBundleItem = allProducts.find(p => p.handle?.includes('kuripe') || p.categories?.some(c => c.handle?.includes('tepi')));
+const aguaBundleItem = allProducts.find(p => p.handle?.includes('agua-de-florida') || p.handle?.includes('palo-santo'));
+
 const schemaData = {
   "@context": "https://schema.org/",
   "@type": "Product",
@@ -80,111 +93,280 @@ const schemaData = {
 
 <Layout
   title={title}
-  description={description ?? `Shop ${title} at the best price.`}
+  description={shortSellingDescription || `Shop ${title} at Ayni Rapé.`}
   image={images?.[0]?.url}
   type="product"
 >
   <!-- SEO JSON-LD Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 
-  <div class="px-8 py-6 md:px-12 lg:px-16 max-w-8xl mx-auto">
-    {error && <p class="text-red-700 mb-6">{error.message}</p>}
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
+    {error && <p class="text-red-500 mb-6">{error.message}</p>}
     {
       product && (
-        <div>
-          <!-- Breadcrumbs -->
-          <nav class="flex items-center gap-2 text-xs text-stone-500 mb-8 font-medium">
-            <a href={`/${countryCode}`} class="hover:text-stone-900 transition-colors">Home</a>
-            <span class="text-stone-300">/</span>
-            <a href={`/${countryCode}/store`} class="hover:text-stone-900 transition-colors">Shop</a>
-            {
-              product.categories?.[0] && (
-                <>
-                  <span class="text-stone-300">/</span>
-                  <a href={`/${countryCode}/store/category/${product.categories[0].handle}`} class="hover:text-stone-900 transition-colors">
-                    {product.categories[0].name}
-                  </a>
-                </>
-              )
-            }
-            <span class="text-stone-300">/</span>
-            <span class="text-stone-900 truncate max-w-[200px]">{title}</span>
-          </nav>
+        <div class="space-y-12">
+          <!-- Breadcrumbs Nav -->
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: `/${countryCode}` },
+              { label: "Shop", href: `/${countryCode}/store` },
+              ...(product.categories?.[0] ? [{ label: product.categories[0].name, href: `/${countryCode}/store/category/${product.categories[0].handle}` }] : []),
+              { label: title ?? "Product" }
+            ]}
+          />
 
-          <div class="grid grid-cols-1 gap-20 lg:grid-cols-2">
-            <ImageCarouselWrapper
-              images={images && images.length > 0 ? images : (thumbnail ? [{ url: thumbnail }] : [])}
-              alt={title ?? "Product image"}
-            />
-
-            <div class="flex flex-col gap-20">
-              <div class="flex flex-col gap-4">
-                <h1 class="text-4xl font-bold">{title}</h1>
-                <div class="text-gray-500 space-y-4">
-                  {description?.split("\n\n").map((paragraph) => (
-                    <p class="whitespace-pre-line leading-relaxed">{paragraph}</p>
-                  ))}
-                </div>
-                <p class="text-4xl font-bold">{cheapestPrice?.calculated_price}</p>
+          <!-- Main Product Buy Box Showcase Card -->
+          <div class="bg-[var(--color-bg-surface-elevated)] p-6 sm:p-10 lg:p-12 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
+            <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 items-start">
+              <!-- Left Column: Gallery -->
+              <div class="lg:sticky lg:top-24">
+                <ImageCarouselWrapper
+                  images={images && images.length > 0 ? images : (thumbnail ? [{ url: thumbnail }] : [])}
+                  alt={title ?? "Product image"}
+                />
               </div>
 
-              <div class="flex gap-4 items-center mt-6">
-                <div class="flex-1">
-                  <ProductActions
-                    options={options ?? []}
-                    variants={variants ?? []}
-                    productId={productId}
-                    regionId={region.id}
-                    client:visible
-                  />
+              <!-- Right Column: Compact Selling Box -->
+              <div class="flex flex-col gap-6">
+                <!-- Badges & Category -->
+                <div>
+                  <div class="flex flex-wrap items-center gap-2 mb-3">
+                    <span class="bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-[var(--color-accent-gold)]/20">
+                      ETHICALLY SOURCED
+                    </span>
+                    <span class="bg-emerald-500/10 text-emerald-500 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-emerald-500/20">
+                      IN STOCK
+                    </span>
+                  </div>
+
+                  <h1 class="text-3xl md:text-4xl lg:text-5xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight">
+                    {title}
+                  </h1>
                 </div>
 
-                <button
-                  id="btn-add-favorite"
-                  data-id={productId}
-                  data-title={title}
-                  data-thumbnail={thumbnail}
-                  data-handle={product?.handle}
-                  class="p-4 border border-stone-200 text-stone-700 hover:bg-stone-50 rounded-full transition-colors flex items-center justify-center cursor-pointer shadow-sm min-h-[50px] shrink-0"
-                  aria-label="Add to Favorites"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-stone-450 fav-heart-icon">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                  </svg>
-                </button>
-              </div>
+                <!-- Price Display -->
+                <div class="flex items-baseline gap-4 border-y border-[var(--color-border-subtle)] py-4">
+                  <span class="text-3xl md:text-4xl font-bold text-[var(--color-accent-gold)]">
+                    {cheapestPrice?.calculated_price}
+                  </span>
+                  <span class="text-xs text-[var(--color-text-muted)]">Includes EU VAT. Fast Dispatch.</span>
+                </div>
 
-              <ProductAttributes
-                material={material}
-                origin_country={origin_country}
-                type={type}
-                weight={weight}
-                length={length}
-                width={width}
-                height={height}
-                metadata={metadata}
-              />
+                <!-- Short Selling Excerpt -->
+                <div class="text-[var(--color-text-secondary)] text-sm leading-relaxed bg-[var(--color-bg-surface)] p-4 rounded-2xl border border-[var(--color-border-subtle)] space-y-2">
+                  <p class="font-medium text-[var(--color-text-primary)] leading-snug">
+                    {shortSellingDescription}
+                  </p>
+                  <ul class="text-xs text-[var(--color-text-muted)] space-y-1 pt-1 list-disc pl-4">
+                    <li>Authentic traditional Amazonian formulation</li>
+                    <li>Prepared under strict ceremonial standards</li>
+                    <li>100% natural, unadulterated botanical specimen</li>
+                  </ul>
+                </div>
+
+                <!-- Add to Cart & Favorites Buttons -->
+                <div class="flex gap-4 items-center pt-1">
+                  <div class="flex-1">
+                    <ProductActions
+                      options={options ?? []}
+                      variants={variants ?? []}
+                      productId={productId}
+                      regionId={region.id}
+                      client:visible
+                    />
+                  </div>
+
+                  <button
+                    id="btn-add-favorite"
+                    data-id={productId}
+                    data-title={title}
+                    data-thumbnail={thumbnail}
+                    data-handle={product?.handle}
+                    class="p-4 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] rounded-full transition-all duration-300 flex items-center justify-center cursor-pointer shadow-sm min-h-[50px] shrink-0"
+                    aria-label="Add to Favorites"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-[var(--color-text-muted)] fav-heart-icon transition-colors">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Trust Guarantees Grid -->
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+                    <span>📦</span>
+                    <span><strong>DHL Express</strong> 3-5 days</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+                    <span>🌿</span>
+                    <span><strong>100% Organic</strong> Amazonian</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+                    <span>🛡️</span>
+                    <span><strong>Authentic</strong> Tribal recipe</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
+                    <span>🌱</span>
+                    <span><strong>1% CO₂</strong> Climate Pledge</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
+          <!-- Section 2: Detailed Story, Usage & Specifications -->
+          <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Left 2 Cols: Detailed Story & How/When to Use -->
+            <div class="lg:col-span-2 space-y-8">
+              <!-- Full Detailed Description -->
+              <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
+                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">HERITAGE & DETAILS</span>
+                <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+                  About {title}
+                </h2>
+                <div class="text-[var(--color-text-secondary)] space-y-4 text-sm leading-relaxed">
+                  {detailedStoryParagraphs.map((paragraph) => (
+                    <p class="whitespace-pre-line">{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+
+              <!-- When & How to Use Section -->
+              <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-6">
+                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">USAGE GUIDANCE</span>
+                <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+                  When & How to Use
+                </h2>
+                
+                <div class="grid sm:grid-cols-2 gap-6 text-xs">
+                  <div class="bg-[var(--color-bg-surface)] p-5 rounded-2xl border border-[var(--color-border-subtle)] space-y-2">
+                    <span class="text-xl block mb-1">🕯️</span>
+                    <strong class="block text-sm text-[var(--color-text-primary)] font-serif-heading">When to Use</strong>
+                    <p class="text-[var(--color-text-secondary)] leading-relaxed">
+                      Recommended before meditation, yoga, breathwork rituals, or when seeking deep grounding after an overwhelming day. Ideal at the start of ceremonies to clear mental chatter and open the heart.
+                    </p>
+                  </div>
+
+                  <div class="bg-[var(--color-bg-surface)] p-5 rounded-2xl border border-[var(--color-border-subtle)] space-y-2">
+                    <span class="text-xl block mb-1">🪵</span>
+                    <strong class="block text-sm text-[var(--color-text-primary)] font-serif-heading">How to Apply</strong>
+                    <p class="text-[var(--color-text-secondary)] leading-relaxed">
+                      Administer a pea-sized portion into a Kuripe applicator (for self-application) or a Tepi pipe (for blowing to another person). Hold your breath, set your intention, and blow gently into each nostril.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 1 Col: Specifications & Complete Set Recommendations -->
+            <div class="space-y-8">
+              <!-- Specifications Component -->
+              <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
+                <ProductAttributes
+                  material={material}
+                  origin_country={origin_country}
+                  type={type}
+                  weight={weight}
+                  length={length}
+                  width={width}
+                  height={height}
+                  metadata={metadata}
+                />
+              </div>
+
+              <!-- Complete Your Set Bundle Box -->
+              <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
+                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-[10px] uppercase block">COMPLETE YOUR RITUAL SET</span>
+                <h3 class="text-lg font-serif-heading font-bold text-[var(--color-text-primary)]">
+                  Recommended Accessories
+                </h3>
+                <p class="text-xs text-[var(--color-text-secondary)]">To work with this blend, you will need an applicator pipe and cleansing aromatics:</p>
+
+                <div class="space-y-3 pt-2">
+                  {kuripeBundleItem && (
+                    <a
+                      href={`/${countryCode}/store/${kuripeBundleItem.handle || kuripeBundleItem.id}`}
+                      class="flex items-center gap-3 bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] transition-colors group"
+                    >
+                      <div class="w-12 h-12 rounded-xl overflow-hidden bg-[var(--color-bg-surface-elevated)] shrink-0">
+                        {kuripeBundleItem.thumbnail ? (
+                          <img src={kuripeBundleItem.thumbnail} alt={kuripeBundleItem.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        ) : (
+                          <div class="w-full h-full flex items-center justify-center text-lg">🪵</div>
+                        )}
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <strong class="block text-xs text-[var(--color-text-primary)] truncate font-semibold group-hover:text-[var(--color-accent-gold)] transition-colors">
+                          {kuripeBundleItem.title}
+                        </strong>
+                        <span class="text-[10px] text-[var(--color-text-muted)]">Applicator Pipe</span>
+                      </div>
+                      <span class="text-xs font-bold text-[var(--color-accent-gold)]">&rarr;</span>
+                    </a>
+                  )}
+
+                  {aguaBundleItem && (
+                    <a
+                      href={`/${countryCode}/store/${aguaBundleItem.handle || aguaBundleItem.id}`}
+                      class="flex items-center gap-3 bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] transition-colors group"
+                    >
+                      <div class="w-12 h-12 rounded-xl overflow-hidden bg-[var(--color-bg-surface-elevated)] shrink-0">
+                        {aguaBundleItem.thumbnail ? (
+                          <img src={aguaBundleItem.thumbnail} alt={aguaBundleItem.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        ) : (
+                          <div class="w-full h-full flex items-center justify-center text-lg">🌸</div>
+                        )}
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <strong class="block text-xs text-[var(--color-text-primary)] truncate font-semibold group-hover:text-[var(--color-accent-gold)] transition-colors">
+                          {aguaBundleItem.title}
+                        </strong>
+                        <span class="text-[10px] text-[var(--color-text-muted)]">Cleansing Essential</span>
+                      </div>
+                      <span class="text-xs font-bold text-[var(--color-accent-gold)]">&rarr;</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sacred Ceremony Guide Section -->
+          <div class="py-6 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl">
+            <CeremonyGuide />
+          </div>
+
+          <!-- Related Products Carousel Slider -->
           {relatedProducts.length > 0 && (
-            <div class="mt-24 border-t border-stone-200/60 pt-16 pb-20">
-              <h2 class="text-3xl font-bold text-stone-900 mb-10 text-center md:text-left">
-                People also viewed this item
-              </h2>
-              <ul class="grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-16 w-full">
+            <div class="pt-8 pb-12 overflow-hidden">
+              <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
+                <div>
+                  <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">RECOMMENDED FOR YOU</span>
+                  <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] sm:text-4xl mt-2">
+                    People also viewed this item
+                  </h2>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                  <button id="rel-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous related products">&larr;</button>
+                  <button id="rel-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next related products">&rarr;</button>
+                </div>
+              </div>
+
+              <div id="related-products-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-4 scroll-smooth snap-x snap-mandatory -mx-4 px-4">
                 {relatedProducts.map((p) => (
-                  <li>
+                  <div class="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] snap-start shrink-0">
                     <ProductPreview
                       id={p.id}
+                      handle={p.handle}
                       variants={p.variants ?? []}
                       thumbnailUrl={p.thumbnail ?? undefined}
                       imageUrl={p.images?.[0]?.url}
                       title={p.title}
                     />
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
         </div>
@@ -195,8 +377,22 @@ const schemaData = {
 
 <script is:inline>
   document.addEventListener('astro:page-load', () => {
+    // Related products carousel control
+    const relSlider = document.getElementById('related-products-slider');
+    const relNextBtn = document.getElementById('rel-slider-next');
+    const relPrevBtn = document.getElementById('rel-slider-prev');
+    
+    if (relSlider) {
+      relNextBtn?.addEventListener('click', () => {
+        relSlider.scrollLeft += 320;
+      });
+      relPrevBtn?.addEventListener('click', () => {
+        relSlider.scrollLeft -= 320;
+      });
+    }
+
+    // Favorites Heart Button logic
     const favBtn = document.getElementById('btn-add-favorite');
-    const label = document.getElementById('fav-btn-label');
     const icon = favBtn?.querySelector('.fav-heart-icon');
 
     if (!favBtn) return;
@@ -224,7 +420,7 @@ const schemaData = {
         if (icon) {
           icon.setAttribute('fill', '#ef4444');
           icon.setAttribute('stroke', '#ef4444');
-          icon.classList.remove('text-stone-400');
+          icon.classList.remove('text-[var(--color-text-muted)]');
           icon.classList.add('text-red-500');
         }
       } else {
@@ -232,7 +428,7 @@ const schemaData = {
           icon.setAttribute('fill', 'none');
           icon.setAttribute('stroke', 'currentColor');
           icon.classList.remove('text-red-500');
-          icon.classList.add('text-stone-400');
+          icon.classList.add('text-[var(--color-text-muted)]');
         }
       }
     }

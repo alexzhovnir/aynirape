@@ -1,34 +1,269 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 
 export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
 ---
 
 <Layout
-  title="About Us - Our Mission & Story"
-  description="Learn about Ayni Rapé, our history with Amazonian sacred herbs, and our mission to provide authentic shamanic supplies and traditional medicine in Europe."
+  title="About Us - Our Mission, Ancestral Roots & Story"
+  description="Learn about Ayni Rapé, our history with Amazonian sacred herbs, our partnerships with indigenous tribes, and our mission to provide authentic shamanic supplies in Europe."
 >
-  <section class="mx-auto max-w-3xl px-8 py-12 md:px-12 lg:px-16">
-    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
-      OUR STORY
-    </p>
-    <h1 class="mt-4 text-4xl font-bold tracking-tight text-stone-900">
-      About Ayni Râpé
-    </h1>
-    <div class="mt-8 space-y-6 text-base leading-8 text-stone-700">
-      <p>
-        The word <strong>Ayni</strong> finds its origins in Andean traditions and reflects a principle of ongoing reciprocity (“today for you, tomorrow for me”). It expresses the understanding that everything in the world is interconnected, and that a community, united around shared values and sacred goods, can accomplish far more than any single individual alone.
-      </p>
-      <p>
-        We, the founders of Ayni, were first introduced to Râpé in 2020. Since then, we have worked closely with this sacred herb and other sacred medicinal herbs, experiencing their role within shamanic plant medicine and personal healing practices. At a later stage, after receiving the blessing of a renowned Maestro Curandero, we began to share these sacred herbs with others, following the principles of respect and reciprocity.
-      </p>
-      <p>
-        Today, through the Ayni venture, our objective is to make this powerful ancestral medicine accessible to a wider audience in Europe, supporting individual healing and inner development through authentic shamanic supplies and indigenous spiritual goods.
-      </p>
-      <p>
-        For this purpose, we have carefully selected our products, directly sourced from Amazonian medicinal plants cultivated by indigenous tribes of Peru and Brazil. Each offering is prepared in strict respect of traditional practices, forming a curated shamanic supply that includes different blends with specific ceremonial characteristics, as well as the essential tools for application.
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
+    <!-- Breadcrumbs Nav -->
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: `/${countryCode}` },
+        { label: "About Us" }
+      ]}
+    />
+
+    <!-- Top Hero Banner -->
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
+        AYNI RAPÉ &bull; ANCESTRAL HERITAGE
+      </span>
+      <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
+        Our Mission, Story & <span class="italic font-normal text-[var(--color-accent-gold)]">Sacred Reciprocity</span>
+      </h1>
+      <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
+        Connecting European practitioners with authentic Amazonian plant medicine, ethically harvested by 5 indigenous tribes of Peru and Brazil.
       </p>
     </div>
-  </section>
+
+    <!-- Main 2-Column Hero / Story Section -->
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <!-- Left Column: Image Gallery & Stats Badge -->
+      <div class="relative flex justify-center">
+        <div class="absolute inset-0 bg-[var(--color-accent-gold)]/10 rounded-3xl blur-3xl scale-95 -z-10"></div>
+        <div class="relative rounded-3xl overflow-hidden border border-[var(--color-border-subtle)] shadow-2xl bg-[var(--color-bg-surface-elevated)] group max-w-lg lg:max-w-none w-full">
+          <img
+            src="/images/blog/rape/nukini-1504.23abece79ac5bad050fdc8779f1c5b53.webp"
+            alt="Sacred Rapé Preparation & Ancestral Traditions"
+            class="w-full h-[480px] lg:h-[580px] object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent"></div>
+          
+          <!-- Floating Stats Grid -->
+          <div class="absolute bottom-6 left-6 right-6 p-6 rounded-2xl bg-[var(--color-bg-surface-elevated)]/95 backdrop-blur-md border border-[var(--color-border-subtle)] shadow-lg grid grid-cols-3 gap-4 text-center">
+            <div>
+              <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">5</span>
+              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Native Tribes</span>
+            </div>
+            <div>
+              <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">100%</span>
+              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Direct Trade</span>
+            </div>
+            <div>
+              <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">1% CO₂</span>
+              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Climate Pledge</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Rich Expanded Text -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-[0.28em] text-[var(--color-accent-gold)] block mb-1">THE ORIGIN OF AYNI</span>
+          <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
+            The Cosmic Law of Reciprocity
+          </h2>
+        </div>
+
+        <div class="space-y-4 text-sm md:text-base leading-relaxed text-[var(--color-text-secondary)]">
+          <p>
+            The word <strong class="text-[var(--color-text-primary)] font-bold">Ayni</strong> finds its deepest origins in Andean and Amazonian traditions, reflecting the timeless cosmic law of ongoing reciprocity: <em class="text-[var(--color-accent-gold)] font-medium">“Hoy por ti, mañana por mí”</em> — today for you, tomorrow for me. It embodies the sacred understanding that all living beings, spirits, plants, and elements are intrinsically interconnected.
+          </p>
+
+          <p>
+            Our journey began in 2020 when we were first introduced to the profound healing power of Râpé in the heart of South America. Experiencing its grounding clarity, emotional release, and spiritual alignment firsthand transformed our path. Over years of immersive practice, fasting, and studying beside revered Amazonian healers and receiving the formal blessing of a renowned Maestro Curandero, we were entrusted with the honor of sharing these sacred herbs across Europe.
+          </p>
+
+          <p>
+            Each blend in our catalogue is directly sourced from indigenous tribes across Peru and Brazil, including the <strong class="text-[var(--color-text-primary)]">Huni Kuin, Yawanawá, Nukini, Katukina, and Shanenawa</strong> nations in Acre. Prepared under strict ceremonial conditions, master tabaqueiros combine organic Mapacho (Nicotiana rustica) with sacred tree ashes such as Tsunu, Cacao, Canelheiro, and Paricá, along with medicinal seeds, flowers, and barks.
+          </p>
+
+          <p>
+            Beyond the powders themselves, we partner with master artisans who hand-craft our Tepi and Kuripe applicators from sustainably harvested Sawo wood, Teak, and Bamboo, as well as energy-conducting Sterling Silver. Every purchase directly feeds back into tribal welfare, supporting community autonomy, land preservation, and economic self-determination for Amazonian families.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Indigenous Tribes We Partner With -->
+    <div class="mt-24 pt-16 border-t border-[var(--color-border-subtle)]">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">GUARDIANS OF THE FOREST</span>
+        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">The 5 Indigenous Nations We Support</h2>
+        <p class="text-xs text-[var(--color-text-secondary)] mt-2">We work directly with master tabaqueiros in Acre and Peru, ensuring fair trade compensation and cultural preservation.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
+          <div class="text-3xl mb-3">🏹</div>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Huni Kuin (Kaxinawá)</h3>
+          <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Acre, Brazil</span>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Famous for their deep connection to the spirit world, the Huni Kuin formulate potent blends with Cacao ash, Murici, and sacred jungle vines for grounding vision work.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
+          <div class="text-3xl mb-3">🔥</div>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Yawanawá</h3>
+          <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Gregório River, Brazil</span>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            The "People of the Wild Boar" are world-renowned for their Tsunu tree ash formulations, celebrated for intense physical cleansing and spiritual purification.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
+          <div class="text-3xl mb-3">🦋</div>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Nukini</h3>
+          <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Juruá Valley, Brazil</span>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Known as the "Butterfly People", the Nukini create gentle, sweet, and heart-opening blends infused with the rare Sansara medicinal leaf.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
+          <div class="text-3xl mb-3">🌿</div>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Katukina</h3>
+          <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Panoan Nation, Brazil</span>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Master herbalists of the Amazon, the Katukina specialize in high-potency Canelheiro and Paricá formulas designed to clear mental noise and center focus.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
+          <div class="text-3xl mb-3">🌸</div>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Shanenawa</h3>
+          <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Feijó, Brazil</span>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Guardians of floral and aromatic herbs, crafting balanced blends that harmoniously combine Mapacho with fragrant botanical resins.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300 flex flex-col justify-center text-center">
+          <span class="text-3xl mb-2">🤝</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">100% Fair Trade Direct</h3>
+          <p class="text-xs text-[var(--color-text-muted)]">
+            Proceeds support tribal schools, healthcare, and territorial protection.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Our History Timeline -->
+    <div class="mt-24 pt-16 border-t border-[var(--color-border-subtle)]">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">MILESTONES & GROWTH</span>
+        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">Our Journey Since 2020</h2>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-6 relative">
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm relative">
+          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">2020 &bull; THE CALLING</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">First Jungle Dieta</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            First introduction to Rapé in South America, undergoing personal fasting dietas beside native Amazonian healers.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm relative">
+          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">2021 &bull; BLESSINGS</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">Maestro Blessing</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Receiving the formal blessing of a Maestro Curandero to legally and respectfully share sacred herbs in Europe.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm relative">
+          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">2023 &bull; EXPANSION</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">Artisanal Studio</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Partnering with master carvers for Sawo wood, Teak, and Sterling Silver Tepi and Kuripe applicators.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm relative">
+          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">PRESENT &bull; IMPACT</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">1% CO₂ & Community</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Serving 10,000+ practitioners across Europe with 100% legal botanical specimens and 1% carbon donation.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: 4 Key Core Principles Cards -->
+    <div class="mt-24 pt-16 border-t border-[var(--color-border-subtle)]">
+      <div class="text-center mb-12">
+        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">OUR GUIDING LIGHT</span>
+        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">The Pillars of Ayni</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+          <span class="text-3xl mb-3 block">🤝</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">Sacred Reciprocity</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Honoring the law of Ayni by giving back to the tribes and ecosystems that nurture these sacred plant medicines.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+          <span class="text-3xl mb-3 block">🏹</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">Tribal Heritage</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Working exclusively with authentic indigenous families, ensuring heritage formulas remain pure and unaltered.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+          <span class="text-3xl mb-3 block">🪶</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">Artisanal Integrity</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Every Tepi and Kuripe applicator is carved by hand with reverence, intention, and anatomical precision.
+          </p>
+        </div>
+
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+          <span class="text-3xl mb-3 block">🌱</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">Mindful Integration</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Providing comprehensive ceremonial guides and safety disclaimers to encourage respectful, conscious practice.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action Banner -->
+    <div class="mt-20 bg-gradient-to-r from-[var(--color-bg-surface-elevated)] via-[var(--color-bg-surface)] to-[var(--color-bg-surface-elevated)] p-10 rounded-3xl border border-[var(--color-border-subtle)] text-center shadow-md">
+      <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-3">
+        Ready to Begin Your Sacred Journey?
+      </h2>
+      <p class="text-xs text-[var(--color-text-secondary)] max-w-xl mx-auto mb-6 leading-relaxed">
+        Explore our curated selection of authentic Amazonian blends, handcrafted applicators, and Peruvian aromatics.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          href={`/${countryCode}/store`}
+          class="px-8 py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold text-xs uppercase tracking-wider rounded-full transition-all duration-300 shadow-md cursor-pointer"
+        >
+          View Catalogue &rarr;
+        </a>
+        <a
+          href="/blog"
+          class="px-8 py-4 border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] font-bold text-xs uppercase tracking-wider rounded-full transition-all duration-300 cursor-pointer bg-[var(--color-bg-surface)]"
+        >
+          Read Journal
+        </a>
+      </div>
+    </div>
+  </div>
 </Layout>

@@ -1,45 +1,177 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 
 export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
 ---
 
 <Layout
-  title="Privacy Policy"
-  description="Privacy policy and data protection terms for Ayni Rapé."
+  title="Privacy Policy - Data Protection & Security Commitment"
+  description="Learn how Ayni Rapé protects your personal data, order information, and privacy in compliance with EU GDPR standards."
 >
-  <section class="mx-auto max-w-3xl px-8 py-12 md:px-12 lg:px-16">
-    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
-      LEGAL
-    </p>
-    <h1 class="mt-4 text-4xl font-bold tracking-tight text-stone-900">
-      Privacy Policy
-    </h1>
-    <div class="mt-8 space-y-6 text-base leading-8 text-stone-700">
-      <p>
-        At Ayni Râpé, we take your privacy seriously. This privacy policy explains how we collect, use, and protect your personal information when you use our website.
-      </p>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
+    <!-- Breadcrumbs Nav -->
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: `/${countryCode}` },
+        { label: "Privacy Policy" }
+      ]}
+    />
 
-      <h2 class="text-2xl font-bold text-stone-900 pt-4">Data Collection</h2>
-      <p>
-        We collect personal data to complete your purchases and run our website:
-      </p>
-      <ul class="list-disc pl-6 space-y-2">
-        <li>Contact information (e.g. name, email address, phone number).</li>
-        <li>Billing and shipping addresses.</li>
-        <li>Order history and cart state to provide accurate pricing and fulfillment.</li>
-      </ul>
-
-      <h2 class="text-2xl font-bold text-stone-900 pt-4">Data Sharing</h2>
-      <p>
-        We do not sell your personal data. We only share information with third-party service providers (such as shipping couriers and payment processors) to the extent necessary to fulfill your orders.
-      </p>
-
-      <h2 class="text-2xl font-bold text-stone-900 pt-4">Your Rights</h2>
-      <p>
-        You have the right to request access to the personal data we hold about you, request corrections, or request deletion of your personal data at any time by contacting us at <a href="mailto:info@aynirape.com" class="text-[#7a5c00] hover:underline">info@aynirape.com</a>.
+    <!-- Hero Header Banner -->
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
+        PRIVACY & DATA PROTECTION
+      </span>
+      <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
+        Privacy Policy & <span class="italic font-normal text-[var(--color-accent-gold)]">GDPR Commitment</span>
+      </h1>
+      <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
+        Your privacy is sacred to us. We adhere to strict European data security standards to protect your personal details at every step.
       </p>
     </div>
-  </section>
+
+    <!-- 4 Trust Pillars Cards Grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
+          🔒
+        </div>
+        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">256-Bit SSL Encryption</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          All order and payment traffic is secured with military-grade SSL data encryption.
+        </p>
+      </div>
+
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
+          🚫
+        </div>
+        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">Zero Data Selling</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          We never sell, rent, or trade your contact or order details to third parties.
+        </p>
+      </div>
+
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
+          🇪🇺
+        </div>
+        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">EU GDPR Compliant</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Full adherence to the General Data Protection Regulation (EU 2016/679).
+        </p>
+      </div>
+
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
+          🗑️
+        </div>
+        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">Right to Erasure</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Request full deletion or export of your account data at any time upon email request.
+        </p>
+      </div>
+    </div>
+
+    <!-- Structured Content Policy Sections -->
+    <div class="space-y-8 max-w-4xl mx-auto">
+      <!-- Section 1: Data Collection -->
+      <div class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">📋</span>
+          <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+            1. Information We Collect
+          </h2>
+        </div>
+        <p class="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
+          We only collect personal information necessary to fulfill your orders, provide customer service, and ensure seamless delivery across Europe:
+        </p>
+        <div class="grid sm:grid-cols-2 gap-4 pt-2">
+          <div class="p-4 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] space-y-1">
+            <strong class="text-xs text-[var(--color-accent-gold)] font-bold uppercase tracking-wider block">Identity & Contact Data</strong>
+            <p class="text-xs text-[var(--color-text-secondary)]">Your full name, email address, phone number, and preferred language.</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] space-y-1">
+            <strong class="text-xs text-[var(--color-accent-gold)] font-bold uppercase tracking-wider block">Fulfillment Details</strong>
+            <p class="text-xs text-[var(--color-text-secondary)]">Shipping & billing address, postal code, and parcel courier preferences.</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] space-y-1">
+            <strong class="text-xs text-[var(--color-accent-gold)] font-bold uppercase tracking-wider block">Technical Data</strong>
+            <p class="text-xs text-[var(--color-text-secondary)]">IP address, browser type, regional location cookie for accurate currency calculation.</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] space-y-1">
+            <strong class="text-xs text-[var(--color-accent-gold)] font-bold uppercase tracking-wider block">Transaction History</strong>
+            <p class="text-xs text-[var(--color-text-secondary)]">Purchased items, invoice records, and shipping tracking numbers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Data Usage & Sharing -->
+      <div class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">🤝</span>
+          <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+            2. How We Use & Share Your Data
+          </h2>
+        </div>
+        <p class="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
+          Your personal details are used exclusively for order processing, shipping notification alerts, and regulatory compliance. We share data only with verified partners required to complete your order:
+        </p>
+        <ul class="space-y-3 text-xs text-[var(--color-text-secondary)]">
+          <li class="flex items-start gap-2.5">
+            <span class="text-[var(--color-accent-gold)] shrink-0 mt-0.5">&bull;</span>
+            <span><strong>Logistics Couriers:</strong> DHL Express and national postal authorities receive your shipping address and phone number for delivery updates.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="text-[var(--color-accent-gold)] shrink-0 mt-0.5">&bull;</span>
+            <span><strong>Payment Processors:</strong> Credit card, PayPal, and Apple Pay payments are tokenized securely through Stripe/PayPal without storing card numbers on our server.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Section 3: Your Rights -->
+      <div class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">🛡️</span>
+          <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+            3. Your GDPR Rights & Data Requests
+          </h2>
+        </div>
+        <p class="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
+          Under European data protection laws, you retain complete authority over your personal information:
+        </p>
+        <div class="space-y-3 text-xs text-[var(--color-text-secondary)] pt-2">
+          <p>
+            You have the right to request a full copy of all data associated with your account, correct any inaccuracies, or request the immediate deletion of your profile.
+          </p>
+          <p class="p-4 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] text-[var(--color-text-primary)]">
+            To submit a data request, please email our Data Protection Desk at: <a href="mailto:info@aynirape.com" class="text-[var(--color-accent-gold)] font-bold hover:underline">info@aynirape.com</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact CTA Banner -->
+    <div class="mt-16 bg-gradient-to-r from-[var(--color-bg-surface-elevated)] via-[var(--color-bg-surface)] to-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] text-center shadow-md">
+      <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-2">
+        Have Questions About Our Privacy Practices?
+      </h2>
+      <p class="text-xs text-[var(--color-text-secondary)] max-w-lg mx-auto mb-6">
+        Our support team is here to assist with any data privacy questions or requests.
+      </p>
+      <a
+        href={`/${countryCode}/contact`}
+        class="inline-block px-8 py-3.5 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold text-xs uppercase tracking-wider rounded-full transition-all duration-300 shadow-md cursor-pointer"
+      >
+        Contact Data Protection Officer &rarr;
+      </a>
+    </div>
+  </div>
 </Layout>

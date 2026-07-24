@@ -66,14 +66,15 @@ export const CheckoutPage = ({ countryCode, countries }: CheckoutPageProps) => {
 
   if (!cart || !cart.items?.length) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-3xl font-bold mb-4">Your cart is empty</h1>
-        <p className="text-gray-600 mb-6">Add items before checking out.</p>
+      <div className="max-w-md mx-auto my-16 p-12 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl shadow-xl text-center space-y-4">
+        <span className="text-4xl">🛍️</span>
+        <h1 className="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)]">Your Cart is Empty</h1>
+        <p className="text-xs text-[var(--color-text-muted)]">Please add sacred items to your cart before checking out.</p>
         <a
           href={`/${countryCode}/store`}
-          className="inline-block bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-3 px-8 rounded-full transition-colors uppercase tracking-wider text-sm"
+          className="inline-block bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold py-3.5 px-8 rounded-full transition-all duration-300 uppercase tracking-wider text-xs shadow-md mt-2"
         >
-          Continue Shopping
+          Explore Catalogue &rarr;
         </a>
       </div>
     );
@@ -87,41 +88,39 @@ export const CheckoutPage = ({ countryCode, countries }: CheckoutPageProps) => {
     | undefined;
 
   const checkoutContent = (
-    <div className="max-w-7xl mx-auto px-8 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-0">
-          <ShippingAddressStep
-            cart={cart}
-            countries={countries}
-            countryCode={countryCode}
-            mode={step === "address" ? "edit" : "read"}
-            onContinue={() => goToStep("delivery")}
-            onEdit={() => goToStep("address")}
-          />
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+      <div className="lg:col-span-2 space-y-6">
+        <ShippingAddressStep
+          cart={cart}
+          countries={countries}
+          countryCode={countryCode}
+          mode={step === "address" ? "edit" : "read"}
+          onContinue={() => goToStep("delivery")}
+          onEdit={() => goToStep("address")}
+        />
 
-          <DeliveryStep
-            cart={cart}
-            mode={
-              step === "delivery"
-                ? "edit"
-                : step === "address"
-                  ? "inactive"
-                  : "read"
-            }
-            onContinue={() => goToStep("payment")}
-            onEdit={() => goToStep("delivery")}
-          />
+        <DeliveryStep
+          cart={cart}
+          mode={
+            step === "delivery"
+              ? "edit"
+              : step === "address"
+                ? "inactive"
+                : "read"
+          }
+          onContinue={() => goToStep("payment")}
+          onEdit={() => goToStep("delivery")}
+        />
 
-          <PaymentStep
-            cart={cart}
-            countryCode={countryCode}
-            mode={step === "payment" ? "edit" : "inactive"}
-          />
-        </div>
+        <PaymentStep
+          cart={cart}
+          countryCode={countryCode}
+          mode={step === "payment" ? "edit" : "inactive"}
+        />
+      </div>
 
-        <div className="lg:col-span-1">
-          <OrderSummary cart={cart} />
-        </div>
+      <div className="lg:col-span-1">
+        <OrderSummary cart={cart} />
       </div>
     </div>
   );

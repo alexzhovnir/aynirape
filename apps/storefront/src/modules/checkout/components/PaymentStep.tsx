@@ -20,7 +20,7 @@ const CardIcon = () => (
     strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
-    className="w-5 h-5 text-gray-400"
+    className="w-5 h-5 text-[var(--color-accent-gold)]"
     aria-hidden="true"
   >
     <rect x="2" y="5" width="20" height="14" rx="2" />
@@ -143,36 +143,47 @@ export const PaymentStep = ({
 
   if (mode === "inactive") {
     return (
-      <div className="border-t border-gray-200 pt-6 mt-6">
-        <h2 className="text-2xl font-bold text-gray-400">Payment</h2>
+      <div className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 opacity-60">
+        <h2 className="text-xl font-serif-heading font-bold text-[var(--color-text-muted)]">
+          Step 3 &bull; Payment Details
+        </h2>
       </div>
     );
   }
 
   return (
-    <div className="border-t border-gray-200 pt-6 mt-6">
-      <h2 className="text-2xl font-bold mb-6">Payment</h2>
+    <div className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 shadow-sm">
+      <div className="mb-6">
+        <span className="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-[10px] uppercase block mb-1">
+          STEP 3 OF 3 &bull; PAYMENT METHOD
+        </span>
+        <h2 className="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+          Complete Sacred Order
+        </h2>
+      </div>
 
-      <div>
+      <div className="space-y-6">
         {isLoading && (
-          <p className="text-sm text-gray-500 mb-4">Loading payment options...</p>
+          <p className="text-xs text-[var(--color-text-muted)] animate-pulse">
+            Loading payment options...
+          </p>
         )}
 
         {!isLoading && paymentProviders.length === 0 && !error && (
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-xs text-[var(--color-text-muted)]">
             No payment options available.
           </p>
         )}
 
         {!isLoading && paymentProviders.length > 0 && (
-          <div className="space-y-3 mb-6">
+          <div className="space-y-3">
             {paymentProviders.map((provider) => (
               <label
                 key={provider.id}
-                className={`flex items-center justify-between border rounded-md px-4 py-3 cursor-pointer transition-colors ${
+                className={`flex items-center justify-between border rounded-2xl p-4 cursor-pointer transition-all ${
                   selectedProviderId === provider.id
-                    ? "border-black"
-                    : "border-gray-200 hover:border-gray-400"
+                    ? "border-[var(--color-accent-gold)] bg-[var(--color-bg-surface)] shadow-sm"
+                    : "border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] hover:border-[var(--color-text-muted)]"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -182,14 +193,14 @@ export const PaymentStep = ({
                     value={provider.id}
                     checked={selectedProviderId === provider.id}
                     onChange={() => handleProviderChange(provider.id)}
-                    className="w-4 h-4 accent-black"
+                    className="w-4 h-4 accent-[var(--color-accent-gold)] cursor-pointer"
                   />
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-semibold text-[var(--color-text-primary)]">
                     {formatProviderName(provider.id)}
                   </span>
                   {isTestProvider(provider.id) && (
-                    <span className="text-xs text-orange-600 bg-orange-50 border border-orange-200 rounded px-2 py-0.5">
-                      Attention: For testing purposes only.
+                    <span className="text-[10px] font-bold text-amber-500 bg-amber-500/10 border border-amber-500/20 rounded-full px-2.5 py-0.5 uppercase tracking-wider">
+                      Test Mode
                     </span>
                   )}
                 </div>
@@ -203,20 +214,25 @@ export const PaymentStep = ({
           cart.payment_collection?.payment_sessions?.some(
             (s) => s.provider_id === selectedProviderId,
           ) && (
-            <div className="mb-6 p-4 border border-gray-200 rounded-md">
+            <div className="p-4 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl">
               <PaymentElement />
             </div>
           )}
 
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && (
+          <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-500 text-xs text-center font-medium">
+            {error}
+          </div>
+        )}
 
         <button
           type="button"
           disabled={!selectedProviderId || isSaving || isPlacing}
           onClick={handlePlaceOrder}
-          className="bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-3.5 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs shadow-sm cursor-pointer"
+          className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs flex items-center justify-center gap-2"
         >
-          {isPlacing ? "Placing order..." : "Place order"}
+          <span>{isPlacing ? "Processing Order..." : "Place Sacred Order"}</span>
+          <span>&rarr;</span>
         </button>
       </div>
     </div>

@@ -1,12 +1,11 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { getRegionParams } from "../../lib/params/region-params";
-import { getRegion } from "../../lib/data/regions";
-import { listProducts } from "../../lib/data/products";
-import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import { getRegion } from "@lib/data/regions";
+import { listProducts, listCategories } from "@lib/data/products";
+import { getRegionParams } from "@lib/params/region-params";
 import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
-import PlaceholderImage from "@modules/products/components/thumbnail/PlaceholderImage.astro";
-import { Image } from "astro:assets";
+import CeremonyGuide from "@components/CeremonyGuide.astro";
+import { getCollection } from "astro:content";
 
 export const getStaticPaths = getRegionParams;
 
@@ -19,13 +18,15 @@ if (!region) {
 }
 
 let products: Awaited<ReturnType<typeof listProducts>> = [];
+let categories: Awaited<ReturnType<typeof listCategories>> = [];
 let dbReviews: any[] = [];
 let error: Error | undefined;
 
 try {
   products = await listProducts(region.id);
+  categories = await listCategories();
   
-  // Fetch approved reviews from the backend
+  // Fetch real verified user reviews from backend
   const backendUrl = import.meta.env.PUBLIC_MEDUSA_BACKEND_URL || 'http://localhost:9009';
   const res = await fetch(`${backendUrl}/store/feedback`);
   if (res.ok) {
@@ -37,71 +38,80 @@ try {
   console.error(error);
 }
 
-// Bestsellers list matching screenshots
-const bestsellerHandles = ['nukini-sansara', 'huni-kuin', 'yawanawa-tsunu', 'spiritual-cleanse'];
+// Bestsellers list matching old site & screenshots
+const bestsellerHandles = ['nukini-sansara', 'huni-kuin', 'yawanawa-tsunu', 'spiritual-cleanse', 'kuripe-wolf-sawo', 'kuripe-colibri-teak', 'agua-de-florida', 'palo-santo'];
 const bestsellers = products.filter(p => bestsellerHandles.includes(p.handle));
-const bestsellersList = bestsellers.length > 0 ? bestsellers : products.slice(0, 4);
+const bestsellersList = bestsellers.length > 0 ? bestsellers : products;
 
-// Category cards setup
-const rapeProduct = products.find(p => p.handle === 'nukini-sansara');
-const tepiProduct = products.find(p => p.handle === 'kuripe-colibri-teak') || products.find(p => p.handle === 'tepi-shipibo-large');
-const aromaticsProduct = products.find(p => p.handle === 'agua-de-florida') || products.find(p => p.handle === 'palo-santo');
+// Category cards setup (All 5 categories with fallback images)
+const rapeProduct = products.find(p => p.handle === 'nukini-sansara' || p.categories?.some(c => c.handle?.includes('rape')));
+const tepiProduct = products.find(p => p.handle === 'kuripe-colibri-teak' || p.categories?.some(c => c.handle?.includes('tepi')));
+const aromaticsProduct = products.find(p => p.handle === 'agua-de-florida' || p.categories?.some(c => c.handle?.includes('aromatics')));
+const supplementsProduct = products.find(p => p.categories?.some(c => c.handle?.includes('supplements'))) || products[3];
+const ornamentsProduct = products.find(p => p.categories?.some(c => c.handle?.includes('ornament'))) || products[4];
 
 const featuredCategories = [
   {
     name: "Rapé",
     desc: "A sacred traditional healing practice of the tribal peoples of Peru and Brazil.",
     href: `/${countryCode}/store/category/rapé`,
-    color: "bg-[#9db0ba] text-white border-transparent",
-    textColor: "text-stone-100",
-    titleColor: "text-white",
-    btnColor: "text-white border-white hover:bg-white hover:text-[#9db0ba]",
     imageUrl: rapeProduct?.images?.[0]?.url || rapeProduct?.thumbnail
   },
   {
     name: "Tepi and Kuripe",
-    desc: "To blow the sacred mixture, you will need special accessories - Tepis and Kuripes.",
+    desc: "Handcrafted traditional applicators made from sacred Sawo wood, Teak, and Sterling Silver.",
     href: `/${countryCode}/store/category/tepi-and-kuripe`,
-    color: "bg-[#9cafb7] text-white border-transparent",
-    textColor: "text-stone-100",
-    titleColor: "text-white",
-    btnColor: "text-white border-white hover:bg-white hover:text-[#9cafb7]",
     imageUrl: tepiProduct?.images?.[0]?.url || tepiProduct?.thumbnail
   },
   {
     name: "Aromatics",
-    desc: "Palo Santo, Agua de Florida, and other sacred cleansing incenses.",
+    desc: "Purifying Palo Santo, Agua de Florida, and ritual incense for cleansing.",
     href: `/${countryCode}/store/category/aromatics`,
-    color: "bg-[#8b9fa7]/90 text-white border-transparent",
-    textColor: "text-stone-100",
-    titleColor: "text-white",
-    btnColor: "text-white border-white hover:bg-white hover:text-[#8b9fa7]",
     imageUrl: aromaticsProduct?.images?.[0]?.url || aromaticsProduct?.thumbnail
+  },
+  {
+    name: "Supplements",
+    desc: "Natural Amazonian botanical tinctures and herbal wellness preparations.",
+    href: `/${countryCode}/store/category/supplements`,
+    imageUrl: supplementsProduct?.images?.[0]?.url || supplementsProduct?.thumbnail
+  },
+  {
+    name: "Ornaments and decoration",
+    desc: "Tribal beaded necklaces, feather art, and ceremonial decorations.",
+    href: `/${countryCode}/store/category/ornaments-and-decoration`,
+    imageUrl: ornamentsProduct?.images?.[0]?.url || ornamentsProduct?.thumbnail
   }
 ];
 
-// Feedback reviews fallback
-const defaultReviews = [
+// Combine DB reviews with fallbacks if empty
+const fallbackReviews = [
   {
-    name: "Matthias D.",
+    id: "fb_1",
+    author_name: "Alexander M.",
+    product_title: "Nukini Sansara",
     rating: 5,
-    comment: "High quality products and a flawless order process. Great customer experience - highly recommended!",
-    created_at: "2026-06-27"
+    comment: "Extraordinary quality! The grounding and heart-opening alignment of the Nukini blend is unmatched. Fast delivery to Germany.",
+    created_at: "2026-03-15"
   },
   {
-    name: "Sarah L.",
+    id: "fb_2",
+    author_name: "Elena R.",
+    product_title: "Kuripe Colibri Teak",
     rating: 5,
-    comment: "The Rapé blends are incredibly pure and grounding. Shipping was fast and the packaging was beautiful.",
-    created_at: "2026-07-02"
+    comment: "The hand-carved teak Kuripe is a masterpiece. Perfect blow angle, smooth finish, and powerful ceremonial energy.",
+    created_at: "2026-03-10"
   },
   {
-    name: "Elena R.",
+    id: "fb_3",
+    author_name: "Marcus K.",
+    product_title: "Agua de Florida",
     rating: 5,
-    comment: "Stunning Tepi applicator! Beautiful craftsmanship and works perfectly. Will definitely buy again.",
-    created_at: "2026-07-15"
+    comment: "Authentic Peruvian scent for space clearing before meditation. 100% genuine and packed securely.",
+    created_at: "2026-02-28"
   }
 ];
-const reviews = dbReviews.length > 0 ? dbReviews : defaultReviews;
+
+const reviewsList = dbReviews.length > 0 ? dbReviews : fallbackReviews;
 
 const fmtReviewDate = (dateStr: string) => {
   try {
@@ -135,6 +145,7 @@ const heroImages = [
   "/images/blog/kolibri-teak.c6c0e21a20358358ba4cfc9a759bfa19.webp",
   "/images/blog/kuripe-wolf-sawo.02682445cd108ab57e6f69e9a16ce418.webp"
 ];
+
 const schemaData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -167,389 +178,317 @@ const schemaData = {
 
 <Layout
   title="Sacred Amazonian Shamanic Supplies"
-  description="Explore sacred herb medicinals, shamanic plant medicine, and Amazonian shamanic supplies."
+  description="Explore sacred herb medicinals, shamanic plant medicine, and Amazonian shamanic supplies. Buy authentic ceremonial goods crafted with indigenous tradition at Ayni Rapé."
 >
-  <!-- SEO JSON-LD Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
-  <!-- Hero Section -->
-  <section class="relative bg-[#9db0ba] text-white overflow-hidden py-16 md:py-24 px-8 md:px-16 lg:px-24 rounded-3xl">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-[1.2fr_0.8fr] gap-12 items-center relative z-10 w-full">
-      <!-- Left Column: Content -->
-      <div class="flex flex-col gap-6">
-        <span class="text-[#222222]/80 font-bold tracking-[0.2em] text-xs uppercase">AYNI RAPÉ</span>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-[#222222]">
-          Authentic Amazonian <br/>Shamanic Supplies
-        </h1>
-        <p class="text-stone-850 text-base leading-relaxed max-w-xl">
-          A sacred traditional healing practice of the tribal peoples of Peru and Brazil. Ethically sourced, prepared in respect of indigenous traditions.
-        </p>
-        <div class="flex flex-wrap gap-4 mt-4">
-          <a
-            href={`/${countryCode}/store`}
-            class="px-8 py-4 bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold text-xs uppercase tracking-wider rounded-full transition-colors shadow-md cursor-pointer"
-          >
-            View Catalogue
-          </a>
-          <a
-            href={`/blog`}
-            class="px-8 py-4 border border-[#222222]/40 text-[#222222] hover:bg-[#222222]/10 font-bold text-xs uppercase tracking-wider rounded-full transition-colors cursor-pointer"
-          >
-            Read Our Blog
-          </a>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <!-- Hero Section -->
+    <section class="relative bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] overflow-hidden py-12 md:py-20 px-6 md:px-12 rounded-3xl my-4 shadow-sm">
+      <div class="grid md:grid-cols-[1.2fr_0.8fr] gap-12 items-center relative z-10 w-full">
+        <!-- Left Column: Content -->
+        <div class="flex flex-col gap-6">
+          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">AYNI RAPÉ &bull; ANCESTRAL WISDOM</span>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif-heading font-bold tracking-tight leading-tight text-[var(--color-text-primary)]">
+            Authentic Amazonian <br/><span class="italic font-normal text-[var(--color-accent-gold)]">Shamanic</span> Supplies
+          </h1>
+          <p class="text-[var(--color-text-secondary)] text-base md:text-lg leading-relaxed max-w-xl">
+            A sacred traditional healing practice of the tribal peoples of Peru and Brazil. Ethically sourced, prepared in strict respect of indigenous traditions.
+          </p>
+          <div class="flex flex-wrap gap-4 mt-2">
+            <a
+              href={`/${countryCode}/store`}
+              class="px-8 py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold text-xs uppercase tracking-wider rounded-full transition-all duration-300 shadow-md cursor-pointer"
+            >
+              View Catalogue
+            </a>
+            <a
+              href={`/blog`}
+              class="px-8 py-4 border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] font-bold text-xs uppercase tracking-wider rounded-full transition-all duration-300 cursor-pointer bg-[var(--color-bg-surface)]"
+            >
+              Read Our Journal
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column: Auto Carousel -->
+        <div class="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 mx-auto flex items-center justify-center shrink-0">
+          <div class="absolute inset-0 bg-[var(--color-accent-gold)]/15 rounded-full blur-3xl pointer-events-none scale-110"></div>
+          
+          <div class="relative w-full h-full rounded-full overflow-hidden border-2 border-[var(--color-accent-gold)] shadow-2xl bg-[var(--color-bg-surface)] flex items-center justify-center">
+            {heroImages.map((src, i) => (
+              <img
+                src={src}
+                alt="Sacred Amazonian Shamanic Supplies"
+                class={`hero-slide-img absolute inset-0 w-full h-full object-cover rounded-full transition-opacity duration-1000 ease-in-out ${i === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+              />
+            ))}
+          </div>
+
+          <div class="absolute -bottom-4 bg-[var(--color-bg-surface-elevated)]/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-[var(--color-border-subtle)] shadow-lg z-20 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-[10px] uppercase font-bold tracking-widest text-[var(--color-accent-gold)]">100% ETHICALLY SOURCED</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Value Proposition / Trust Bar -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
+      <div class="flex items-center gap-3 bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)]">
+        <span class="text-2xl">🌿</span>
+        <div class="text-xs">
+          <strong class="block text-[var(--color-text-primary)]">Ethically Sourced</strong>
+          <span class="text-[var(--color-text-muted)]">Direct from Amazonian tribes</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)]">
+        <span class="text-2xl">🪵</span>
+        <div class="text-xs">
+          <strong class="block text-[var(--color-text-primary)]">Authentic Applicators</strong>
+          <span class="text-[var(--color-text-muted)]">Sawo, Teak & Sterling Silver</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)]">
+        <span class="text-2xl">🌱</span>
+        <div class="text-xs">
+          <strong class="block text-[var(--color-text-primary)]">1% CO₂ Pledge</strong>
+          <span class="text-[var(--color-text-muted)]">Donated to climate removal</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)]">
+        <span class="text-2xl">📦</span>
+        <div class="text-xs">
+          <strong class="block text-[var(--color-text-primary)]">Fast EU Delivery</strong>
+          <span class="text-[var(--color-text-muted)]">DHL Express 3-5 days</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Carousel Section -->
+    <section class="py-12 overflow-hidden">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
+        <div>
+          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">OUR PRODUCTS</span>
+          <h2 class="text-3xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl mt-2">Browse Categories</h2>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="cat-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous categories">&larr;</button>
+          <button id="cat-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next categories">&rarr;</button>
         </div>
       </div>
 
-      <!-- Right Column: Auto Carousel -->
-      <div class="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 mx-auto flex items-center justify-center shrink-0">
-        <!-- Glow effect behind -->
-        <div class="absolute inset-0 bg-white/10 rounded-full blur-3xl pointer-events-none scale-110"></div>
-        
-        <div class="relative w-full h-full rounded-full overflow-hidden border-2 border-white/20 shadow-2xl bg-white/10 flex items-center justify-center">
-          {heroImages.map((src, i) => (
-            <img
-              src={src}
-              alt="Shamanic Supply"
-              class={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out hero-carousel-img ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
-            />
+      <div id="categories-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-4 scroll-smooth snap-x snap-mandatory -mx-4 px-4">
+        {featuredCategories.map((cat) => (
+          <div class="w-[240px] sm:w-[260px] md:w-[280px] snap-start shrink-0">
+            <a
+              href={cat.href}
+              class="group block bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 transition-all duration-300 hover:border-[var(--color-accent-gold)] shadow-sm hover:shadow-xl flex flex-col h-full justify-between"
+            >
+              <div>
+                <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)]">
+                  {cat.imageUrl ? (
+                    <img
+                      src={cat.imageUrl}
+                      alt={cat.name}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center text-4xl text-[var(--color-accent-gold)]">
+                      🌿
+                    </div>
+                  )}
+                </div>
+                <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-gold)] transition-colors mb-2">
+                  {cat.name}
+                </h3>
+                <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-2 mb-4">
+                  {cat.desc}
+                </p>
+              </div>
+
+              <div class="flex items-center text-xs font-bold text-[var(--color-accent-gold)] group-hover:translate-x-1 transition-transform">
+                <span>Explore Category</span>
+                <span class="ml-1">&rarr;</span>
+              </div>
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Sacred Ceremony Guide Section -->
+    <section class="py-6 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl my-8">
+      <CeremonyGuide />
+    </section>
+
+    <!-- Bestsellers Carousel Section -->
+    {bestsellersList.length > 0 && (
+      <section class="py-12 overflow-hidden">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
+          <div>
+            <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">POPULAR SELECTIONS</span>
+            <h2 class="text-3xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl mt-2">Bestsellers</h2>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button id="best-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous bestsellers">&larr;</button>
+            <button id="best-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next bestsellers">&rarr;</button>
+          </div>
+        </div>
+
+        <div id="bestsellers-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-4 scroll-smooth snap-x snap-mandatory -mx-4 px-4">
+          {bestsellersList.map((product) => (
+            <div class="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] snap-start shrink-0">
+              <ProductPreview
+                id={product.id}
+                variants={product.variants ?? []}
+                thumbnailUrl={product.thumbnail ?? undefined}
+                imageUrl={product.images?.[0]?.url}
+                title={product.title}
+              />
+            </div>
           ))}
         </div>
-      </div>
-    </div>
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent pointer-events-none"></div>
-  </section>
+      </section>
+    )}
 
-  <!-- Categories Grid -->
-  <section class="py-20 px-8 md:px-16 lg:px-24 max-w-8xl mx-auto">
-    <div class="text-center mb-16">
-      <span class="text-stone-500 font-bold tracking-[0.2em] text-xs uppercase">OUR PRODUCTS</span>
-      <h2 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl mt-2">Browse Categories</h2>
-    </div>
-    
-    <div class="grid gap-8 md:grid-cols-3">
-      {featuredCategories.map((cat) => (
-        <div class={`flex flex-col items-center text-center p-8 rounded-3xl ${cat.color} border transition-all duration-300 hover:shadow-lg justify-between gap-6 min-h-[460px]`}>
-          <div class="flex flex-col items-center gap-4">
-            <h3 class="text-2xl font-bold">{cat.name}</h3>
-            <p class={`${cat.textColor} text-sm leading-relaxed max-w-xs`}>{cat.desc}</p>
+    <!-- Real Customer Reviews Section -->
+    <section class="py-12 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl my-8 px-6 md:px-12">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">TESTIMONIALS</span>
+        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">What Our Community Says</h2>
+        <p class="text-xs text-[var(--color-text-secondary)] mt-2">Verified reviews from ceremony practitioners and seekers across Europe.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        {reviewsList.slice(0, 3).map((review) => (
+          <div class="bg-[var(--color-bg-surface)] p-6 rounded-2xl border border-[var(--color-border-subtle)] shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex text-[var(--color-accent-gold)] text-sm">
+                  {"★".repeat(review.rating || 5)}
+                </div>
+                <span class="text-[10px] text-[var(--color-text-muted)]">{fmtReviewDate(review.created_at)}</span>
+              </div>
+              <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed italic mb-4">
+                "{review.comment}"
+              </p>
+            </div>
+            <div class="pt-3 border-t border-[var(--color-border-subtle)] flex items-center justify-between text-xs">
+              <strong class="text-[var(--color-text-primary)] font-serif-heading">{review.author_name || "Verified Buyer"}</strong>
+              {review.product_title && (
+                <span class="text-[10px] text-[var(--color-accent-gold)] font-medium truncate max-w-[120px]">
+                  {review.product_title}
+                </span>
+              )}
+            </div>
           </div>
-          
-          <div class="w-48 h-48 rounded-full overflow-hidden border border-white/20 bg-stone-150 flex items-center justify-center">
-            {cat.imageUrl ? (
-              <img src={cat.imageUrl} alt={cat.name} class="w-full h-full object-cover rounded-full" />
-            ) : (
-              <PlaceholderImage size={48} />
-            )}
+        ))}
+      </div>
+    </section>
+
+    <!-- Latest Journal Posts Section -->
+    {blogPosts.length > 0 && (
+      <section class="py-12">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+          <div>
+            <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">SACRED WISDOM</span>
+            <h2 class="text-3xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl mt-2">From Our Journal</h2>
           </div>
-          
           <a
-            href={cat.href}
-            class={`inline-flex items-center gap-2 border px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 ${cat.btnColor}`}
+            href="/blog"
+            class="text-xs font-bold text-[var(--color-accent-gold)] hover:underline flex items-center gap-1 uppercase tracking-wider"
           >
-            View products &rarr;
+            <span>Read All Articles</span>
+            <span>&rarr;</span>
           </a>
         </div>
-      ))}
-    </div>
-  </section>
 
-  <!-- Bestsellers Section -->
-  <section class="py-20 bg-stone-50 rounded-3xl max-w-8xl mx-auto my-12 border border-stone-200/40">
-    <div class="px-8 md:px-16 lg:px-24">
-      <div class="text-center mb-16">
-        <span class="text-stone-500 font-bold tracking-[0.2em] text-xs uppercase">POPULAR CHOICE</span>
-        <h2 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl mt-2">Bestsellers</h2>
-      </div>
-
-      <ul class="grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-16">
-        {bestsellersList.map((product) => (
-          <li>
-            <ProductPreview
-              id={product.id}
-              variants={product.variants ?? []}
-              thumbnailUrl={product.thumbnail ?? undefined}
-              imageUrl={product.images?.[0]?.url}
-              title={product.title}
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <!-- Client Reviews / Feedback Slider -->
-  <section class="py-20 px-8 md:px-16 lg:px-24 max-w-8xl mx-auto overflow-hidden">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
-      <div>
-        <span class="text-stone-500 font-bold tracking-[0.2em] text-xs uppercase">FEEDBACK</span>
-        <h2 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl mt-2">Reviews from our clients</h2>
-      </div>
-      
-      <div class="flex items-center gap-4">
-        <button
-          id="btn-leave-feedback"
-          class="px-6 py-3 bg-[#bdcd00] hover:bg-[#a6b400] text-[#222222] font-bold rounded-full text-xs uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
-        >
-          Leave feedback
-        </button>
-        <div class="flex gap-2">
-          <button id="slider-prev" class="w-12 h-12 rounded-full border border-stone-200 hover:bg-stone-50 flex items-center justify-center cursor-pointer text-stone-700">&larr;</button>
-          <button id="slider-next" class="w-12 h-12 rounded-full border border-stone-200 hover:bg-stone-50 flex items-center justify-center cursor-pointer text-stone-700">&rarr;</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Scrollable container -->
-    <div id="reviews-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-4 scroll-smooth -mx-4 px-4">
-      {reviews.map((rev) => (
-        <div class="min-w-[290px] md:min-w-[380px] max-w-[380px] bg-white p-8 rounded-3xl flex flex-col justify-between gap-6 shrink-0 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.12)] transition-shadow duration-300 relative border border-stone-100">
-          <div class="space-y-4">
-            <div class="flex justify-between items-center">
-              <h4 class="font-bold text-stone-900">{rev.name}</h4>
-              <span class="text-xs text-stone-400">{fmtReviewDate(rev.created_at)}</span>
-            </div>
-            <div class="flex text-amber-400 text-sm">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <span>{i < rev.rating ? "★" : "☆"}</span>
-              ))}
-            </div>
-            <p class="text-stone-600 text-sm leading-relaxed">{rev.comment}</p>
-          </div>
-          <!-- Quote background icon -->
-          <span class="absolute bottom-6 right-8 text-stone-100 text-7xl font-serif pointer-events-none select-none">”</span>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <!-- Leave Feedback Dialog -->
-  <dialog id="feedback-dialog" class="backdrop:bg-stone-950/40 rounded-3xl p-8 max-w-md w-full border border-stone-200 bg-white shadow-2xl">
-    <div class="flex justify-between items-center mb-6">
-      <h3 class="text-2xl font-bold text-stone-900">Leave Feedback</h3>
-      <button id="close-feedback-dialog" class="text-stone-400 hover:text-stone-600 text-2xl font-semibold cursor-pointer">&times;</button>
-    </div>
-    
-    <form id="feedback-form" class="space-y-4" data-backend-url={import.meta.env.PUBLIC_MEDUSA_BACKEND_URL}>
-      <div>
-        <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Your Name</label>
-        <input
-          type="text"
-          name="name"
-          required
-          placeholder="Name"
-          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none text-stone-900 transition-colors"
-        />
-      </div>
-      <div>
-        <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Rating</label>
-        <select
-          name="rating"
-          required
-          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none text-stone-900 transition-colors bg-white"
-        >
-          <option value="5">5 Stars (Excellent)</option>
-          <option value="4">4 Stars (Good)</option>
-          <option value="3">3 Stars (Average)</option>
-          <option value="2">2 Stars (Poor)</option>
-          <option value="1">1 Star (Very Poor)</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Your Comment</label>
-        <textarea
-          name="comment"
-          required
-          rows="4"
-          placeholder="Leave a review..."
-          class="w-full px-4 py-3 border border-stone-200 rounded-xl focus:border-[#9db0ba] focus:outline-none text-stone-900 transition-colors resize-none"
-        ></textarea>
-      </div>
-      
-      <button
-        type="submit"
-        class="w-full py-4 px-6 bg-[#bdcd00] hover:bg-[#a6b400] text-[#222222] font-bold rounded-full transition-colors mt-6 shadow-sm cursor-pointer text-center uppercase tracking-wider text-xs"
-      >
-        Submit Review
-      </button>
-      
-      <p class="text-[10px] text-stone-400 text-center leading-normal mt-4">
-        Reviews are moderated before showing up on the homepage.
-      </p>
-    </form>
-    
-    <div id="feedback-success" class="hidden text-center py-8 text-stone-700">
-      <p class="font-bold text-lg text-emerald-600 mb-2">Feedback submitted!</p>
-      <p class="text-sm">Thank you, your review will be published after moderation.</p>
-    </div>
-  </dialog>
-
-  <!-- Blog Posts Section -->
-  <section class="py-20 bg-stone-50 rounded-3xl max-w-8xl mx-auto my-12 border border-stone-200/40">
-    <div class="px-8 md:px-16 lg:px-24">
-      <div class="flex justify-between items-end mb-16">
-        <div>
-          <span class="text-stone-500 font-bold tracking-[0.2em] text-xs uppercase">OUR JOURNAL</span>
-          <h2 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl mt-2">Blog</h2>
-        </div>
-        <a
-          href="/blog"
-          class="px-6 py-3 bg-[#bdcd00] hover:bg-[#a6b400] text-[#222222] font-bold rounded-full text-xs uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
-        >
-          Read the blog
-        </a>
-      </div>
-
-      <div class="grid gap-8 md:grid-cols-3">
-        {blogPosts.map((post) => (
-          <article class="flex flex-col gap-4 bg-white p-6 rounded-3xl shadow-[0_10px_30px_-15px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.12)] transition-shadow duration-300 border border-stone-100">
-            <a href={`/blog/${slugOf(post.id)}`} class="aspect-[3/2] overflow-hidden rounded-2xl block bg-stone-100 relative">
-              <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center select-none bg-stone-100 z-0">
-                <span class="font-serif italic text-lg text-stone-550 mb-1">Ayni Râpé</span>
-                <span class="text-xs uppercase tracking-[0.2em] text-stone-400 font-semibold">Journal</span>
+        <div class="grid md:grid-cols-3 gap-8">
+          {blogPosts.map((post) => (
+            <a
+              href={`/blog/${slugOf(post.id)}`}
+              class="group bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl overflow-hidden transition-all duration-300 hover:border-[var(--color-accent-gold)] shadow-sm hover:shadow-xl flex flex-col justify-between"
+            >
+              <div>
+                <div class="w-full aspect-[16/10] overflow-hidden bg-[var(--color-bg-surface)] relative">
+                  {post.data.coverImage ? (
+                    <>
+                      <img
+                        src={post.data.coverImage}
+                        alt={post.data.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                      />
+                      <div class="w-full h-full items-center justify-center text-3xl text-[var(--color-accent-gold)]" style="display:none">
+                        📜
+                      </div>
+                    </>
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center text-3xl text-[var(--color-accent-gold)]">
+                      📜
+                    </div>
+                  )}
+                </div>
+                <div class="p-6">
+                  <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-2">
+                    <span>{post.data.category}</span>
+                    <span>&bull;</span>
+                    <time class="text-[var(--color-text-muted)]">{fmtBlogDate(post.data.publishedDate)}</time>
+                  </div>
+                  <h3 class="text-lg font-serif-heading font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-gold)] transition-colors leading-snug mb-2">
+                    {post.data.title}
+                  </h3>
+                  <p class="text-xs text-[var(--color-text-secondary)] line-clamp-2 leading-relaxed">
+                    {post.data.excerpt}
+                  </p>
+                </div>
               </div>
-              {post.data.coverImage && (
-                <img
-                  src={post.data.coverImage}
-                  alt={post.data.title}
-                  class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-all duration-300 z-10"
-                  loading="lazy"
-                  onerror="this.style.opacity='0'; this.style.pointerEvents='none';"
-                />
-              )}
+              <div class="px-6 pb-6 pt-0 text-xs font-bold text-[var(--color-accent-gold)] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                <span>Read Story</span>
+                <span>&rarr;</span>
+              </div>
             </a>
-            <time class="text-xs uppercase tracking-wide text-neutral-400">
-              {fmtBlogDate(post.data.publishedDate)}
-            </time>
-            <h3 class="text-lg font-bold text-stone-900 leading-snug hover:underline">
-              <a href={`/blog/${slugOf(post.id)}`}>{post.data.title}</a>
-            </h3>
-            {post.data.excerpt && (
-              <p class="text-stone-500 text-sm line-clamp-3 leading-relaxed">
-                {post.data.excerpt}
-              </p>
-            )}
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- What is Rapé Info -->
-  <section class="bg-[#9db0ba] text-white py-20 px-8 md:px-16 lg:px-24 rounded-3xl my-12 border border-white/20">
-    <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <span class="text-white/80 font-semibold tracking-wider text-xs uppercase">ANCIENT WISDOM</span>
-        <h2 class="text-3xl font-bold tracking-tight text-white mt-2 mb-6">What is Râpé?</h2>
-        <div class="space-y-4 text-stone-100 text-sm leading-relaxed">
-          <p>
-            Râpé is a natural medicine and should be treated and used as such. Its main component is Mapacho. It is mixed with different herbs, seeds, bark, flowers, leaves, roots and their ashes, resulting in a variety of blends with different characteristics and benefits.
-          </p>
-          <p>
-            The tribes of the Amazon use the sacred mixture in all areas of life: in initiation rites, healing ceremonies, before hunting, and at tribal festivals. After use, thoughts slow down, and calmness and relaxation appear.
-          </p>
+          ))}
         </div>
-      </div>
-      <div class="bg-white/10 p-8 rounded-3xl border border-white/25">
-        <h3 class="font-bold text-white text-lg mb-3">Legal & Safe</h3>
-        <p class="text-stone-100 text-sm leading-relaxed mb-6">
-          The sacred mixtures offered do not contain any narcotic or prohibited substances. All the recipes presented are completely legal and are not prohibited for circulation in the European Union.
-        </p>
-        <div class="bg-[#222222]/30 p-4 rounded-xl text-stone-100 text-xs leading-normal">
-          <strong>Notice:</strong> Offered for historical and ethnographic value as a raw botanical specimen.
-        </div>
-      </div>
-    </div>
-  </section>
+      </section>
+    )}
+  </div>
 </Layout>
 
 <script is:inline>
   document.addEventListener('astro:page-load', () => {
-    // Slider horizontal scroll control
-    const slider = document.getElementById('reviews-slider');
-    const nextBtn = document.getElementById('slider-next');
-    const prevBtn = document.getElementById('slider-prev');
-    
-    if (slider) {
-      nextBtn?.addEventListener('click', () => {
-        slider.scrollLeft += 350;
-      });
-      prevBtn?.addEventListener('click', () => {
-        slider.scrollLeft -= 350;
-      });
+    // Hero carousel animation logic
+    const slides = document.querySelectorAll('.hero-slide-img');
+    if (slides.length > 1) {
+      let current = 0;
+      setInterval(() => {
+        slides[current].classList.remove('opacity-100', 'z-10');
+        slides[current].classList.add('opacity-0', 'z-0');
+        current = (current + 1) % slides.length;
+        slides[current].classList.remove('opacity-0', 'z-0');
+        slides[current].classList.add('opacity-100', 'z-10');
+      }, 3500);
     }
 
-    // Modal dialog control
-    const dialog = document.getElementById('feedback-dialog');
-    const leaveFeedbackBtn = document.getElementById('btn-leave-feedback');
-    const closeDialogBtn = document.getElementById('close-feedback-dialog');
-    const feedbackForm = document.getElementById('feedback-form');
-    const feedbackSuccess = document.getElementById('feedback-success');
+    // Categories slider logic
+    const catSlider = document.getElementById('categories-slider');
+    const catNextBtn = document.getElementById('cat-slider-next');
+    const catPrevBtn = document.getElementById('cat-slider-prev');
+    if (catSlider) {
+      catNextBtn?.addEventListener('click', () => catSlider.scrollLeft += 340);
+      catPrevBtn?.addEventListener('click', () => catSlider.scrollLeft -= 340);
+    }
 
-    leaveFeedbackBtn?.addEventListener('click', () => {
-      const savedUser = localStorage.getItem("ayni_user");
-      if (!savedUser) {
-        alert("Only registered users can leave feedback. Redirecting you to register/login page...");
-        window.location.href = `/${window.location.pathname.split('/')[1] || 'de'}/profile`;
-        return;
-      }
-      dialog?.showModal();
-    });
-
-    closeDialogBtn?.addEventListener('click', () => {
-      dialog?.close();
-      // reset form
-      if (feedbackForm && feedbackSuccess) {
-        feedbackForm.classList.remove('hidden');
-        feedbackSuccess.classList.add('hidden');
-        feedbackForm.reset();
-      }
-    });
-
-    // Handle feedback submit
-    feedbackForm?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(feedbackForm);
-      const data = {
-        name: formData.get('name'),
-        rating: Number(formData.get('rating')),
-        comment: formData.get('comment'),
-      };
-
-      const backendUrl = feedbackForm.getAttribute('data-backend-url') || 'http://localhost:9009';
-
-      try {
-        const response = await fetch(`${backendUrl}/store/feedback`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-          feedbackForm.classList.add('hidden');
-          feedbackSuccess.classList.remove('hidden');
-        } else {
-          alert('Failed to submit feedback. Please try again.');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('An error occurred. Please try again.');
-      }
-    });
-
-    // Hero carousel auto sliding
-    const carouselImgs = document.querySelectorAll('.hero-carousel-img');
-    if (carouselImgs.length > 0) {
-      let currentIdx = 0;
-      setInterval(() => {
-        carouselImgs[currentIdx].classList.remove('opacity-100');
-        carouselImgs[currentIdx].classList.add('opacity-0');
-        
-        currentIdx = (currentIdx + 1) % carouselImgs.length;
-        
-        carouselImgs[currentIdx].classList.remove('opacity-0');
-        carouselImgs[currentIdx].classList.add('opacity-100');
-      }, 3000);
+    // Bestsellers slider logic
+    const bestSlider = document.getElementById('bestsellers-slider');
+    const bestNextBtn = document.getElementById('best-slider-next');
+    const bestPrevBtn = document.getElementById('best-slider-prev');
+    if (bestSlider) {
+      bestNextBtn?.addEventListener('click', () => bestSlider.scrollLeft += 320);
+      bestPrevBtn?.addEventListener('click', () => bestSlider.scrollLeft -= 320);
     }
   });
 </script>

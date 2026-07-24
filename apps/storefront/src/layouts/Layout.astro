@@ -43,11 +43,33 @@ const regionId = region?.id || null;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark" class="dark">
   <head>
     <ClientRouter />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    
+    {/* Zero-flicker theme initialization. Re-runs on astro:after-swap because
+        the ClientRouter's DOM morph re-applies each page's hardcoded
+        data-theme="dark" default onto <html>, and identical inline scripts
+        are not re-executed across soft navigations. */}
+    <script is:inline>
+      function __applyStoredTheme() {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme = stored ? stored : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      }
+      __applyStoredTheme();
+      document.addEventListener('astro:after-swap', __applyStoredTheme);
+    </script>
+
     <link
       rel="dns-prefetch"
       href="//medusa-public-images.s3.eu-west-1.amazonaws.com"
@@ -57,6 +79,8 @@ const regionId = region?.id || null;
       href="https://medusa-public-images.s3.eu-west-1.amazonaws.com"
       crossorigin
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
@@ -84,10 +108,10 @@ const regionId = region?.id || null;
     <meta name="twitter:description" content={description} />
     {image && <meta name="twitter:image" content={image} />}
   </head>
-  <body class="min-h-screen bg-white text-black">
-    <div class="mx-auto flex min-h-screen w-full max-w-[1440px] px-4 md:px-8 flex-col">
+  <body class="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <div class="flex min-h-screen w-full flex-col">
       <Nav client:load countryCode={countryCode} regionId={regionId} />
-      <main class="flex-1 min-h-[calc(100vh-72px)]">
+      <main class="flex-1 min-h-[calc(100vh-80px)]">
         <slot />
       </main>
       <Footer countryCode={countryCode} />

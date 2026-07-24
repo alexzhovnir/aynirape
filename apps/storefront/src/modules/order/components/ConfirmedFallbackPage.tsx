@@ -42,13 +42,13 @@ export const ConfirmedFallbackPage = ({
 
   return (
     <main
-      className="max-w-2xl mx-auto px-8 py-16"
+      className="max-w-2xl mx-auto px-4 md:px-8 py-16 text-[var(--color-text-primary)]"
       aria-label="Order confirmation"
     >
       {/* Success header */}
       <div className="text-center mb-12">
         <div
-          className="inline-flex items-center justify-center w-16 h-16 bg-[#bdcd00] rounded-full mb-6"
+          className="inline-flex items-center justify-center w-16 h-16 bg-[var(--color-accent-gold)] rounded-full mb-6 shadow-md"
           aria-hidden="true"
         >
           <svg className="w-8 h-8 text-stone-950" viewBox="0 0 24 24" fill="none">
@@ -62,15 +62,19 @@ export const ConfirmedFallbackPage = ({
           </svg>
         </div>
 
-        <h1 className="text-4xl font-bold mb-3">Thank you for your order!</h1>
+        <h1 className="text-4xl font-serif-heading font-bold mb-3 text-[var(--color-text-primary)]">
+          Thank you for your order!
+        </h1>
 
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-[var(--color-text-muted)]">
           Your order has been placed successfully.
           {cart?.email && (
             <>
               {" "}
               A confirmation email has been sent to{" "}
-              <span className="font-medium text-gray-700">{cart.email}</span>
+              <span className="font-medium text-[var(--color-text-secondary)]">
+                {cart.email}
+              </span>
             </>
           )}
         </p>
@@ -80,10 +84,13 @@ export const ConfirmedFallbackPage = ({
         <>
           {/* Order items */}
           <section aria-labelledby="items-heading" className="mb-8">
-            <h2 id="items-heading" className="text-lg font-semibold mb-4">
+            <h2
+              id="items-heading"
+              className="text-lg font-serif-heading font-bold mb-4 text-[var(--color-text-primary)]"
+            >
               Order Items
             </h2>
-            <div className="divide-y divide-gray-100 border border-gray-200 rounded-md overflow-hidden">
+            <div className="divide-y divide-[var(--color-border-subtle)] border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] rounded-2xl overflow-hidden shadow-sm">
               {cart.items?.map((item) => {
                 const thumbnailUrl =
                   item.variant?.product?.thumbnail ||
@@ -96,30 +103,32 @@ export const ConfirmedFallbackPage = ({
                       <img
                         src={thumbnailUrl}
                         alt={item.title}
-                        className="w-16 h-16 object-cover rounded border border-gray-200 shrink-0"
+                        className="w-16 h-16 object-cover rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] shrink-0"
                         loading="lazy"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-gray-100 rounded border border-gray-200 shrink-0" />
+                      <div className="w-16 h-16 bg-[var(--color-bg-surface)] rounded-xl border border-[var(--color-border-subtle)] shrink-0 flex items-center justify-center text-lg">
+                        🌿
+                      </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate">
+                      <p className="font-semibold text-sm truncate text-[var(--color-text-primary)]">
                         {item.title}
                       </p>
                       {item.variant_title && (
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-[var(--color-text-muted)] mt-0.5">
                           {item.variant_title}
                         </p>
                       )}
                       <div className="flex justify-between mt-2 text-sm">
-                        <span className="text-gray-500">
+                        <span className="text-[var(--color-text-muted)]">
                           {item.quantity} ×{" "}
                           {convertToLocale({
                             amount: item.unit_price ?? 0,
                             currencyCode: currency,
                           })}
                         </span>
-                        <span className="font-medium">
+                        <span className="font-bold text-[var(--color-accent-gold)]">
                           {convertToLocale({
                             amount: lineTotal,
                             currencyCode: currency,
@@ -135,13 +144,16 @@ export const ConfirmedFallbackPage = ({
 
           {/* Order summary */}
           <section aria-labelledby="summary-heading" className="mb-8">
-            <h2 id="summary-heading" className="text-lg font-semibold mb-4">
+            <h2
+              id="summary-heading"
+              className="text-lg font-serif-heading font-bold mb-4 text-[var(--color-text-primary)]"
+            >
               Order Summary
             </h2>
-            <div className="border border-gray-200 rounded-md p-4 space-y-2 text-sm">
+            <div className="border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] rounded-2xl p-4 space-y-2 text-sm shadow-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
-                <span>
+                <span className="text-[var(--color-text-secondary)]">Subtotal</span>
+                <span className="font-semibold text-[var(--color-text-primary)]">
                   {convertToLocale({
                     amount: cart.subtotal ?? 0,
                     currencyCode: currency,
@@ -151,10 +163,10 @@ export const ConfirmedFallbackPage = ({
 
               {shippingMethod && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">
+                  <span className="text-[var(--color-text-secondary)]">
                     Shipping ({shippingMethod.name})
                   </span>
-                  <span>
+                  <span className="font-semibold text-[var(--color-text-primary)]">
                     {convertToLocale({
                       amount: cart.shipping_total ?? 0,
                       currencyCode: currency,
@@ -164,8 +176,8 @@ export const ConfirmedFallbackPage = ({
               )}
 
               <div className="flex justify-between">
-                <span className="text-gray-600">Taxes</span>
-                <span>
+                <span className="text-[var(--color-text-secondary)]">Taxes</span>
+                <span className="font-semibold text-[var(--color-text-primary)]">
                   {convertToLocale({
                     amount: cart.tax_total ?? 0,
                     currencyCode: currency,
@@ -174,7 +186,7 @@ export const ConfirmedFallbackPage = ({
               </div>
 
               {(cart.discount_total ?? 0) > 0 && (
-                <div className="flex justify-between text-green-700">
+                <div className="flex justify-between text-emerald-500">
                   <span>Discount</span>
                   <span>
                     −
@@ -186,9 +198,11 @@ export const ConfirmedFallbackPage = ({
                 </div>
               )}
 
-              <div className="pt-3 border-t border-gray-200 flex justify-between font-bold text-base">
-                <span>Total</span>
-                <span>
+              <div className="pt-3 border-t border-[var(--color-border-subtle)] flex justify-between items-baseline font-bold text-base">
+                <span className="text-[var(--color-text-primary)] font-serif-heading text-lg">
+                  Total
+                </span>
+                <span className="text-xl text-[var(--color-accent-gold)] font-serif-heading">
                   {convertToLocale({
                     amount: cart.total ?? 0,
                     currencyCode: currency,
@@ -200,14 +214,19 @@ export const ConfirmedFallbackPage = ({
 
           {/* Delivery & payment */}
           <section aria-labelledby="delivery-heading" className="mb-8">
-            <h2 id="delivery-heading" className="text-lg font-semibold mb-4">
+            <h2
+              id="delivery-heading"
+              className="text-lg font-serif-heading font-bold mb-4 text-[var(--color-text-primary)]"
+            >
               Delivery &amp; Payment
             </h2>
-            <div className="border border-gray-200 rounded-md divide-y divide-gray-100 text-sm">
+            <div className="border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] rounded-2xl divide-y divide-[var(--color-border-subtle)] text-sm shadow-sm">
               {cart.shipping_address && (
                 <div className="p-4">
-                  <p className="font-medium mb-1">Shipping Address</p>
-                  <address className="text-gray-600 not-italic leading-relaxed">
+                  <p className="font-semibold mb-1 text-[var(--color-text-primary)]">
+                    Shipping Address
+                  </p>
+                  <address className="text-[var(--color-text-secondary)] not-italic leading-relaxed">
                     {cart.shipping_address.first_name}{" "}
                     {cart.shipping_address.last_name}
                     <br />
@@ -234,11 +253,15 @@ export const ConfirmedFallbackPage = ({
 
               {cart.billing_address && (
                 <div className="p-4">
-                  <p className="font-medium mb-1">Billing Address</p>
+                  <p className="font-semibold mb-1 text-[var(--color-text-primary)]">
+                    Billing Address
+                  </p>
                   {sameAddress ? (
-                    <p className="text-gray-600">Same as shipping address</p>
+                    <p className="text-[var(--color-text-secondary)]">
+                      Same as shipping address
+                    </p>
                   ) : (
-                    <address className="text-gray-600 not-italic leading-relaxed">
+                    <address className="text-[var(--color-text-secondary)] not-italic leading-relaxed">
                       {cart.billing_address.first_name}{" "}
                       {cart.billing_address.last_name}
                       <br />
@@ -253,8 +276,10 @@ export const ConfirmedFallbackPage = ({
 
               {paymentProviderId && (
                 <div className="p-4">
-                  <p className="font-medium mb-1">Payment</p>
-                  <p className="text-gray-600">
+                  <p className="font-semibold mb-1 text-[var(--color-text-primary)]">
+                    Payment
+                  </p>
+                  <p className="text-[var(--color-text-secondary)]">
                     {formatProviderName(paymentProviderId)}
                   </p>
                 </div>
@@ -264,25 +289,30 @@ export const ConfirmedFallbackPage = ({
 
           {/* What's next */}
           <section aria-labelledby="next-heading" className="mb-10">
-            <h2 id="next-heading" className="text-lg font-semibold mb-4">
+            <h2
+              id="next-heading"
+              className="text-lg font-serif-heading font-bold mb-4 text-[var(--color-text-primary)]"
+            >
               What happens next?
             </h2>
-            <ol className="space-y-3 text-sm text-gray-600">
+            <ol className="space-y-3 text-sm text-[var(--color-text-secondary)]">
               <li className="flex gap-3">
-                <span className="shrink-0 w-6 h-6 rounded-full bg-gray-100 text-gray-700 font-semibold flex items-center justify-center text-xs">
+                <span className="shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent-gold)]/10 border border-[var(--color-border-accent)] text-[var(--color-accent-gold)] font-bold flex items-center justify-center text-xs">
                   1
                 </span>
                 <span>
-                  <strong className="text-gray-900">Order Processing</strong> —
-                  We&apos;re preparing your items for shipment.
+                  <strong className="text-[var(--color-text-primary)]">
+                    Order Processing
+                  </strong>{" "}
+                  — We&apos;re preparing your items for shipment.
                 </span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-6 h-6 rounded-full bg-gray-100 text-gray-700 font-semibold flex items-center justify-center text-xs">
+                <span className="shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent-gold)]/10 border border-[var(--color-border-accent)] text-[var(--color-accent-gold)] font-bold flex items-center justify-center text-xs">
                   2
                 </span>
                 <span>
-                  <strong className="text-gray-900">
+                  <strong className="text-[var(--color-text-primary)]">
                     Shipment Notification
                   </strong>{" "}
                   — You&apos;ll receive an email with tracking information when
@@ -290,12 +320,14 @@ export const ConfirmedFallbackPage = ({
                 </span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-6 h-6 rounded-full bg-gray-100 text-gray-700 font-semibold flex items-center justify-center text-xs">
+                <span className="shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent-gold)]/10 border border-[var(--color-border-accent)] text-[var(--color-accent-gold)] font-bold flex items-center justify-center text-xs">
                   3
                 </span>
                 <span>
-                  <strong className="text-gray-900">Delivery</strong> — Your
-                  package will arrive at your shipping address.
+                  <strong className="text-[var(--color-text-primary)]">
+                    Delivery
+                  </strong>{" "}
+                  — Your package will arrive at your shipping address.
                 </span>
               </li>
             </ol>
@@ -307,7 +339,7 @@ export const ConfirmedFallbackPage = ({
       <div className="text-center">
         <a
           href={`/${countryCode}/store`}
-          className="inline-block bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-3 px-10 rounded-full transition-colors uppercase tracking-wider text-sm"
+          className="inline-block bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold py-3.5 px-10 rounded-full transition-all duration-300 uppercase tracking-wider text-xs shadow-md"
         >
           Continue Shopping
         </a>

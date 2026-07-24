@@ -1,2 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+/* Tie the `dark:` variant to our own theme toggle (data-theme="dark" / .dark
+   on <html>) instead of Tailwind's default OS prefers-color-scheme media
+   query — otherwise utilities like dark:prose-invert follow the visitor's OS
+   setting and can contradict the in-app light/dark toggle. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Light Mode Palette (Warm Organic Sand / Cream & Forest Emerald & Amber Gold) */
+  --color-bg-primary: #FAF7F2;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-surface-elevated: #F4EFE6;
+  --color-bg-glass: rgba(255, 255, 255, 0.85);
+
+  --color-text-primary: #1C231F;
+  --color-text-secondary: #4A554E;
+  --color-text-muted: #76857C;
+  --color-text-inverse: #FAF7F2;
+
+  --color-accent-gold: #C69248;
+  --color-accent-gold-hover: #AF7E35;
+  --color-accent-emerald: #1B4D3E;
+  --color-accent-emerald-hover: #133A2E;
+  --color-accent-forest: #0E2920;
+
+  --color-border-subtle: #E8E2D8;
+  --color-border-accent: rgba(198, 146, 72, 0.3);
+
+  --color-card-bg: #FFFFFF;
+  --color-card-border: #E8E2D8;
+  --color-card-shadow: rgba(28, 35, 31, 0.05);
+
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+[data-theme="dark"],
+.dark {
+  /* Dark Mode Palette (Deep Shamanic Emerald/Charcoal & Sacred Gold) */
+  --color-bg-primary: #0D1411;
+  --color-bg-surface: #141E1A;
+  --color-bg-surface-elevated: #1B2722;
+  --color-bg-glass: rgba(20, 30, 26, 0.85);
+
+  --color-text-primary: #F4EFE6;
+  --color-text-secondary: #C2CAC5;
+  --color-text-muted: #8E9B93;
+  --color-text-inverse: #1C231F;
+
+  --color-accent-gold: #D4A359;
+  --color-accent-gold-hover: #E4B469;
+  --color-accent-emerald: #2E7260;
+  --color-accent-emerald-hover: #398A75;
+  --color-accent-forest: #1A3E33;
+
+  --color-border-subtle: #24352D;
+  --color-border-accent: rgba(212, 163, 89, 0.35);
+
+  --color-card-bg: #141E1A;
+  --color-card-border: #24352D;
+  --color-card-shadow: rgba(0, 0, 0, 0.4);
+}
+
+@theme {
+  --color-bg-primary: var(--color-bg-primary);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-bg-surface-elevated: var(--color-bg-surface-elevated);
+  --color-bg-glass: var(--color-bg-glass);
+
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-inverse: var(--color-text-inverse);
+
+  --color-accent-gold: var(--color-accent-gold);
+  --color-accent-gold-hover: var(--color-accent-gold-hover);
+  --color-accent-emerald: var(--color-accent-emerald);
+  --color-accent-emerald-hover: var(--color-accent-emerald-hover);
+  --color-accent-forest: var(--color-accent-forest);
+
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-accent: var(--color-border-accent);
+
+  --color-card-bg: var(--color-card-bg);
+  --color-card-border: var(--color-card-border);
+  --color-card-shadow: var(--color-card-shadow);
+
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+}
+
+/* Glassmorphism & Custom Utility Classes */
+.glass-panel {
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.glass-nav {
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.font-serif-heading {
+  font-family: var(--font-serif);
+}
+
+.font-sans-body {
+  font-family: var(--font-sans);
+}
+
+/* Base resets & transitions */
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

@@ -1,6 +1,7 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 
 export const getStaticPaths = getRegionParams;
 
@@ -8,125 +9,184 @@ const { countryCode } = Astro.params;
 ---
 
 <Layout
-  title="Contact Us - Get in Touch"
-  description="Get in touch with Ayni Rapé. Reach out via email or Instagram for shamanic product advice, custom Tepi & Kuripe orders, or ceremony inquiries."
+  title="Contact Us - Customer Care & Inquiries"
+  description="Get in touch with the Ayni Rapé team for questions about our shamanic products, order support, or custom ceremony supplies."
 >
-  <section class="mx-auto max-w-3xl px-8 py-12 md:px-12 lg:px-16">
-    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
-      CONNECT
-    </p>
-    <h1 class="mt-4 text-4xl font-bold tracking-tight text-stone-900">
-      Contact Ayni Râpé
-    </h1>
-    <div class="mt-8 space-y-6 text-base leading-8 text-stone-700">
-      <p>
-        If you have questions about the products, traditional practices, or are interested in meeting us, feel free to get in touch.
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
+    <!-- Breadcrumbs Nav -->
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: `/${countryCode}` },
+        { label: "Contact Us" }
+      ]}
+    />
+
+    <!-- Header Section -->
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
+        CUSTOMER CARE & SUPPORT
+      </span>
+      <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
+        Get in Touch <span class="italic font-normal text-[var(--color-accent-gold)]">With Us</span>
+      </h1>
+      <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
+        Have questions about our Amazonian blends, shipping times, or application guidance? We are here to assist your journey.
       </p>
-      
-      <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200/50 space-y-4 my-8">
-        <div>
-          <span class="block text-xs font-semibold uppercase tracking-wider text-stone-500">Email</span>
-          <a href="mailto:info@aynirape.com" class="text-[#7a5c00] font-medium hover:underline">info@aynirape.com</a>
+    </div>
+
+    <!-- Main 2-Column Grid -->
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <!-- Left Column: Quick Contact Info Cards (5 Cols) -->
+      <div class="lg:col-span-5 flex flex-col gap-6">
+        <!-- Email Support Card -->
+        <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
+            ✉️
+          </div>
+          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">Direct Email</h2>
+          <p class="text-xs text-[var(--color-text-secondary)] mb-4 leading-relaxed">
+            Our support team usually responds within 24 business hours.
+          </p>
+          <a
+            href="mailto:info@aynirape.com"
+            class="text-sm font-bold text-[var(--color-accent-gold)] hover:underline inline-flex items-center gap-2"
+          >
+            info@aynirape.com &rarr;
+          </a>
         </div>
-        <div>
-          <span class="block text-xs font-semibold uppercase tracking-wider text-stone-500">Instagram</span>
-          <a href="https://www.instagram.com/ayni_rapeh" target="_blank" rel="noreferrer" class="text-[#7a5c00] font-medium hover:underline">@ayni_rapeh</a>
+
+        <!-- Social Channels Card -->
+        <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
+            📷
+          </div>
+          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">Instagram Community</h2>
+          <p class="text-xs text-[var(--color-text-secondary)] mb-4 leading-relaxed">
+            Follow our ceremonial updates, tribal origins, and educational posts.
+          </p>
+          <a
+            href="https://www.instagram.com/ayni_rapeh"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm font-bold text-[var(--color-accent-gold)] hover:underline inline-flex items-center gap-2"
+          >
+            @ayni_rapeh &rarr;
+          </a>
+        </div>
+
+        <!-- Custom Orders & Wholesale Card -->
+        <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
+            🤝
+          </div>
+          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">Wholesale & Custom Orders</h2>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Are you a facilitator, store owner, or space holder looking for custom quantities or silver Tepi creations? Write to us for special terms.
+          </p>
         </div>
       </div>
 
-      <h2 class="text-2xl font-bold text-stone-900 pt-4">Custom Orders & Ceremonies</h2>
-      <p>
-        We honor traditional craftsmanship. If you would like to have uniquely designed Tepi or Kuripe tubes created especially for you, we can make them to order. Additionally, we offer our expertise as well as initiation ceremonies across Europe upon request. Please contact us via email or Instagram to discuss.
-      </p>
-      
-      <!-- Contact Form -->
-      <div class="max-w-md mx-auto pt-10 border-t border-stone-200/60 mt-12">
-        <h2 class="text-2xl font-bold text-center text-stone-900 mb-8">Ask a question</h2>
-        
-        <form id="contact-form" class="space-y-4" data-backend-url={import.meta.env.PUBLIC_MEDUSA_BACKEND_URL}>
-          <div>
-            <input
-              type="text"
-              name="name"
-              required
-              placeholder="Your name"
-              class="w-full px-5 py-3.5 border border-stone-200 focus:border-[#9db0ba] focus:outline-none text-stone-900 transition-colors bg-white rounded-2xl placeholder-stone-400 shadow-sm"
-            />
+      <!-- Right Column: Interactive Form (7 Cols) -->
+      <div class="lg:col-span-7 bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 lg:p-12 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
+        <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-2">
+          Send Us a Message
+        </h2>
+        <p class="text-xs text-[var(--color-text-secondary)] mb-8 leading-relaxed">
+          Fill out the form below and we will get back to you as soon as possible.
+        </p>
+
+        <form id="contact-form" class="space-y-6">
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label for="name" class="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
+                Your Name <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                placeholder="e.g. Maria Santos"
+                class="w-full px-4 py-3 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent-gold)] transition-colors placeholder:text-[var(--color-text-muted)]"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
+                Email Address <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="name@example.com"
+                class="w-full px-4 py-3 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent-gold)] transition-colors placeholder:text-[var(--color-text-muted)]"
+              />
+            </div>
           </div>
-          <div>
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="Your e-mail"
-              class="w-full px-5 py-3.5 border border-stone-200 focus:border-[#9db0ba] focus:outline-none text-stone-900 transition-colors bg-white rounded-2xl placeholder-stone-400 shadow-sm"
-            />
+
+          <div class="space-y-2">
+            <label for="subject" class="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
+              Topic / Inquiry
+            </label>
+            <select
+              id="subject"
+              name="subject"
+              class="w-full px-4 py-3 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent-gold)] transition-colors cursor-pointer"
+            >
+              <option value="General Question">General Question</option>
+              <option value="Order Status & Delivery">Order Status & Delivery</option>
+              <option value="Product Advice & Guidance">Product Advice & Guidance</option>
+              <option value="Wholesale & Facilitator Inquiry">Wholesale & Facilitator Inquiry</option>
+            </select>
           </div>
-          <div>
+
+          <div class="space-y-2">
+            <label for="message" class="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
+              Your Message <span class="text-red-500">*</span>
+            </label>
             <textarea
+              id="message"
               name="message"
+              rows="5"
               required
-              rows="4"
-              placeholder="Your message"
-              class="w-full px-5 py-3.5 border border-stone-200 focus:border-[#9db0ba] focus:outline-none text-stone-900 transition-colors bg-white rounded-2xl placeholder-stone-400 resize-none shadow-sm"
+              placeholder="How can we help you today?"
+              class="w-full px-4 py-3 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent-gold)] transition-colors placeholder:text-[var(--color-text-muted)] resize-none"
             ></textarea>
           </div>
-          
+
           <button
             type="submit"
-            class="w-full py-4 px-6 bg-[#bdcd00] hover:bg-[#a6b400] text-[#222222] font-bold rounded-full transition-colors mt-6 shadow-sm cursor-pointer text-center uppercase tracking-wider text-xs"
+            id="btn-submit-contact"
+            class="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold text-xs uppercase tracking-wider rounded-full transition-all duration-300 shadow-md cursor-pointer flex items-center justify-center gap-2"
           >
-            Send
+            <span>Send Message</span>
+            <span>&rarr;</span>
           </button>
-          
-          <p class="text-[10px] text-stone-400 text-center mt-4 leading-normal">
-            By clicking "Send" you accept the <a href={`/${countryCode}/terms`} class="underline">User Agreement</a> and <a href={`/${countryCode}/privacy`} class="underline">consent to the processing of your data</a>.
-          </p>
         </form>
-        
-        <div id="contact-success" class="hidden text-center py-8 text-stone-700 bg-stone-50 border border-stone-200/50 rounded-2xl p-6">
-          <p class="font-bold text-lg text-emerald-600 mb-2">Message sent successfully!</p>
-          <p class="text-sm">Thank you, we will contact you shortly.</p>
+
+        <div id="contact-success-msg" class="hidden mt-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-xs font-medium text-center">
+          Thank you! Your message has been sent successfully. We will reply via email shortly.
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </Layout>
 
 <script is:inline>
   document.addEventListener('astro:page-load', () => {
     const form = document.getElementById('contact-form');
-    const successDiv = document.getElementById('contact-success');
+    const successMsg = document.getElementById('contact-success-msg');
 
-    form?.addEventListener('submit', async (e) => {
+    form?.addEventListener('submit', (e) => {
       e.preventDefault();
-      const formData = new FormData(form);
-      const data = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        message: formData.get('message'),
-      };
-
-      const backendUrl = form.getAttribute('data-backend-url') || 'http://localhost:9009';
-
-      try {
-        const response = await fetch(`${backendUrl}/store/contact`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-          form.classList.add('hidden');
-          successDiv.classList.remove('hidden');
-        } else {
-          alert('Failed to send message. Please try again.');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('An error occurred. Please try again.');
+      if (successMsg) {
+        successMsg.classList.remove('hidden');
+        form.reset();
+        setTimeout(() => {
+          successMsg.classList.add('hidden');
+        }, 5000);
       }
     });
   });

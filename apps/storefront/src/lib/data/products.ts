@@ -4,7 +4,7 @@ export const listProducts = async (regionId: string, categoryId?: string) => {
   try {
     const { products } = await sdk.store.product.list({
       region_id: regionId,
-      fields: "*variants.calculated_price,*categories",
+      fields: "*variants.calculated_price,*categories,*images",
       ...(categoryId ? { category_id: [categoryId] } : {}),
     });
     return products;
@@ -25,14 +25,27 @@ export const listCategories = async () => {
 };
 
 export const retrieveProduct = async (
-  productId: string,
+  idOrHandle: string,
   regionId: string,
 ) => {
   try {
-    const { product } = await sdk.store.product.retrieve(productId, {
+    // First try looking up product by handle
+    const { products } = await sdk.store.product.list({
+      handle: idOrHandle,
       region_id: regionId,
       fields:
-        "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,*categories",
+        "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,*categories,*images",
+    });
+
+    if (products && products.length > 0) {
+      return products[0];
+    }
+
+    // Fallback to direct lookup by Medusa product ID
+    const { product } = await sdk.store.product.retrieve(idOrHandle, {
+      region_id: regionId,
+      fields:
+        "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,*categories,*images",
     });
     return product;
   } catch (error) {

@@ -137,219 +137,326 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
   };
 
   if (loading) {
-    return <div className="text-center py-20 text-stone-600">Loading profile...</div>;
+    return (
+      <div className="max-w-xl mx-auto my-20 p-12 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl shadow-xl text-center flex flex-col items-center justify-center gap-4">
+        <div className="w-12 h-12 rounded-full border-2 border-[var(--color-accent-gold)] border-t-transparent animate-spin"></div>
+        <p className="text-sm font-serif-heading text-[var(--color-text-primary)] animate-pulse">
+          Loading Your Sacred Account Portal...
+        </p>
+      </div>
+    );
   }
 
   // Not Logged In screen
   if (!user) {
     return (
-      <div className="max-w-md mx-auto my-16 p-8 bg-white rounded-3xl shadow-[0_2px_20px_-4px_rgba(0,0,0,0.08)]">
-        <h2 className="text-3xl font-serif italic text-stone-900 mb-6 text-center">
-          {isRegistering ? "Create Account" : "Sign In"}
-        </h2>
+      <div className="max-w-xl mx-auto my-12 p-8 sm:p-12 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] rounded-3xl shadow-2xl transition-all duration-300">
+        <div className="text-center mb-8">
+          <span className="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-[10px] uppercase block mb-2">
+            AYNI RAPÉ &bull; MEMBER PORTAL
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight">
+            {isRegistering ? "Create Account" : "Sign In to Portal"}
+          </h1>
+          <p className="text-xs text-[var(--color-text-secondary)] mt-2 leading-relaxed max-w-sm mx-auto">
+            Access your ceremonial order history, saved sacred blends, and verified community reviews.
+          </p>
+        </div>
+
+        {/* Mode Toggle Tabs */}
+        <div className="flex bg-[var(--color-bg-surface)] p-1.5 rounded-2xl border border-[var(--color-border-subtle)] mb-8">
+          <button
+            type="button"
+            onClick={() => { setIsRegistering(false); setError(""); }}
+            className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
+              !isRegistering
+                ? "bg-[var(--color-accent-gold)] text-stone-950 shadow-md"
+                : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+            }`}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => { setIsRegistering(true); setError(""); }}
+            className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
+              isRegistering
+                ? "bg-[var(--color-accent-gold)] text-stone-950 shadow-md"
+                : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+            }`}
+          >
+            Register
+          </button>
+        </div>
         
-        {error && <p className="text-red-600 text-sm mb-4 text-center">{error}</p>}
+        {error && (
+          <div className="p-4 mb-6 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-500 text-xs text-center font-medium">
+            {error}
+          </div>
+        )}
 
         {isRegistering ? (
-          <form onSubmit={handleRegister} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">First Name</label>
-              <input
-                type="text"
-                required
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
-              />
+          <form onSubmit={handleRegister} className="space-y-5">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">First Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Maria"
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                  className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">Last Name</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Santos"
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
+                  className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
+                />
+              </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Last Name</label>
-              <input
-                type="text"
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
-                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">E-mail</label>
+              <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">E-mail Address *</label>
               <input
                 type="email"
                 required
+                placeholder="name@example.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
+                className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Password</label>
+              <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">Password *</label>
               <input
                 type="password"
                 required
+                placeholder="••••••••"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
+                className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
               />
             </div>
+
             <button
               type="submit"
-              className="w-full py-4 bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold rounded-full transition-colors shadow-sm cursor-pointer mt-4"
+              className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer uppercase tracking-wider text-xs flex items-center justify-center gap-2 mt-2"
             >
-              Sign Up
+              <span>Create Account & Join Ayni</span>
+              <span>&rarr;</span>
             </button>
-            <p className="text-sm text-stone-500 text-center mt-4">
-              Already have an account?{" "}
-              <button type="button" onClick={() => setIsRegistering(false)} className="text-[#bdcd00] hover:underline font-medium">
-                Log In
-              </button>
-            </p>
           </form>
         ) : (
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">E-mail</label>
+              <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">E-mail Address *</label>
               <input
                 type="email"
                 required
+                placeholder="name@example.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
+                className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Password</label>
+              <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">Password *</label>
               <input
                 type="password"
                 required
+                placeholder="••••••••"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border-0 bg-stone-50/60 shadow-sm rounded-xl focus:shadow-md focus:bg-white focus:outline-none transition-all"
+                className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
               />
             </div>
+
             <button
               type="submit"
-              className="w-full py-4 bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold rounded-full transition-colors shadow-sm cursor-pointer mt-4"
+              className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer uppercase tracking-wider text-xs flex items-center justify-center gap-2 mt-2"
             >
-              Sign In
+              <span>Sign In to Account</span>
+              <span>&rarr;</span>
             </button>
-            <p className="text-sm text-stone-500 text-center mt-4">
-              Don't have an account?{" "}
-              <button type="button" onClick={() => setIsRegistering(true)} className="text-[#bdcd00] hover:underline font-medium">
-                Register
-              </button>
-            </p>
           </form>
         )}
       </div>
     );
   }
 
-  // Logged In screen with Left Sidebar Menu and cleaned up borders
+  // Logged In screen with Profile Banner & Sidebar Tabs
   return (
-    <div className="max-w-6xl mx-auto my-12 px-4">
-      {/* Header section (Borderless, minimal structure) */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 mb-8 border-b border-stone-100">
-        <div>
-          <span className="text-xs uppercase tracking-widest text-stone-400 font-semibold">Welcome back</span>
-          <h1 className="text-3xl font-bold text-stone-950 mt-1">
-            {user.first_name ? `${user.first_name} ${user.last_name || ""}` : user.email}
-          </h1>
+    <div className="space-y-10">
+      {/* Profile Header Hero Showcase Card */}
+      <div className="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex items-center gap-6">
+          <div className="w-16 h-16 rounded-full bg-[var(--color-accent-gold)]/15 flex items-center justify-center text-2xl font-bold font-serif-heading text-[var(--color-accent-gold)] border border-[var(--color-accent-gold)]/30 shrink-0">
+            {user.first_name ? user.first_name[0].toUpperCase() : user.email[0].toUpperCase()}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-gold)]">
+                VERIFIED PRACTITIONER
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-1">
+              {user.first_name ? `${user.first_name} ${user.last_name || ""}` : user.email}
+            </h1>
+            <p className="text-xs text-[var(--color-text-muted)] mt-0.5">{user.email}</p>
+          </div>
         </div>
+
         <button
           onClick={handleLogout}
-          className="px-6 py-2 border border-stone-200 hover:bg-stone-50 text-stone-600 rounded-full text-xs font-semibold tracking-wider uppercase transition-colors cursor-pointer"
+          className="px-6 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] rounded-full text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer shrink-0"
         >
           Sign Out
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-10 items-start">
-        {/* Left Sidebar Menu */}
-        <aside className="flex flex-col gap-1.5" aria-label="Profile navigation sidebar">
+      {/* Quick Stats Counter Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)] block mb-1">Orders Placed</span>
+            <strong className="text-2xl font-serif-heading text-[var(--color-text-primary)]">{orders.length}</strong>
+          </div>
+          <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl border border-[var(--color-accent-gold)]/20">
+            📦
+          </div>
+        </div>
+
+        <div className="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)] block mb-1">Saved Favorites</span>
+            <strong className="text-2xl font-serif-heading text-[var(--color-text-primary)]">{favorites.length}</strong>
+          </div>
+          <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl border border-[var(--color-accent-gold)]/20">
+            ❤️
+          </div>
+        </div>
+
+        <div className="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)] block mb-1">My Reviews</span>
+            <strong className="text-2xl font-serif-heading text-[var(--color-text-primary)]">{feedbacks.length}</strong>
+          </div>
+          <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl border border-[var(--color-accent-gold)]/20">
+            ★
+          </div>
+        </div>
+      </div>
+
+      {/* Main Layout Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-10 items-start">
+        {/* Sidebar Navigation */}
+        <aside className="bg-[var(--color-bg-surface-elevated)] p-4 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm flex flex-col gap-2">
           <button
             onClick={() => setActiveTab("orders")}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-bold transition-all duration-200 cursor-pointer ${
               activeTab === "orders"
-                ? "bg-[#9db0ba] text-white"
-                : "text-stone-600 hover:bg-stone-50"
+                ? "bg-[var(--color-accent-gold)] text-stone-950 shadow-md"
+                : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-surface)] hover:text-[var(--color-text-primary)]"
             }`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-            </svg>
-            <span>Order History</span>
+            <div className="flex items-center gap-3">
+              <span>📦</span>
+              <span>Order History</span>
+            </div>
+            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-stone-950/15">{orders.length}</span>
           </button>
 
           <button
             onClick={() => setActiveTab("favorites")}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-bold transition-all duration-200 cursor-pointer ${
               activeTab === "favorites"
-                ? "bg-[#9db0ba] text-white"
-                : "text-stone-600 hover:bg-stone-50"
+                ? "bg-[var(--color-accent-gold)] text-stone-950 shadow-md"
+                : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-surface)] hover:text-[var(--color-text-primary)]"
             }`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-            </svg>
-            <span>My Favorites</span>
+            <div className="flex items-center gap-3">
+              <span>❤️</span>
+              <span>My Favorites</span>
+            </div>
+            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-stone-950/15">{favorites.length}</span>
           </button>
 
           <button
             onClick={() => setActiveTab("reviews")}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+            className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-bold transition-all duration-200 cursor-pointer ${
               activeTab === "reviews"
-                ? "bg-[#9db0ba] text-white"
-                : "text-stone-600 hover:bg-stone-50"
+                ? "bg-[var(--color-accent-gold)] text-stone-950 shadow-md"
+                : "text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-surface)] hover:text-[var(--color-text-primary)]"
             }`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379L12 21l3.62-3.134c1.154-.086 2.294-.213 3.423-.379 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-            </svg>
-            <span>My Reviews</span>
+            <div className="flex items-center gap-3">
+              <span>★</span>
+              <span>My Reviews</span>
+            </div>
+            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-stone-950/15">{feedbacks.length}</span>
           </button>
         </aside>
 
-        {/* Tab Contents - borderless details */}
+        {/* Active Tab Main Content Area */}
         <main className="w-full">
           {activeTab === "orders" && (
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-stone-900 pb-4 border-b border-stone-100">Order History</h2>
+              <div className="flex justify-between items-center pb-4 border-b border-[var(--color-border-subtle)]">
+                <h2 className="text-xl font-serif-heading font-bold text-[var(--color-text-primary)]">Order History</h2>
+                <span className="text-xs text-[var(--color-text-muted)]">Showing recent purchases</span>
+              </div>
+
               {orders.length === 0 ? (
-                <p className="text-stone-500 text-sm">You haven't placed any orders yet.</p>
+                <div className="p-12 bg-[var(--color-bg-surface-elevated)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm">
+                  <span className="text-4xl">🛍️</span>
+                  <p className="text-sm text-[var(--color-text-secondary)]">You haven't placed any ceremonial orders yet.</p>
+                  <a
+                    href={`/${countryCode}/store`}
+                    className="inline-block px-6 py-3 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 text-xs font-bold uppercase tracking-wider rounded-full shadow-sm"
+                  >
+                    Browse Catalogue &rarr;
+                  </a>
+                </div>
               ) : (
                 <div className="space-y-6">
                   {orders.map(order => (
-                    <div key={order.id} className="border border-stone-100 rounded-2xl p-6 bg-white shadow-sm">
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-4 mb-4 border-b border-stone-100 text-xs">
+                    <div key={order.id} className="border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 bg-[var(--color-bg-surface-elevated)] shadow-sm space-y-6">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-4 border-b border-[var(--color-border-subtle)] text-xs">
                         <div>
-                          <span className="text-stone-400 font-medium block uppercase tracking-wider">Order ID</span>
-                          <span className="font-semibold text-stone-900 mt-1 block">{order.id}</span>
+                          <span className="text-[var(--color-text-muted)] font-medium block uppercase tracking-wider text-[10px]">Order ID</span>
+                          <span className="font-mono font-bold text-[var(--color-text-primary)] mt-1 block">{order.id}</span>
                         </div>
                         <div>
-                          <span className="text-stone-400 font-medium block uppercase tracking-wider">Date</span>
-                          <span className="text-stone-700 mt-1 block">{new Date(order.created_at).toLocaleDateString()}</span>
+                          <span className="text-[var(--color-text-muted)] font-medium block uppercase tracking-wider text-[10px]">Date</span>
+                          <span className="text-[var(--color-text-secondary)] mt-1 block">{new Date(order.created_at).toLocaleDateString()}</span>
                         </div>
                         <div>
-                          <span className="text-stone-400 font-medium block uppercase tracking-wider">Total</span>
-                          <span className="font-bold text-stone-950 mt-1 block">{(order.total / 100).toFixed(2)} {order.currency_code.toUpperCase()}</span>
+                          <span className="text-[var(--color-text-muted)] font-medium block uppercase tracking-wider text-[10px]">Total Amount</span>
+                          <span className="font-bold text-[var(--color-accent-gold)] mt-1 block">{(order.total / 100).toFixed(2)} {order.currency_code.toUpperCase()}</span>
                         </div>
                         <div>
-                          <span className="text-stone-400 font-medium block uppercase tracking-wider">Status</span>
-                          <span className="mt-1 inline-block px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-bold uppercase">{order.status}</span>
+                          <span className="text-[var(--color-text-muted)] font-medium block uppercase tracking-wider text-[10px]">Fulfillment</span>
+                          <span className="mt-1 inline-block px-3 py-1 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-full text-[10px] font-bold uppercase">{order.status}</span>
                         </div>
                       </div>
                       
                       <div className="space-y-4">
                         {order.items.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-4">
+                          <div key={idx} className="flex items-center gap-4 bg-[var(--color-bg-surface)] p-3.5 rounded-2xl border border-[var(--color-border-subtle)]">
                             {item.thumbnail ? (
-                              <img src={item.thumbnail} alt={item.title} className="w-12 h-12 object-cover rounded-xl border border-stone-100" />
+                              <img src={item.thumbnail} alt={item.title} className="w-14 h-14 object-cover rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] shrink-0" />
                             ) : (
-                              <div className="w-12 h-12 bg-stone-50 border border-stone-100 rounded-xl" />
+                              <div className="w-14 h-14 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-xl shrink-0 flex items-center justify-center text-lg">🌿</div>
                             )}
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-semibold text-sm text-stone-900 truncate">{item.title}</h4>
-                              <p className="text-xs text-stone-400 mt-0.5">Quantity: {item.quantity}</p>
+                              <h4 className="font-semibold text-sm text-[var(--color-text-primary)] truncate">{item.title}</h4>
+                              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Quantity: {item.quantity}</p>
                             </div>
                           </div>
                         ))}
@@ -362,28 +469,41 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
           )}
 
           {activeTab === "favorites" && (
-            <div>
-              <h2 className="text-xl font-bold text-stone-900 pb-4 border-b border-stone-100 mb-6">My Favorites</h2>
+            <div className="space-y-6">
+              <div className="flex justify-between items-center pb-4 border-b border-[var(--color-border-subtle)]">
+                <h2 className="text-xl font-serif-heading font-bold text-[var(--color-text-primary)]">My Saved Favorites</h2>
+                <span className="text-xs text-[var(--color-text-muted)]">{favorites.length} Saved</span>
+              </div>
+
               {favorites.length === 0 ? (
-                <p className="text-stone-500 text-sm">No items in your favorites list yet.</p>
+                <div className="p-12 bg-[var(--color-bg-surface-elevated)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm">
+                  <span className="text-4xl">❤️</span>
+                  <p className="text-sm text-[var(--color-text-secondary)]">No items saved in your favorites list yet.</p>
+                  <a
+                    href={`/${countryCode}/store`}
+                    className="inline-block px-6 py-3 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 text-xs font-bold uppercase tracking-wider rounded-full shadow-sm"
+                  >
+                    Explore Shop & Save Items &rarr;
+                  </a>
+                </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {favorites.map(fav => (
-                    <div key={fav.id} className="flex items-center justify-between p-4 bg-white border border-stone-100 rounded-2xl shadow-sm">
-                      <a href={`/${countryCode}/store/${fav.id}`} className="flex gap-4 items-center group flex-1 min-w-0">
+                    <div key={fav.id} className="flex items-center justify-between p-4 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-2xl shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
+                      <a href={`/${countryCode}/store/${fav.handle || fav.id}`} className="flex gap-4 items-center group flex-1 min-w-0">
                         {fav.thumbnail ? (
-                          <img src={fav.thumbnail} alt={fav.title} className="w-14 h-14 object-cover rounded-xl border border-stone-100 shrink-0" />
+                          <img src={fav.thumbnail} alt={fav.title} className="w-14 h-14 object-cover rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] shrink-0" />
                         ) : (
-                          <div className="w-14 h-14 bg-stone-50 border border-stone-100 rounded-xl shrink-0" />
+                          <div className="w-14 h-14 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-xl shrink-0 flex items-center justify-center text-lg">🌿</div>
                         )}
-                        <span className="font-semibold text-sm text-stone-900 group-hover:text-[#9db0ba] transition-colors truncate">
+                        <span className="font-semibold text-sm text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-gold)] transition-colors truncate">
                           {fav.title}
                         </span>
                       </a>
                       
                       <button
                         onClick={() => handleRemoveFavorite(fav.id)}
-                        className="text-stone-400 hover:text-red-500 p-2 rounded-full hover:bg-stone-50 transition-colors cursor-pointer shrink-0 ml-2"
+                        className="text-[var(--color-text-muted)] hover:text-red-500 p-2.5 rounded-xl hover:bg-[var(--color-bg-surface)] transition-colors cursor-pointer shrink-0 ml-2 border border-transparent hover:border-[var(--color-border-subtle)]"
                         aria-label="Remove from favorites"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
@@ -399,27 +519,36 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
 
           {activeTab === "reviews" && (
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-stone-900 pb-4 border-b border-stone-100">My Reviews</h2>
+              <div className="flex justify-between items-center pb-4 border-b border-[var(--color-border-subtle)]">
+                <h2 className="text-xl font-serif-heading font-bold text-[var(--color-text-primary)]">My Submitted Reviews</h2>
+                <span className="text-xs text-[var(--color-text-muted)]">{feedbacks.length} Feedback Submitted</span>
+              </div>
+
               {feedbacks.length === 0 ? (
-                <p className="text-stone-500 text-sm">You haven't left any feedback yet.</p>
+                <div className="p-12 bg-[var(--color-bg-surface-elevated)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm">
+                  <span className="text-4xl">★</span>
+                  <p className="text-sm text-[var(--color-text-secondary)]">You haven't left any community reviews yet.</p>
+                </div>
               ) : (
                 <div className="space-y-4">
                   {feedbacks.map(fb => (
-                    <div key={fb.id} className="border border-stone-100 rounded-2xl p-6 bg-white shadow-sm">
-                      <div className="flex justify-between items-center mb-3">
-                        <div className="flex text-amber-400 text-sm">
+                    <div key={fb.id} className="border border-[var(--color-border-subtle)] rounded-3xl p-6 bg-[var(--color-bg-surface-elevated)] shadow-sm space-y-3">
+                      <div className="flex justify-between items-center">
+                        <div className="flex text-[var(--color-accent-gold)] text-sm">
                           {Array.from({ length: 5 }).map((_, i) => (
                             <span key={i}>{i < fb.rating ? "★" : "☆"}</span>
                           ))}
                         </div>
-                        <span className="text-xs text-stone-400">{new Date(fb.created_at).toLocaleDateString()}</span>
+                        <span className="text-[10px] text-[var(--color-text-muted)] font-mono">{new Date(fb.created_at).toLocaleDateString()}</span>
                       </div>
-                      <p className="text-stone-700 text-sm leading-relaxed mb-4">"{fb.comment}"</p>
-                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase ${
-                        fb.is_approved ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-900'
-                      }`}>
-                        {fb.is_approved ? "✓ Published" : "⟳ Under Moderation"}
-                      </span>
+                      <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed italic">"{fb.comment}"</p>
+                      <div className="pt-2 border-t border-[var(--color-border-subtle)] flex items-center justify-between">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase ${
+                          fb.is_approved ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+                        }`}>
+                          {fb.is_approved ? "✓ Published" : "⟳ Under Moderation"}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>

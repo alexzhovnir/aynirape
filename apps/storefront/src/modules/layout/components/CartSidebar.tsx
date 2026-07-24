@@ -70,8 +70,8 @@ export const CartSidebar = ({ countryCode }: CartSidebarProps) => {
       <div
         ref={backdropRef}
         onClick={handleBackdropClick}
-        className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
-          isOpen ? "opacity-50" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 bg-black/60 backdrop-blur-xs z-40 transition-opacity duration-300 ${
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden="true"
       />
@@ -82,17 +82,17 @@ export const CartSidebar = ({ countryCode }: CartSidebarProps) => {
         role="dialog"
         aria-modal="true"
         aria-label="Shopping cart"
-        className={`fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-xl transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full max-w-md bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] border-l border-[var(--color-border-subtle)] z-50 shadow-2xl transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 className="text-xl font-bold">Cart</h2>
+          <div className="flex items-center justify-between p-6 border-b border-[var(--color-border-subtle)]">
+            <h2 className="text-xl font-serif-heading font-semibold text-[var(--color-text-primary)]">Cart</h2>
             <button
               onClick={closeCartSidebar}
-              className="text-gray-500 hover:text-gray-700 text-2xl leading-none"
+              className="text-[var(--color-text-muted)] hover:text-[var(--color-accent-gold)] text-2xl leading-none transition-colors cursor-pointer"
               aria-label="Close cart"
             >
               ×
@@ -103,11 +103,11 @@ export const CartSidebar = ({ countryCode }: CartSidebarProps) => {
           <div className="flex-1 overflow-y-auto p-6">
             {isEmpty ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
-                <p className="text-gray-500 mb-4">Your cart is empty</p>
+                <p className="text-[var(--color-text-muted)] mb-4">Your cart is empty</p>
                 <a
                   href={`/${countryCode}/store`}
                   onClick={closeCartSidebar}
-                  className="text-sm text-blue-600 hover:underline"
+                  className="text-sm font-semibold text-[var(--color-accent-gold)] hover:underline"
                 >
                   Continue Shopping
                 </a>
@@ -127,16 +127,16 @@ export const CartSidebar = ({ countryCode }: CartSidebarProps) => {
                   return (
                     <div
                       key={item.id}
-                      className="flex gap-4 pb-6 border-b border-gray-100 last:border-0"
+                      className="flex gap-4 pb-6 border-b border-[var(--color-border-subtle)] last:border-0"
                     >
-                      {/* Thumbnail - matches ImageCarousel thumb pattern (144x144) */}
+                      {/* Thumbnail */}
                       {thumbnailUrl && (
                         <img
                           src={thumbnailUrl}
                           alt={productTitle}
                           width={144}
                           height={144}
-                          className="w-16 h-16 aspect-square object-cover rounded"
+                          className="w-16 h-16 aspect-square object-cover rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)]"
                           loading="lazy"
                           decoding="async"
                           draggable={false}
@@ -145,19 +145,19 @@ export const CartSidebar = ({ countryCode }: CartSidebarProps) => {
 
                       {/* Item details */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-sm mb-1 truncate">
+                        <h3 className="font-semibold text-sm mb-1 text-[var(--color-text-primary)] truncate">
                           {productTitle}
                         </h3>
                         {variantTitle && (
-                          <p className="text-xs text-gray-500 mb-1">
+                          <p className="text-xs text-[var(--color-text-muted)] mb-1">
                             Variant: {variantTitle}
                           </p>
                         )}
-                        <p className="text-xs text-gray-500 mb-2">
+                        <p className="text-xs text-[var(--color-text-muted)] mb-2">
                           Quantity: {item.quantity}
                         </p>
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-medium">
+                          <p className="text-sm font-bold text-[var(--color-accent-gold)]">
                             {convertToLocale({
                               amount: unitPrice,
                               currencyCode,
@@ -165,7 +165,7 @@ export const CartSidebar = ({ countryCode }: CartSidebarProps) => {
                           </p>
                           <button
                             onClick={() => handleRemoveItem(item.id)}
-                            className="flex items-center gap-1 text-xs text-red-600 hover:text-red-700"
+                            className="flex items-center gap-1 text-xs text-red-500 hover:text-red-400 transition-colors cursor-pointer"
                             aria-label={`Remove ${productTitle} from cart`}
                           >
                             <svg
@@ -194,10 +194,10 @@ export const CartSidebar = ({ countryCode }: CartSidebarProps) => {
 
           {/* Footer */}
           {!isEmpty && (
-            <div className="border-t border-gray-200 p-6 space-y-4">
+            <div className="border-t border-[var(--color-border-subtle)] p-6 space-y-4 bg-[var(--color-bg-surface-elevated)]">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Subtotal (excl. taxes)</span>
-                <span className="font-medium">
+                <span className="text-[var(--color-text-secondary)]">Subtotal (excl. taxes)</span>
+                <span className="font-bold text-[var(--color-accent-gold)]">
                   {convertToLocale({
                     amount: cart?.item_subtotal || 0,
                     currencyCode: cart?.currency_code || "USD",
@@ -207,7 +207,7 @@ export const CartSidebar = ({ countryCode }: CartSidebarProps) => {
               <a
                 href={`/${countryCode}/cart`}
                 onClick={closeCartSidebar}
-                className="block w-full bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-3.5 px-6 rounded-full text-center transition-colors uppercase tracking-wider text-xs shadow-sm"
+                className="block w-full bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold py-3.5 px-6 rounded-full text-center transition-all duration-300 uppercase tracking-wider text-xs shadow-md"
               >
                 Go to cart
               </a>

@@ -1,4 +1,6 @@
 ---
+import { LanguageSelect } from "@components/LanguageSelect";
+
 interface Props {
   countryCode: string;
 }
@@ -23,24 +25,24 @@ const companyLinks = [
 ];
 ---
 
-<footer class="border-t border-black/10 bg-stone-50">
-  <div class="px-8 py-14 md:px-12 lg:px-16">
+<footer class="border-t border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div
-      class="grid gap-10 border-b border-black/10 pb-10 md:grid-cols-2 xl:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]"
+      class="grid gap-10 border-b border-[var(--color-border-subtle)] pb-10 md:grid-cols-2 xl:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]"
     >
       <section class="max-w-md">
         <p
-          class="text-xl font-serif italic text-stone-750 flex items-center gap-2"
+          class="text-xl font-serif-heading italic text-[var(--color-text-primary)] flex items-center gap-2"
         >
           <svg
-            class="w-6 h-6 text-[#9db0ba]"
+            class="w-6 h-6 text-[var(--color-accent-gold)]"
             viewBox="0 0 100 100"
             fill="currentColor"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path d="M50 15 C55 35, 65 45, 85 50 C65 55, 55 65, 50 85 C45 65, 35 55, 15 50 C35 45, 45 35, 50 15 Z" />
-            <circle cx="50" cy="50" r="8" class="text-stone-50" fill="currentColor" />
-            <circle cx="50" cy="50" r="3" class="text-[#9db0ba]" fill="currentColor" />
+            <circle cx="50" cy="50" r="8" fill="var(--color-bg-surface)" />
+            <circle cx="50" cy="50" r="3" fill="var(--color-accent-gold)" />
             <circle cx="50" cy="28" r="2.5" />
             <circle cx="50" cy="72" r="2.5" />
             <circle cx="28" cy="50" r="2.5" />
@@ -48,21 +50,21 @@ const companyLinks = [
           </svg>
           <span>Ayni Râpé</span>
         </p>
-        <h2 class="mt-4 text-3xl font-semibold tracking-tight text-stone-900">
+        <h2 class="mt-4 text-2xl font-serif-heading font-semibold tracking-tight text-[var(--color-text-primary)]">
           Sacred Amazonian Shamanic Supplies
         </h2>
-        <p class="mt-4 text-sm leading-6 text-stone-600">
+        <p class="mt-4 text-sm leading-6 text-[var(--color-text-secondary)]">
           Ethically sourced rapé, tepi & kuripe applicators, aromatics, and ornaments, prepared in strict respect of traditional indigenous practices.
         </p>
       </section>
 
       <nav aria-label="Footer shop navigation">
-        <p class="text-sm font-semibold text-black">Shop</p>
-        <ul class="mt-4 space-y-3 text-sm text-black/65">
+        <p class="text-sm font-semibold text-[var(--color-text-primary)] uppercase tracking-wider">Shop</p>
+        <ul class="mt-4 space-y-2.5 text-sm text-[var(--color-text-secondary)]">
           {
             shopLinks.map((link) => (
               <li>
-                <a class="transition hover:text-black" href={link.href}>
+                <a class="transition hover:text-[var(--color-accent-gold)]" href={link.href}>
                   {link.label}
                 </a>
               </li>
@@ -72,16 +74,14 @@ const companyLinks = [
       </nav>
 
       <nav aria-label="Footer company navigation">
-        <p class="text-sm font-semibold text-black">Company</p>
-        <ul class="mt-4 space-y-3 text-sm text-black/65">
+        <p class="text-sm font-semibold text-[var(--color-text-primary)] uppercase tracking-wider">Company</p>
+        <ul class="mt-4 space-y-2.5 text-sm text-[var(--color-text-secondary)]">
           {
             companyLinks.map((link) => (
               <li>
                 <a
-                  class="transition hover:text-black"
+                  class="transition hover:text-[var(--color-accent-gold)]"
                   href={link.href}
-                  target={link.external ? "_blank" : undefined}
-                  rel={link.external ? "noreferrer" : undefined}
                 >
                   {link.label}
                 </a>
@@ -92,13 +92,13 @@ const companyLinks = [
       </nav>
 
       <section>
-        <p class="text-sm font-semibold text-stone-900">Age Restriction</p>
-        <div class="mt-4 space-y-4 text-sm text-stone-600">
-          <p class="text-xs border border-amber-200 bg-amber-50/50 p-3 rounded-lg text-amber-800">
-            <strong>Warning:</strong> To shop at AyniRape, you must be at least 18 years old. All products are supplied for ethnographic, scientific, and incense/ritual burning purposes.
+        <p class="text-sm font-semibold text-[var(--color-text-primary)] uppercase tracking-wider">Age Restriction</p>
+        <div class="mt-4 space-y-4 text-sm text-[var(--color-text-secondary)]">
+          <p class="text-xs border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] p-3.5 rounded-xl text-[var(--color-text-muted)] leading-relaxed">
+            <strong class="text-[var(--color-accent-gold)]">Warning:</strong> To shop at AyniRape, you must be at least 18 years old. All products are supplied for ethnographic, scientific, and incense/ritual burning purposes.
           </p>
           <a
-            class="inline-flex rounded-full bg-[#bdcd00] px-5 py-3 text-xs font-bold text-stone-950 uppercase tracking-wider transition hover:bg-[#a6b400] shadow-sm"
+            class="inline-flex rounded-full bg-[var(--color-accent-gold)] px-6 py-2.5 text-xs font-bold text-stone-950 uppercase tracking-wider transition hover:bg-[var(--color-accent-gold-hover)] shadow-md"
             href={`/${countryCode}/store`}
           >
             Start shopping
@@ -107,8 +107,14 @@ const companyLinks = [
       </section>
     </div>
 
-    <p class="text-sm text-stone-500 pt-6">
-      &copy; {currentYear} Ayni Râpé. All rights reserved.
-    </p>
+    <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-xs text-[var(--color-text-muted)] text-center md:text-left">
+        &copy; {currentYear} Ayni Râpé. All rights reserved.
+      </p>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-[var(--color-text-muted)]">Region:</span>
+        <LanguageSelect client:load countryCode={countryCode} />
+      </div>
+    </div>
   </div>
 </footer>

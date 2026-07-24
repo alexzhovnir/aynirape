@@ -43,7 +43,7 @@ const formSchema = z
         (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
         "Enter a valid email address",
       ),
-    phone: z.string(),
+    phone: z.string().min(1, "Phone number is required"),
     billingSameAsShipping: z.boolean(),
     shipping: addressSchema,
     billing: billingSchema,
@@ -98,42 +98,35 @@ function areSameAddress(
   b?: StoreCart["billing_address"] | null,
 ): boolean {
   if (!a || !b) return false;
-  return (
-    a.first_name === b.first_name &&
-    a.last_name === b.last_name &&
-    a.address_1 === b.address_1 &&
-    a.postal_code === b.postal_code &&
-    a.city === b.city
-  );
+
+  const fields: (keyof NonNullable<StoreCart["shipping_address"]>)[] = [
+    "first_name",
+    "last_name",
+    "address_1",
+    "company",
+    "postal_code",
+    "city",
+    "country_code",
+    "province",
+  ];
+
+  return fields.every((f) => (a[f] ?? "") === (b[f] ?? ""));
 }
 
+const CheckCircle = () => (
+  <span className="inline-flex items-center justify-center w-5 h-5 bg-emerald-500/20 text-emerald-500 rounded-full shrink-0 border border-emerald-500/30 text-xs font-bold">
+    ✓
+  </span>
+);
+
 interface ShippingAddressStepProps {
-  cart: StoreCart | null;
+  cart: StoreCart;
   countries: RegionCountry[];
   countryCode: string;
   mode: "edit" | "read";
   onContinue?: () => void;
   onEdit?: () => void;
 }
-
-const CheckCircle = () => (
-  <span className="inline-flex items-center justify-center w-5 h-5 bg-black rounded-full shrink-0">
-    <svg
-      className="w-3 h-3 text-white"
-      viewBox="0 0 12 12"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M2 6l3 3 5-5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  </span>
-);
 
 const ReadOnlyView = ({
   cart,
@@ -144,12 +137,14 @@ const ReadOnlyView = ({
 }) => {
   const shipping = cart.shipping_address;
   const billing = cart.billing_address;
-  const isBillingSame = areSameAddress(shipping, billing);
+  const isBillingSame =
+    !billing?.first_name || areSameAddress(shipping, billing);
 
   const shippingLines = [
     shipping?.first_name && shipping?.last_name
       ? `${shipping.first_name} ${shipping.last_name}`
       : null,
+    shipping?.company ?? null,
     shipping?.address_1 ?? null,
     shipping?.postal_code && shipping?.city
       ? `${shipping.postal_code}, ${shipping.city}`
@@ -171,45 +166,45 @@ const ReadOnlyView = ({
       ].filter(Boolean) as string[];
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          Shipping Address
+    <div className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 shadow-sm">
+      <div className="flex items-center justify-between pb-4 border-b border-[var(--color-border-subtle)] mb-6">
+        <h2 className="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] flex items-center gap-2">
+          <span>Shipping Address</span>
           <CheckCircle />
         </h2>
         <button
           type="button"
           onClick={onEdit}
-          className="text-blue-600 hover:underline text-sm"
+          className="px-4 py-1.5 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-accent-gold)] hover:border-[var(--color-accent-gold)] text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
         >
           Edit
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-8 text-sm">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs text-[var(--color-text-secondary)]">
         <div>
-          <p className="font-medium mb-2">Shipping Address</p>
+          <p className="font-bold text-[var(--color-text-primary)] uppercase tracking-wider text-[10px] mb-2">Shipping Details</p>
           {shippingLines.map((line, i) => (
-            <p key={i} className="text-gray-700">
+            <p key={i} className="leading-relaxed">
               {line}
             </p>
           ))}
         </div>
 
         <div>
-          <p className="font-medium mb-2">Contact</p>
-          {cart.email && <p className="text-gray-700">{cart.email}</p>}
+          <p className="font-bold text-[var(--color-text-primary)] uppercase tracking-wider text-[10px] mb-2">Contact Info</p>
+          {cart.email && <p className="leading-relaxed font-mono">{cart.email}</p>}
         </div>
 
         <div>
-          <p className="font-medium mb-2">Billing Address</p>
+          <p className="font-bold text-[var(--color-text-primary)] uppercase tracking-wider text-[10px] mb-2">Billing Address</p>
           {isBillingSame ? (
-            <p className="text-gray-700">
-              Billing and delivery address are the same.
+            <p className="leading-relaxed text-[var(--color-text-muted)]">
+              Same as shipping address.
             </p>
           ) : (
             billingLines?.map((line, i) => (
-              <p key={i} className="text-gray-700">
+              <p key={i} className="leading-relaxed">
                 {line}
               </p>
             ))
@@ -240,11 +235,11 @@ export const ShippingAddressStep = ({
   } = useForm<CheckoutFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      phone: "",
+      email: cart.email ?? "",
+      phone: cart.shipping_address?.phone ?? "",
       billingSameAsShipping: true,
-      shipping: { ...EMPTY_ADDRESS, country: countryCode },
-      billing: { ...EMPTY_ADDRESS },
+      shipping: mapAddress(cart.shipping_address),
+      billing: EMPTY_ADDRESS,
     },
   });
 
@@ -315,10 +310,17 @@ export const ShippingAddressStep = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <h2 className="text-2xl font-bold mb-6">Shipping Address</h2>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 shadow-sm">
+      <div className="mb-6">
+        <span className="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-[10px] uppercase block mb-1">
+          STEP 1 OF 3 &bull; SHIPPING ADDRESS
+        </span>
+        <h2 className="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+          Where should we deliver?
+        </h2>
+      </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <AddressFields
           prefix="shipping"
           register={register}
@@ -327,13 +329,15 @@ export const ShippingAddressStep = ({
         />
 
         {/* Billing same as shipping */}
-        <label className="flex items-center gap-2 cursor-pointer select-none">
+        <label className="flex items-center gap-3 cursor-pointer select-none py-2">
           <input
             type="checkbox"
             {...register("billingSameAsShipping")}
-            className="w-4 h-4 accent-black"
+            className="w-4 h-4 accent-[var(--color-accent-gold)] rounded cursor-pointer"
           />
-          <span className="text-sm">Billing address same as shipping address</span>
+          <span className="text-xs font-semibold text-[var(--color-text-secondary)]">
+            Billing address is the same as shipping address
+          </span>
         </label>
 
         {/* Email / Phone */}
@@ -341,10 +345,10 @@ export const ShippingAddressStep = ({
           <div>
             <input
               type="email"
-              placeholder="Email*"
+              placeholder="Email address*"
               {...register("email")}
-              className={`w-full border rounded px-4 py-3 text-sm outline-none focus:border-gray-500 transition-colors ${
-                errors.email ? "border-red-400" : "border-gray-300"
+              className={`w-full bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] border rounded-2xl px-4 py-3.5 text-sm outline-none focus:border-[var(--color-accent-gold)] transition-colors placeholder:text-[var(--color-text-muted)] ${
+                errors.email ? "border-red-500/70" : "border-[var(--color-border-subtle)]"
               }`}
             />
             <p className="text-red-500 text-xs mt-1 min-h-4">
@@ -354,18 +358,22 @@ export const ShippingAddressStep = ({
           <div>
             <input
               type="tel"
-              placeholder="Phone"
+              placeholder="Phone number*"
               {...register("phone")}
-              className="w-full border border-gray-300 rounded px-4 py-3 text-sm outline-none focus:border-gray-500 transition-colors"
+              className={`w-full bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] border rounded-2xl px-4 py-3.5 text-sm outline-none focus:border-[var(--color-accent-gold)] transition-colors placeholder:text-[var(--color-text-muted)] ${
+                errors.phone ? "border-red-500/70" : "border-[var(--color-border-subtle)]"
+              }`}
             />
-            <p className="min-h-4 mt-1" />
+            <p className="text-red-500 text-xs mt-1 min-h-4">
+              {errors.phone?.message ?? ""}
+            </p>
           </div>
         </div>
 
         {/* Billing address section */}
         {!billingSameAsShipping && (
-          <div className="pt-4 border-t border-gray-200">
-            <h3 className="text-lg font-semibold mb-4">Billing Address</h3>
+          <div className="pt-6 border-t border-[var(--color-border-subtle)]">
+            <h3 className="text-lg font-serif-heading font-bold text-[var(--color-text-primary)] mb-4">Billing Address</h3>
             <AddressFields
               prefix="billing"
               register={register}
@@ -376,15 +384,18 @@ export const ShippingAddressStep = ({
         )}
 
         {submitError && (
-          <p className="text-red-500 text-sm">{submitError}</p>
+          <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-500 text-xs text-center font-medium">
+            {submitError}
+          </div>
         )}
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-3.5 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs shadow-sm cursor-pointer"
+          className="w-full sm:w-auto px-8 py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs flex items-center justify-center gap-2"
         >
-          {isSubmitting ? "Saving..." : "Continue to delivery"}
+          <span>{isSubmitting ? "Saving..." : "Continue to Delivery"}</span>
+          <span>&rarr;</span>
         </button>
       </div>
     </form>

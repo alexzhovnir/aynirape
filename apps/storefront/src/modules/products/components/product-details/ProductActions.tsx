@@ -127,7 +127,7 @@ export const ProductActions = ({
     !isProductInStock(selectedVariant) ||
     isAdding;
 
-  // Filter options to only show those that have actual choices (more than 1 value, and not standard dummy values like 'Default')
+  // Filter options to only show those that have actual choices
   const visibleOptions = (options ?? []).filter(opt => {
     if (!opt.values || opt.values.length === 0) return false;
     if (opt.values.length === 1) {
@@ -141,7 +141,7 @@ export const ProductActions = ({
     <div className="flex flex-col gap-8">
       {visibleOptions.map((option) => (
         <div key={option.id} className="flex flex-col gap-2">
-          <h2 className="text-lg font-bold text-stone-900">{option.title}</h2>
+          <h2 className="text-lg font-serif-heading font-bold text-[var(--color-text-primary)]">{option.title}</h2>
           <div className="flex flex-wrap gap-2">
             {option.values?.map((value) => {
               const isSelected = selectedOptions[option.id] === value.id;
@@ -151,8 +151,8 @@ export const ProductActions = ({
                   className={clsx(
                     "py-2.5 px-5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-200 min-h-[44px] box-border border",
                     isSelected
-                      ? "bg-[#9db0ba] text-white border-[#9db0ba] shadow-sm"
-                      : "bg-stone-50 text-stone-750 border-stone-200 hover:bg-stone-100 hover:border-stone-300"
+                      ? "bg-[var(--color-accent-gold)] text-stone-950 font-bold border-[var(--color-accent-gold)] shadow-md"
+                      : "bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)]"
                   )}
                   onClick={() => handleOptionSelect(option.id, value.id)}
                 >
@@ -166,7 +166,7 @@ export const ProductActions = ({
 
       <button
         className={clsx(
-          "bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-4 px-8 rounded-full cursor-pointer hover:shadow-md transition-all duration-200 uppercase tracking-wider text-xs",
+          "bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold py-4 px-8 rounded-full cursor-pointer hover:shadow-md transition-all duration-200 uppercase tracking-wider text-xs shadow-md",
           {
             "opacity-50 cursor-not-allowed": isAddToCardButtonDisabled,
           },

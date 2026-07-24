@@ -48,11 +48,28 @@ const regionId = region?.id || null;
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} data-theme="dark" class="dark">
   <head>
     <ClientRouter />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    {/* Zero-flicker theme initialization */}
+    <script is:inline>
+      (function() {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme = stored ? stored : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
@@ -74,10 +91,10 @@ const regionId = region?.id || null;
     <link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} blog`} href="/rss.xml" />
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
-  <body class="min-h-screen bg-white text-black">
-    <div class="mx-auto flex min-h-screen w-full max-w-[1440px] px-4 md:px-8 flex-col">
+  <body class="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <div class="flex min-h-screen w-full flex-col">
       <Nav client:load countryCode={DEFAULT_REGION} regionId={regionId} />
-      <main class="flex-1 min-h-[calc(100vh-72px)] py-8">
+      <main class="flex-1 min-h-[calc(100vh-72px)] max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         <slot />
       </main>
       <Footer countryCode={DEFAULT_REGION} />

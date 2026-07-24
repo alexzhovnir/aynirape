@@ -1,37 +1,50 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 
 export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
 ---
 
 <Layout
   title="Privacy Statement"
   description="Data protection policies and privacy-first information for clients of the Ayni Rapé online store."
 >
-  <section class="mx-auto max-w-3xl px-8 py-12 md:px-12 lg:px-16">
-    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-black/55">
-      Privacy
-    </p>
-    <h1 class="mt-4 text-4xl font-bold tracking-tight text-black">
-      Privacy-first storefront foundations
-    </h1>
-    <div class="mt-8 space-y-6 text-base leading-8 text-black/70">
-      <p>
-        This starter is designed to keep customer data handling straightforward.
-        Checkout and cart information is only collected when needed to complete
-        an order flow.
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
+    <!-- Breadcrumbs Nav -->
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: `/${countryCode}` },
+        { label: "Privacy Statement" }
+      ]}
+    />
+
+    <div class="max-w-3xl">
+      <p class="text-xs font-bold uppercase tracking-[0.28em] text-[var(--color-accent-gold)]">
+        Privacy
       </p>
-      <p>
-        Payment details are processed through connected payment providers rather
-        than stored directly in the storefront codebase. Region and cart state
-        are used to keep pricing and checkout behavior accurate for the shopper.
-      </p>
-      <p>
-        If you adapt this starter for production, update this page with your own
-        business policies, retention periods, and contact details before going
-        live.
-      </p>
+      <h1 class="mt-4 text-4xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)]">
+        Privacy-first storefront foundations
+      </h1>
+      <div class="mt-8 space-y-6 text-base leading-8 text-[var(--color-text-secondary)]">
+        <p>
+          This starter is designed to keep customer data handling straightforward.
+          Checkout and cart information is only collected when needed to complete
+          an order flow.
+        </p>
+        <p>
+          Payment details are processed through connected payment providers rather
+          than stored directly in the storefront codebase. Region and cart state
+          are used to keep pricing and checkout behavior accurate for the shopper.
+        </p>
+        <p>
+          If you adapt this starter for production, update this page with your own
+          business policies, retention periods, and contact details before going
+          live.
+        </p>
+      </div>
     </div>
-  </section>
+  </div>
 </Layout>

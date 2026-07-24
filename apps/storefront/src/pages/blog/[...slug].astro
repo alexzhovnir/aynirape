@@ -3,6 +3,7 @@ export const prerender = true;
 
 import { getCollection, render } from "astro:content";
 import BlogLayout from "@layouts/BlogLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 import { getRegion } from "../../lib/data/regions";
 import { listProducts } from "../../lib/data/products";
 
@@ -13,7 +14,6 @@ const localizedPath = (lang: string, slug: string) =>
   lang === "en" ? `/blog/${slug}` : `/${lang}/blog/${slug}`;
 
 export async function getStaticPaths() {
-  // getStaticPaths is hoisted and cannot see component-scope consts — define locally.
   const toSlug = (id: string) => id.replace(/\/index$/, "");
   const posts = await getCollection("blog", ({ data }) => !data.draft);
   return posts
@@ -25,7 +25,6 @@ const { post } = Astro.props;
 const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth === 2);
 
-// hreflang: siblings that share the same translationKey.
 const alternates = post.data.translationKey
   ? (await getCollection("blog", ({ data }) => !data.draft))
       .filter((p) => p.data.translationKey === post.data.translationKey)
@@ -76,12 +75,18 @@ if (region) {
   alternates={alternates}
   jsonLd={jsonLd}
 >
-  <a href="/blog" class="text-sm text-neutral-500 no-underline hover:underline block mb-6">&larr; Journal</a>
+  <Breadcrumbs
+    items={[
+      { label: "Home", href: "/de" },
+      { label: "Journal", href: "/blog" },
+      { label: post.data.title }
+    ]}
+  />
   
-  <div class="w-full aspect-[21/9] overflow-hidden rounded-xl bg-stone-100 relative border border-stone-200/40 mb-10">
-    <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center select-none bg-stone-100 z-0">
-      <span class="font-serif italic text-2xl text-stone-500 mb-1">Ayni Râpé</span>
-      <span class="text-xs uppercase tracking-[0.2em] text-stone-400 font-semibold">Journal</span>
+  <div class="w-full aspect-[21/9] overflow-hidden rounded-3xl bg-[var(--color-bg-surface-elevated)] relative border border-[var(--color-border-subtle)] mb-10 shadow-sm">
+    <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center select-none bg-[var(--color-bg-surface)] z-0">
+      <span class="font-serif-heading italic text-2xl text-[var(--color-accent-gold)] mb-1">Ayni Râpé</span>
+      <span class="text-xs uppercase tracking-[0.2em] text-[var(--color-text-muted)] font-semibold">Journal</span>
     </div>
     {post.data.coverImage && (
       <img
@@ -98,11 +103,11 @@ if (region) {
     <aside class="self-start sticky top-28 hidden lg:block space-y-8">
       {toc.length > 0 && (
         <div>
-          <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-950 mb-4">In this article</h3>
-          <ul class="space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-4">In this article</h3>
+          <ul class="space-y-2.5">
             {toc.map((h) => (
               <li>
-                <a href={`#${h.slug}`} class="text-stone-600 hover:text-[#7a5c00] text-sm font-medium transition-colors block leading-snug">
+                <a href={`#${h.slug}`} class="text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] text-sm font-medium transition-colors block leading-snug">
                   {h.text}
                 </a>
               </li>
@@ -112,23 +117,23 @@ if (region) {
       )}
 
       <!-- Shamanic Promo Card -->
-      <div class="bg-stone-50 border border-stone-200/50 p-6 rounded-3xl text-center space-y-4">
+      <div class="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] p-6 rounded-3xl text-center space-y-4 shadow-sm">
         <span class="text-2xl">🌱</span>
-        <h4 class="font-bold text-stone-900 text-sm">Authentic Supplies</h4>
-        <p class="text-xs text-stone-500 leading-relaxed">Ready for ceremony? Explore our ethically sourced mixtures and tools.</p>
-        <a href={`/de/store`} class="inline-block w-full py-2 bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 text-xs font-bold rounded-full transition-colors cursor-pointer text-center">
+        <h4 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-sm">Authentic Supplies</h4>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">Ready for ceremony? Explore our ethically sourced mixtures and tools.</p>
+        <a href={`/de/store`} class="inline-block w-full py-2.5 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 text-xs font-bold rounded-full transition-all duration-300 cursor-pointer text-center shadow-md">
           Shop Now
         </a>
       </div>
     </aside>
 
     <!-- Main article container -->
-    <article class="prose prose-neutral max-w-none">
-      <h1 class="mt-0">{post.data.title}</h1>
-      <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 mb-8 mt-2">
+    <article class="prose dark:prose-invert max-w-none text-[var(--color-text-primary)]">
+      <h1 class="mt-0 font-serif-heading font-bold text-[var(--color-text-primary)]">{post.data.title}</h1>
+      <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-[var(--color-text-muted)] mb-8 mt-2">
         <span>{fmtDate(post.data.publishedDate)}</span>
         <span>&bull;</span>
-        <span class="text-[#7a5c00] font-medium">{post.data.category}</span>
+        <span class="text-[var(--color-accent-gold)] font-semibold">{post.data.category}</span>
         <span>&bull;</span>
         <span>By {post.data.author}</span>
       </div>
@@ -139,23 +144,23 @@ if (region) {
     <!-- Right Sidebar: Share and Cross-sell -->
     <aside class="self-start sticky top-28 hidden xl:block space-y-10">
       <!-- Social Share -->
-      <div class="border-b border-stone-200/60 pb-8">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-950 mb-4">Share</h3>
+      <div class="border-b border-[var(--color-border-subtle)] pb-8">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-4">Share</h3>
         <div class="flex flex-col gap-3">
-          <a href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(post.data.title)}`} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 text-stone-600 hover:text-[#7a5c00] text-sm font-medium transition-colors">
-            <svg class="w-4.5 h-4.5 text-stone-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.37.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/></svg>
+          <a href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(post.data.title)}`} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] text-sm font-medium transition-colors">
+            <svg class="w-4.5 h-4.5 text-[var(--color-accent-gold)]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.37.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/></svg>
             Telegram
           </a>
-          <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.data.title + ' - ' + url)}`} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 text-stone-600 hover:text-[#7a5c00] text-sm font-medium transition-colors">
-            <svg class="w-4.5 h-4.5 text-stone-500" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.118-2.91-6.999-1.88-1.882-4.36-2.914-6.999-2.915-5.44 0-9.866 4.424-9.87 9.87-.001 1.778.475 3.51 1.378 5.028l-.987 3.606 3.698-.97z"/></svg>
+          <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(post.data.title + ' - ' + url)}`} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] text-sm font-medium transition-colors">
+            <svg class="w-4.5 h-4.5 text-[var(--color-accent-gold)]" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.118-2.91-6.999-1.88-1.882-4.36-2.914-6.999-2.915-5.44 0-9.866 4.424-9.87 9.87-.001 1.778.475 3.51 1.378 5.028l-.987 3.606 3.698-.97z"/></svg>
             WhatsApp
           </a>
-          <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(url)}`} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 text-stone-600 hover:text-[#7a5c00] text-sm font-medium transition-colors">
-            <svg class="w-4.5 h-4.5 text-stone-500" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(url)}`} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] text-sm font-medium transition-colors">
+            <svg class="w-4.5 h-4.5 text-[var(--color-accent-gold)]" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             Twitter / X
           </a>
-          <button id="copy-link-btn" class="flex items-center gap-2.5 text-stone-600 hover:text-[#7a5c00] text-sm font-medium transition-colors cursor-pointer text-left w-full" data-url={url}>
-            <svg class="w-4.5 h-4.5 text-stone-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          <button id="copy-link-btn" class="flex items-center gap-2.5 text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] text-sm font-medium transition-colors cursor-pointer text-left w-full" data-url={url}>
+            <svg class="w-4.5 h-4.5 text-[var(--color-accent-gold)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
             <span>Copy Link</span>
           </button>
         </div>
@@ -164,16 +169,16 @@ if (region) {
       <!-- Featured Products / Cross-sell -->
       {featuredProducts.length > 0 && (
         <div>
-          <h3 class="text-xs font-semibold uppercase tracking-wider text-stone-950 mb-4">Featured Products</h3>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-4">Featured Products</h3>
           <div class="space-y-4">
             {featuredProducts.map((p) => (
-              <a href={`/${DEFAULT_REGION}/store/${p.id}`} class="flex items-center gap-3 group">
-                <div class="w-12 h-12 rounded-full overflow-hidden border border-stone-150 bg-stone-50 shrink-0">
+              <a href={`/${DEFAULT_REGION}/store/${p.handle || p.id}`} class="flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-full overflow-hidden border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] shrink-0">
                   <img src={p.thumbnail} alt={p.title} class="w-full h-full object-cover" />
                 </div>
                 <div class="flex-1 min-w-0 text-left">
-                  <h4 class="text-xs font-bold text-stone-900 truncate group-hover:text-[#7a5c00] transition-colors leading-tight">{p.title}</h4>
-                  <p class="text-[10px] text-stone-500 mt-0.5">View details &rarr;</p>
+                  <h4 class="text-xs font-bold text-[var(--color-text-primary)] truncate group-hover:text-[var(--color-accent-gold)] transition-colors leading-tight">{p.title}</h4>
+                  <p class="text-[10px] text-[var(--color-accent-gold)] mt-0.5 font-medium">View details &rarr;</p>
                 </div>
               </a>
             ))}

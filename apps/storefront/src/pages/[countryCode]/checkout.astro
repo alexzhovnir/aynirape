@@ -5,6 +5,7 @@ import { getRegionParams } from "@lib/params/region-params";
 import type { RegionCountry } from "@modules/checkout/components/AddressFields";
 import { CheckoutPage } from "@modules/checkout/components/CheckoutPage";
 import InPostGeoWidget from "@modules/checkout/components/InPostGeoWidget.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
 
 export const getStaticPaths = getRegionParams;
 
@@ -44,6 +45,15 @@ try {
 ---
 
 <Layout title="Checkout" description="Complete your purchase." noindex>
-  <CheckoutPage client:load countryCode={countryCode} countries={countries} />
-  <InPostGeoWidget />
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: `/${countryCode}` },
+        { label: "Shopping Cart", href: `/${countryCode}/cart` },
+        { label: "Checkout" }
+      ]}
+    />
+    <CheckoutPage client:load countryCode={countryCode} countries={countries} />
+    <InPostGeoWidget />
+  </div>
 </Layout>

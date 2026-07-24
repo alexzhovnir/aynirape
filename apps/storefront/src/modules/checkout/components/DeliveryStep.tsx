@@ -20,28 +20,11 @@ interface DeliveryStepProps {
 }
 
 const CheckCircle = () => (
-  <span className="inline-flex items-center justify-center w-5 h-5 bg-black rounded-full shrink-0">
-    <svg
-      className="w-3 h-3 text-white"
-      viewBox="0 0 12 12"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M2 6l3 3 5-5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+  <span className="inline-flex items-center justify-center w-5 h-5 bg-emerald-500/20 text-emerald-500 rounded-full shrink-0 border border-emerald-500/30 text-xs font-bold">
+    ✓
   </span>
 );
 
-/**
- * Detect whether a shipping option requires an InPost locker selection.
- * Checks the provider metadata or option name for known InPost identifiers.
- */
 function isInPostLockerOption(
   option: StoreCartShippingOptionWithServiceZone,
 ): boolean {
@@ -78,10 +61,11 @@ export const DeliveryStep = ({
           await sdk.store.fulfillment.listCartOptions({ cart_id: cart.id });
         setShippingOptions(shipping_options);
 
-        // Pre-select if cart already has a shipping method
         const existingMethodId = cart.shipping_methods?.[0]?.shipping_option_id;
         if (existingMethodId) {
           setSelectedOptionId(existingMethodId);
+        } else if (shipping_options.length > 0) {
+          handleOptionChange(shipping_options[0].id);
         }
       } catch (err) {
         console.error("Failed to load shipping options:", err);
@@ -92,76 +76,67 @@ export const DeliveryStep = ({
     };
 
     fetchOptions();
-  }, [mode, cart.id]);
+  }, [mode, cart.id, cart.shipping_methods]);
 
-  const selectedOption = shippingOptions.find((o) => o.id === selectedOptionId);
-  const needsLocker = selectedOption
-    ? isInPostLockerOption(selectedOption)
-    : false;
-
-  const handleOptionChange = async (optionId: string) => {
-    if (isSaving) return;
-    setSelectedOptionId(optionId);
-    // Clear locker selection when switching options
-    setSelectedLockerPoint(null);
-    setIsSaving(true);
-    setError("");
-
-    const option = shippingOptions.find((o) => o.id === optionId);
-    const isLocker = option ? isInPostLockerOption(option) : false;
-
-    try {
-      // For locker options, don't save yet — wait for point selection
-      if (isLocker) {
-        document.dispatchEvent(new CustomEvent("inpost:preload"));
-        setIsSaving(false);
-        return;
-      }
-      await addShippingMethod(optionId);
-    } catch (err) {
-      console.error("Failed to update shipping method:", err);
-      setError("Failed to update shipping method. Please try again.");
-      const savedMethodId = cart.shipping_methods?.[0]?.shipping_option_id;
-      setSelectedOptionId(savedMethodId ?? "");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleLockerPointSelected = useCallback(
-    async (point: InPostPoint) => {
-      setSelectedLockerPoint(point);
-      setIsSaving(true);
-      setError("");
-      try {
-        await addShippingMethod(selectedOptionId, {
-          target_point: point.name,
-        });
-      } catch (err) {
-        console.error("Failed to set locker shipping method:", err);
-        setError("Failed to save locker selection. Please try again.");
-        setSelectedLockerPoint(null);
-      } finally {
-        setIsSaving(false);
+  const handleInPostPoint = useCallback(
+    (e: Event) => {
+      const customEvent = e as CustomEvent<InPostPoint>;
+      if (customEvent.detail) {
+        setSelectedLockerPoint(customEvent.detail);
+        if (selectedOptionId) {
+          addShippingMethod(
+            selectedOptionId,
+            { target_point: customEvent.detail.name }
+          ).catch(console.error);
+        }
       }
     },
     [selectedOptionId],
   );
 
-  // Listen for point selection from the Astro-rendered InPost GeoWidget
   useEffect(() => {
-    const handler = (e: Event) => {
-      const point = (e as CustomEvent).detail as InPostPoint;
-      handleLockerPointSelected(point);
-    };
-    document.addEventListener("inpost:pointSelected", handler);
-    return () => document.removeEventListener("inpost:pointSelected", handler);
-  }, [handleLockerPointSelected]);
+    document.addEventListener("inpost:point-selected", handleInPostPoint);
+    return () =>
+      document.removeEventListener("inpost:point-selected", handleInPostPoint);
+  }, [handleInPostPoint]);
+
+  const handleOptionChange = async (optionId: string) => {
+    if (isSaving) return;
+    setSelectedOptionId(optionId);
+    setIsSaving(true);
+    setError("");
+
+    try {
+      const option = shippingOptions.find((o) => o.id === optionId);
+      const isLocker = option ? isInPostLockerOption(option) : false;
+
+      const data =
+        isLocker && selectedLockerPoint
+          ? { target_point: selectedLockerPoint.name }
+          : undefined;
+
+      await addShippingMethod(optionId, data);
+    } catch (err) {
+      console.error("Failed to set shipping option:", err);
+      setError("Failed to set shipping option. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const selectedOption = shippingOptions.find(
+    (o) => o.id === selectedOptionId,
+  );
+  const needsLocker = selectedOption
+    ? isInPostLockerOption(selectedOption)
+    : false;
 
   if (mode === "inactive") {
     return (
-      <div className="border-t border-gray-200 pt-6 mt-6">
-        <h2 className="text-2xl font-bold text-gray-400">Delivery</h2>
+      <div className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 opacity-60">
+        <h2 className="text-xl font-serif-heading font-bold text-[var(--color-text-muted)]">
+          Step 2 &bull; Delivery Method
+        </h2>
       </div>
     );
   }
@@ -171,36 +146,38 @@ export const DeliveryStep = ({
     const currencyCode = cart.currency_code || "USD";
 
     return (
-      <div className="border-t border-gray-200 pt-6 mt-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            Delivery
+      <div className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 shadow-sm">
+        <div className="flex items-center justify-between pb-4 border-b border-[var(--color-border-subtle)] mb-6">
+          <h2 className="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] flex items-center gap-2">
+            <span>Delivery Method</span>
             <CheckCircle />
           </h2>
           <button
             type="button"
             onClick={onEdit}
-            className="text-blue-600 hover:underline text-sm"
+            className="px-4 py-1.5 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-accent-gold)] hover:border-[var(--color-accent-gold)] text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
           >
             Edit
           </button>
         </div>
 
         {method && (
-          <div className="text-sm">
-            <p className="font-medium mb-1">Shipping method</p>
-            <p className="text-gray-700">
+          <div className="text-xs text-[var(--color-text-secondary)]">
+            <p className="font-bold text-[var(--color-text-primary)] uppercase tracking-wider text-[10px] mb-2">Selected Option</p>
+            <p className="font-semibold text-sm text-[var(--color-text-primary)]">
               {method.name}
               {" — "}
-              {method.amount === 0
-                ? "Free"
-                : convertToLocale({ amount: method.amount, currencyCode })}
+              <span className="text-[var(--color-accent-gold)]">
+                {method.amount === 0
+                  ? "Free"
+                  : convertToLocale({ amount: method.amount, currencyCode })}
+              </span>
             </p>
             {(() => {
               const data = method.data as Record<string, unknown> | undefined;
               const targetPoint = data?.target_point as string | undefined;
               return targetPoint ? (
-                <p className="text-gray-500 mt-1">Locker: {targetPoint}</p>
+                <p className="text-[var(--color-text-muted)] mt-1 font-mono">Locker Point: {targetPoint}</p>
               ) : null;
             })()}
           </div>
@@ -212,29 +189,31 @@ export const DeliveryStep = ({
   const currencyCode = cart.currency_code || "USD";
 
   return (
-    <div className="border-t border-gray-200 pt-6 mt-6">
-      <h2 className="text-2xl font-bold mb-6">Delivery</h2>
+    <div className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 shadow-sm">
+      <div className="mb-6">
+        <span className="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-[10px] uppercase block mb-1">
+          STEP 2 OF 3 &bull; DELIVERY METHOD
+        </span>
+        <h2 className="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+          Select Delivery Option
+        </h2>
+      </div>
 
-      <div>
-        <p className="font-medium mb-1">Shipping method</p>
-        <p className="text-sm text-gray-500 mb-4">
-          How would you like your order delivered
-        </p>
-
+      <div className="space-y-6">
         {isLoading && (
-          <p className="text-sm text-gray-500 mb-4">
-            Loading shipping options...
+          <p className="text-xs text-[var(--color-text-muted)] animate-pulse">
+            Loading available shipping options...
           </p>
         )}
 
         {!isLoading && shippingOptions.length === 0 && !error && (
-          <p className="text-sm text-gray-500 mb-4">
-            No shipping options available for your address.
+          <p className="text-xs text-[var(--color-text-muted)]">
+            No shipping options available for your delivery address.
           </p>
         )}
 
         {!isLoading && shippingOptions.length > 0 && (
-          <div className="space-y-3 mb-6">
+          <div className="space-y-3">
             {shippingOptions.map((option) => {
               const isLocker = isInPostLockerOption(option);
               const isSelected = selectedOptionId === option.id;
@@ -242,10 +221,10 @@ export const DeliveryStep = ({
               return (
                 <div key={option.id}>
                   <label
-                    className={`flex items-center justify-between border rounded-md px-4 py-3 cursor-pointer transition-colors ${
+                    className={`flex items-center justify-between border rounded-2xl p-4 cursor-pointer transition-all ${
                       isSelected
-                        ? "border-black"
-                        : "border-gray-200 hover:border-gray-400"
+                        ? "border-[var(--color-accent-gold)] bg-[var(--color-bg-surface)] shadow-sm"
+                        : "border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] hover:border-[var(--color-text-muted)]"
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -255,13 +234,13 @@ export const DeliveryStep = ({
                         value={option.id}
                         checked={isSelected}
                         onChange={() => handleOptionChange(option.id)}
-                        className="w-4 h-4 accent-black"
+                        className="w-4 h-4 accent-[var(--color-accent-gold)] cursor-pointer"
                       />
-                      <span className="text-sm font-medium">{option.name}</span>
+                      <span className="text-sm font-semibold text-[var(--color-text-primary)]">{option.name}</span>
                     </div>
-                    <span className="text-sm text-gray-700">
+                    <span className="text-xs font-bold text-[var(--color-accent-gold)]">
                       {option.amount === 0
-                        ? "Free"
+                        ? "FREE"
                         : convertToLocale({
                             amount: option.amount,
                             currencyCode,
@@ -270,11 +249,11 @@ export const DeliveryStep = ({
                   </label>
 
                   {isLocker && isSelected && (
-                    <div className="mt-3">
+                    <div className="mt-3 p-4 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)]">
                       {selectedLockerPoint ? (
-                        <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
-                          <span className="font-medium">Selected locker:</span>
-                          <span>{selectedLockerPoint.name}</span>
+                        <div className="flex items-center gap-2 text-xs text-[var(--color-text-primary)] mb-2">
+                          <span className="font-bold">Selected Locker:</span>
+                          <span className="font-mono">{selectedLockerPoint.name}</span>
                         </div>
                       ) : null}
                       <button
@@ -282,11 +261,11 @@ export const DeliveryStep = ({
                         onClick={() =>
                           document.dispatchEvent(new CustomEvent("inpost:open"))
                         }
-                        className="text-sm text-blue-600 hover:underline"
+                        className="text-xs font-bold text-[var(--color-accent-gold)] hover:underline cursor-pointer"
                       >
                         {selectedLockerPoint
-                          ? "Change locker"
-                          : "Choose locker"}
+                          ? "Change Parcel Locker"
+                          : "Choose Parcel Locker →"}
                       </button>
                     </div>
                   )}
@@ -296,7 +275,11 @@ export const DeliveryStep = ({
           </div>
         )}
 
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && (
+          <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-500 text-xs text-center font-medium">
+            {error}
+          </div>
+        )}
 
         <button
           type="button"
@@ -306,9 +289,10 @@ export const DeliveryStep = ({
             (needsLocker && !selectedLockerPoint)
           }
           onClick={onContinue}
-          className="bg-[#bdcd00] hover:bg-[#a6b400] text-stone-950 font-bold py-3.5 px-8 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs shadow-sm cursor-pointer"
+          className="w-full sm:w-auto px-8 py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs flex items-center justify-center gap-2"
         >
-          {isSaving ? "Saving..." : "Continue to payment"}
+          <span>{isSaving ? "Saving..." : "Continue to Payment"}</span>
+          <span>&rarr;</span>
         </button>
       </div>
     </div>
