@@ -1,4 +1,5 @@
 import { config, fields, collection } from "@keystatic/core";
+import { block } from "@keystatic/core/content-components";
 
 /**
  * Keystatic — git-based CMS. Content is authored through the UI at /keystatic
@@ -68,7 +69,35 @@ export default config({
             itemLabel: (props) => props.value,
           },
         ),
-        content: fields.markdoc({ label: "Content" }),
+        category: fields.select({
+          label: "Category",
+          options: [
+            { label: "Cleansing", value: "Cleansing" },
+            { label: "Rituals", value: "Rituals" },
+            { label: "Guides", value: "Guides" },
+          ],
+          defaultValue: "Rituals",
+        }),
+        author: fields.text({ label: "Author", defaultValue: "Ayni Team" }),
+        authorSlug: fields.text({
+          label: "Author slug",
+          defaultValue: "ayni-team",
+        }),
+        content: fields.markdoc({
+          label: "Content",
+          components: {
+            "product-cta": block({
+              label: "Product CTA",
+              schema: {
+                handle: fields.text({
+                  label: "Product handle",
+                  validation: { isRequired: true },
+                }),
+                label: fields.text({ label: "Button label" }),
+              },
+            }),
+          },
+        }),
       },
     }),
   },
