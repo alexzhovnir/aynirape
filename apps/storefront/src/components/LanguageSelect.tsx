@@ -7,20 +7,14 @@ export interface CountryOption {
 }
 
 const DEFAULT_COUNTRIES: CountryOption[] = [
-  { iso_2: "de", name: "Germany", currency_code: "EUR" },
-  { iso_2: "dk", name: "Denmark", currency_code: "DKK" },
-  { iso_2: "fr", name: "France", currency_code: "EUR" },
-  { iso_2: "es", name: "Spain", currency_code: "EUR" },
-  { iso_2: "it", name: "Italy", currency_code: "EUR" },
-  { iso_2: "se", name: "Sweden", currency_code: "SEK" },
-  { iso_2: "gb", name: "United Kingdom", currency_code: "GBP" },
-  { iso_2: "nl", name: "Netherlands", currency_code: "EUR" },
-  { iso_2: "at", name: "Austria", currency_code: "EUR" },
-  { iso_2: "pl", name: "Poland", currency_code: "PLN" },
-  { iso_2: "be", name: "Belgium", currency_code: "EUR" },
-  { iso_2: "ch", name: "Switzerland", currency_code: "CHF" },
-  { iso_2: "us", name: "United States", currency_code: "USD" },
+  { iso_2: "gb", name: "English", currency_code: "GBP" },
+  { iso_2: "de", name: "Deutsch", currency_code: "EUR" },
+  { iso_2: "fr", name: "Français", currency_code: "EUR" },
+  { iso_2: "it", name: "Italiano", currency_code: "EUR" },
 ];
+
+const DROPDOWN_WIDTH_PX = 176; // w-44
+const DROPDOWN_MARGIN_PX = 8;
 
 export function getFlagEmoji(iso2: string): string {
   if (!iso2 || iso2.length !== 2) return "🌐";
@@ -43,8 +37,10 @@ export const LanguageSelect = ({
   className = "",
 }: LanguageSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [openUpward, setOpenUpward] = useState(false);
+  const [alignLeft, setAlignLeft] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const normalizedCode = countryCode ? countryCode.toLowerCase() : "de";
 
@@ -62,12 +58,6 @@ export const LanguageSelect = ({
       iso_2: normalizedCode,
       name: normalizedCode.toUpperCase(),
     };
-
-  const filteredCountries = allCountries.filter(
-    (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.iso_2.toLowerCase().includes(search.toLowerCase())
-  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -92,6 +82,29 @@ export const LanguageSelect = ({
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  const handleToggle = () => {
+    if (!isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      const estimatedHeight = allCountries.length * 40 + 16;
+
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      setOpenUpward(spaceBelow < estimatedHeight && spaceAbove > spaceBelow);
+
+      // alignLeft = anchor the dropdown's left edge to the button (grows
+      // rightward). Prefer that when there's room; only grow leftward
+      // (alignLeft = false) when growing rightward would overflow but
+      // growing leftward fits.
+      const spaceRight = window.innerWidth - rect.left;
+      const spaceLeft = rect.right;
+      const requiredSpace = DROPDOWN_WIDTH_PX + DROPDOWN_MARGIN_PX;
+      const fitsRight = spaceRight >= requiredSpace;
+      const fitsLeft = spaceLeft >= requiredSpace;
+      setAlignLeft(fitsRight || (!fitsLeft && spaceRight >= spaceLeft));
+    }
+    setIsOpen((v) => !v);
+  };
 
   const handleSelectCountry = (newCode: string) => {
     setIsOpen(false);
@@ -121,12 +134,13 @@ export const LanguageSelect = ({
   return (
     <div className={`relative inline-block text-left ${className}`} ref={dropdownRef}>
       <button
+        ref={buttonRef}
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className="text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] bg-[var(--color-bg-surface-elevated)] hover:bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] px-2.5 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[var(--color-accent-gold)]"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-label="Select region and language"
+        aria-label="Select language"
       >
         <span className="text-sm leading-none" role="img" aria-label={currentCountry.name}>
           {getFlagEmoji(currentCountry.iso_2)}
@@ -134,11 +148,6 @@ export const LanguageSelect = ({
         <span className="font-semibold uppercase tracking-wider text-[11px] text-[var(--color-text-primary)]">
           {currentCountry.iso_2}
         </span>
-        {currentCountry.currency_code && (
-          <span className="text-[10px] text-[var(--color-text-muted)] hidden xs:inline">
-            ({currentCountry.currency_code})
-          </span>
-        )}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -155,70 +164,48 @@ export const LanguageSelect = ({
 
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 w-56 rounded-2xl bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] shadow-2xl z-50 overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150"
+          className={`absolute ${alignLeft ? "left-0" : "right-0"} ${
+            openUpward ? "bottom-full mb-2" : "top-full mt-2"
+          } w-44 rounded-2xl bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] shadow-2xl z-50 overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 p-1.5 space-y-0.5`}
           role="listbox"
         >
-          <div className="p-2 border-b border-[var(--color-border-subtle)]">
-            <input
-              type="text"
-              placeholder="Search region..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full text-xs bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] border border-[var(--color-border-subtle)] rounded-lg px-2.5 py-1.5 focus:outline-hidden focus:border-[var(--color-accent-gold)]"
-              autoFocus
-            />
-          </div>
+          {allCountries.map((c) => {
+            const isSelected = c.iso_2.toLowerCase() === normalizedCode;
+            return (
+              <button
+                key={c.iso_2}
+                type="button"
+                onClick={() => handleSelectCountry(c.iso_2)}
+                className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                  isSelected
+                    ? "bg-[var(--color-accent-gold)]/15 text-[var(--color-accent-gold)] font-medium"
+                    : "text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] hover:text-[var(--color-accent-gold)]"
+                }`}
+                role="option"
+                aria-selected={isSelected}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="text-sm shrink-0 leading-none">
+                    {getFlagEmoji(c.iso_2)}
+                  </span>
+                  <span className="truncate">{c.name}</span>
+                </div>
 
-          <div className="max-h-60 overflow-y-auto p-1.5 space-y-0.5 custom-scrollbar">
-            {filteredCountries.length === 0 ? (
-              <div className="px-3 py-2 text-xs text-[var(--color-text-muted)] text-center">
-                No region found
-              </div>
-            ) : (
-              filteredCountries.map((c) => {
-                const isSelected = c.iso_2.toLowerCase() === normalizedCode;
-                return (
-                  <button
-                    key={c.iso_2}
-                    type="button"
-                    onClick={() => handleSelectCountry(c.iso_2)}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
-                      isSelected
-                        ? "bg-[var(--color-accent-gold)]/15 text-[var(--color-accent-gold)] font-medium"
-                        : "text-[var(--color-text-primary)] hover:bg-[var(--color-bg-surface)] hover:text-[var(--color-accent-gold)]"
-                    }`}
-                    role="option"
-                    aria-selected={isSelected}
+                {isSelected && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                    stroke="currentColor"
+                    className="w-3.5 h-3.5 text-[var(--color-accent-gold)] shrink-0 ml-2"
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="text-sm shrink-0 leading-none">
-                        {getFlagEmoji(c.iso_2)}
-                      </span>
-                      <span className="truncate">{c.name}</span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                      <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-muted)] font-mono">
-                        {c.iso_2}
-                      </span>
-                      {isSelected && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2.5}
-                          stroke="currentColor"
-                          className="w-3.5 h-3.5 text-[var(--color-accent-gold)]"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                        </svg>
-                      )}
-                    </div>
-                  </button>
-                );
-              })
-            )}
-          </div>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                  </svg>
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

@@ -25,11 +25,16 @@ ENV PUBLIC_MEDUSA_BACKEND_URL=$PUBLIC_MEDUSA_BACKEND_URL \
 WORKDIR /repo/apps/storefront
 RUN pnpm build
 
+FROM node:22-slim AS prod-deps
+WORKDIR /app
+COPY apps/storefront/package.json ./package.json
+RUN npm install --omit=dev --legacy-peer-deps --no-audit --no-fund
+
 FROM node:22-slim AS runner
 ENV NODE_ENV=production
-WORKDIR /repo
-COPY --from=build /repo ./
-WORKDIR /repo/apps/storefront
+WORKDIR /app
+COPY --from=build /repo/apps/storefront/dist ./dist
+COPY --from=prod-deps /app/node_modules ./node_modules
 EXPOSE 8100
 ENV HOST=0.0.0.0
 CMD ["node", "./dist/server/entry.mjs"]
