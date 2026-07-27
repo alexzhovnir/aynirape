@@ -1,0 +1,442 @@
+[
+  {
+    "title": "Emburana",
+    "handle": "emburana",
+    "description": "Shop premium rapé Emburana with authentic Amazonian Emburana rapé blend. Natural Emburaná rapé powder, traditional and ceremonial quality. Buy Emburana rapé online on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/emburana",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/emburana-0.jpg"
+    ]
+  },
+  {
+    "title": "Nukini Sansara",
+    "handle": "nukini-sansara",
+    "description": "Order authentic Nukini Sansara rapé online. This Amazon rainforest rapé is a sacred ceremonial powder made by the Nukini tribe, offering a balanced intensity and deep spiritual connection in traditional rituals on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/nukini-sansara",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/nukini-sansara-0.jpg"
+    ]
+  },
+  {
+    "title": "Huni Kuin",
+    "handle": "huni-kuin",
+    "description": "Explore authentic Huni Kuin ceremonial rapé crafted by the Huni Kuin tribe. Shop traditional Amazonian Huni Kuin rapé and premium quality sacred blend Blow online on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/huni-kuin",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/huni-kuin-0.jpg"
+    ]
+  },
+  {
+    "title": "Caboclo Paricá",
+    "handle": "caboclo-parica",
+    "description": "Discover Caboclo Paricá rapé, a powerful Amazonian blow blend. Explore its unique composition, including blend and natural herbs, and learn how to buy authentic Caboclo rapé online on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/caboclo-parica",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/caboclo-parica-0.jpg"
+    ]
+  },
+  {
+    "title": "Yawanawa Tsunu",
+    "handle": "yawanawa-tsunu",
+    "description": "Buy Yawanawa Tsunu Hape online: Tsunu sacred blow, traditional rapé for spiritual practice and ceremonial rituals on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/yawanawa",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/yawanawa-tsunu-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Jaguar Crocodile",
+    "handle": "kuripe-jaguar-crocodile",
+    "description": "Buy authentic handcrafted Kuripe Jaguar Crocodile online. Collector edition stone Kuripe for ceremonial hapé rituals, made in Peru for sacred use on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/jaguar",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-jaguar-crocodile-0.jpg"
+    ]
+  },
+  {
+    "title": "Spiritual Cleanse",
+    "handle": "spiritual-cleanse",
+    "description": "Experience spiritual cleansing with our rapé spiritual medicine blend. Ideal for energy clearing, meditation, and connecting with Amazonian traditions for inner harmony on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/spiritual-cleanse-i",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/spiritual-cleanse-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Jaguar Tamarind",
+    "handle": "kuripe-jaguar-tamarind",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-jaguar-tamarind",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-jaguar-tamarind-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Wolf Sawo",
+    "handle": "kuripe-wolf-sawo",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-wolf-sawo",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-wolf-sawo-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Colibri Crocodile",
+    "handle": "kuripe-colibri-crocodile",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-colibri-crocodile",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-colibri-crocodile-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Colibri Teak",
+    "handle": "kuripe-colibri-teak",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-colibri-teak",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-colibri-teak-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Eagle Tamarind",
+    "handle": "kuripe-eagle-tamarind",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-eagle-tamarind",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-eagle-tamarind-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Eagle Teak",
+    "handle": "kuripe-eagle-teak",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-eagle-teak",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-eagle-teak-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Minimalistic Cemara",
+    "handle": "kuripe-minimalistic-cemara",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-minimalistic-cemara",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-minimalistic-cemara-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Double Crocodile",
+    "handle": "kuripe-double-crocodile",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-double-crocodile",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-double-crocodile-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Turquoise",
+    "handle": "kuripe-turquoise",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-turquoise",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-turquoise-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Amethyst",
+    "handle": "kuripe-amethyst",
+    "description": "Buy authentic Amethyst Kuripe pipes. Handmade stone Kuripe available for sale, unique and durable for your collection on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-amethyst",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-amethyst-0.jpg"
+    ]
+  },
+  {
+    "title": "Tepi Shipibo small",
+    "handle": "tepi-shipibo-small",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-shipibo-small",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/tepi-shipibo-small-0.jpg"
+    ]
+  },
+  {
+    "title": "Tepi Shipibo large",
+    "handle": "tepi-shipibo-large",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-shipibo-large",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/tepi-shipibo-large-0.jpg"
+    ]
+  },
+  {
+    "title": "Huayruro Seeds Bracelet",
+    "handle": "huayruro-seeds-bracelet",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/ornaments-and-decoration/huayruro-seeds-bracelet",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/huayruro-seeds-bracelet-0.jpg"
+    ]
+  },
+  {
+    "title": "Tepi Double Jaguar Waru",
+    "handle": "tepi-double-jaguar-waru",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-double-jaguar-waru",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/tepi-double-jaguar-waru-0.jpg"
+    ]
+  },
+  {
+    "title": "Tepi Double Jaguar Crocodile",
+    "handle": "tepi-double-jaguar-crocodile",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-double-jaguar-crocodile",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/tepi-double-jaguar-crocodile-0.jpg"
+    ]
+  },
+  {
+    "title": "Tepi Colibri Crocodile",
+    "handle": "tepi-colibri-crocodile",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-colibri-crocodile",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/tepi-colibri-crocodile-0.jpg"
+    ]
+  },
+  {
+    "title": "Tepi Colibri Teak",
+    "handle": "tepi-colibri-teak",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-colibri-teak",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/tepi-colibri-teak-0.jpg"
+    ]
+  },
+  {
+    "title": "Tepi Minimalistic Sawo",
+    "handle": "tepi-minimalistic-sawo",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-minimalistic-sawo",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/tepi-minimalistic-sawo-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Standard",
+    "handle": "kuripe-standard",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-standard",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-standard-0.jpg"
+    ]
+  },
+  {
+    "title": "Força Feminina",
+    "handle": "forca-feminina",
+    "description": "Shop Força Feminina Rapé for sale. Explore the ceremonial feminine force rapé and enjoy a genuine spiritual experience with authentic feminine force hapeh on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/forca-feminina",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/forca-feminina-0.jpg"
+    ]
+  },
+  {
+    "title": "Katukina Eucalipto",
+    "handle": "katukina-eucalipto",
+    "description": "Discover Katukina Eucalipto rapé, a traditional Katukina hapé powder. Buy high-quality Katukina eucalyptus rapé online for rituals, meditation, and spiritual practice on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/katukina-eucalipto",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/katukina-eucalipto-0.jpg"
+    ]
+  },
+  {
+    "title": "Kuripe Wolf Crocodile",
+    "handle": "kuripe-wolf-crocodile",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-wolf-crocodile-i",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/kuripe-wolf-crocodile-0.jpg"
+    ]
+  },
+  {
+    "title": "Agua de Florida",
+    "handle": "agua-de-florida",
+    "description": "Shop Agua de Florida cologne for sale. Authentic Peru Florida Water for rituals and cleansing. Buy Agua de Florida online with the best price and guaranteed quality on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/aromatics/agua-de-florida-2",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/agua-de-florida-0.jpg"
+    ]
+  },
+  {
+    "title": "Discovery Bundle light 4+1",
+    "handle": "discovery-bundle-light-41",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/discovery-bundle-light",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/discovery-bundle-light-41-0.jpg"
+    ]
+  },
+  {
+    "title": "Discovery Bundle strong 4+1",
+    "handle": "discovery-bundle-strong-41",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/discovery-bundle-strong",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/discovery-bundle-strong-41-0.jpg"
+    ]
+  },
+  {
+    "title": "Palo Santo",
+    "handle": "palo-santo",
+    "description": "Discover palo santo incense, santo palo sticks, and palo santo smudge sticks for cleansing rituals. Shop palo santo burning sticks and learn about smudging with palo santo wood on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/aromatics/palo-santo",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/palo-santo-0.jpg"
+    ]
+  },
+  {
+    "title": "Ceremonial carpet - Snake",
+    "handle": "ceremonial-carpet-snake",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/ornaments-and-decoration/ceremonial-carpet-snake",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/ceremonial-carpet-snake-0.jpg"
+    ]
+  },
+  {
+    "title": "Ceremonial carpet - Snake & Parrot",
+    "handle": "ceremonial-carpet-snake-and-parrot",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/ornaments-and-decoration/ceremonial-carpet-snake-and-parrot",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/ceremonial-carpet-snake-and-parrot-0.jpg"
+    ]
+  },
+  {
+    "title": "Ceremonial carpet - Sacred Plant",
+    "handle": "ceremonial-carpet-sacred-plant",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/ornaments-and-decoration/ceremonial-carpet-sacred-plant",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/ceremonial-carpet-sacred-plant-0.jpg"
+    ]
+  },
+  {
+    "title": "Silver Kuripe Double Cobra with chain and Kyanite",
+    "handle": "silver-kuripe-double-cobra-with-chain-and-kyanite",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/silver-kuripe-double-cobra-with-chain-and-kyanite-stone",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/silver-kuripe-double-cobra-with-chain-and-kyanite-0.jpg"
+    ]
+  },
+  {
+    "title": "Silver Kuripe Single Cobra with Turquoise",
+    "handle": "silver-kuripe-single-cobra-with-turquoise",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/silver-kuripe-single-cobra-with-turquoise",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/silver-kuripe-single-cobra-with-turquoise-0.jpg"
+    ]
+  },
+  {
+    "title": "Silver Kuripe Leaves with Labradorite",
+    "handle": "silver-kuripe-leaves-with-labradorite",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/silver-kuripe-leaves-with-labradorite",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/silver-kuripe-leaves-with-labradorite-0.jpg"
+    ]
+  },
+  {
+    "title": "Silver Tepi Double Cobra",
+    "handle": "silver-tepi-double-cobra",
+    "description": "Silver tepi double cobra is a premium handmade silver tepi pipe for rapé. This double cobra tepi applicator is perfect for ceremonial use and collectors on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/silver-tepi-double-cobra",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/silver-tepi-double-cobra-0.jpg"
+    ]
+  },
+  {
+    "title": "Yawanawa",
+    "handle": "yawanawa",
+    "description": "Discover authentic Yawanawa ceremonial rapé, a traditional blow blend used in rituals. Buy Yawanawa rapé online, ethically sourced and fair trade on the website aynirape.com",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/rape/yawanawa-ceremonial",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/yawanawa-0.jpg"
+    ]
+  },
+  {
+    "title": "Pure Açaí Powder",
+    "handle": "pure-acai-powder",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/supplements/pure-a%C3%A7a%C3%AD-powder",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/pure-acai-powder-0.jpg"
+    ]
+  },
+  {
+    "title": "Guaraná Seed Powder",
+    "handle": "guarana-seed-powder",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/supplements/guaran%C3%A1-seed-powder",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/guarana-seed-powder-0.jpg"
+    ]
+  },
+  {
+    "title": "Maca Root Powder",
+    "handle": "maca-root-powder",
+    "description": "",
+    "price": 0,
+    "originalUrl": "https://aynirape.com/shop/supplements/maca-root-powder",
+    "images": [
+      "/Users/alexzhovnir/Documents/Github/aynirape/scripts/product_images/maca-root-powder-0.jpg"
+    ]
+  }
+]

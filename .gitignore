@@ -31,3 +31,4 @@ coverage/
 
 # Uploads (local dev)
 apps/backend/uploads/
+scripts/product_images
