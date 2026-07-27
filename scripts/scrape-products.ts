@@ -97,9 +97,20 @@ async function scrapeProducts() {
       const priceVal = parseFloat(priceText.replace(/[^0-9.]/g, '')) || 0;
       
       let imageUrls: string[] = [];
-      const ogImage = $$('meta[property="og:image"]').attr('content');
-      if (ogImage) {
-        imageUrls.push(ogImage);
+      
+      $$('.product__swiper-image img').each((_, el) => {
+        const src = $$(el).attr('src');
+        if (src) {
+          imageUrls.push(src.startsWith('http') ? src : `https://aynirape.com${src}`);
+        }
+      });
+      
+      // Fallback
+      if (imageUrls.length === 0) {
+        const ogImage = $$('meta[property="og:image"]').attr('content');
+        if (ogImage && !ogImage.endsWith('og.jpg')) {
+          imageUrls.push(ogImage);
+        }
       }
       
       const localImages: string[] = [];
