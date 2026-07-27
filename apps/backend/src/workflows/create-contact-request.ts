@@ -1,4 +1,4 @@
-import { createWorkflow, createStep, StepResponse } from "@medusajs/framework/workflows-sdk";
+import { createWorkflow, createStep, StepResponse, WorkflowResponse } from "@medusajs/framework/workflows-sdk";
 
 interface CreateContactRequestInput {
   name: string;
@@ -6,8 +6,8 @@ interface CreateContactRequestInput {
   message: string;
 }
 
-const saveContactRequestStep = createStep(
-  "save-contact-request-step",
+const saveContactRequest = createStep(
+  "save-contact-request",
   async (input: CreateContactRequestInput, { container }) => {
     const contactModuleService = container.resolve("contact") as any;
     const contactRequest = await contactModuleService.createContactRequests(input);
@@ -22,7 +22,7 @@ const saveContactRequestStep = createStep(
 export const createContactRequestWorkflow = createWorkflow(
   "create-contact-request",
   (input: CreateContactRequestInput) => {
-    const contactRequest = saveContactRequestStep(input);
-    return contactRequest;
+    const contactRequest = saveContactRequest(input);
+    return new WorkflowResponse(contactRequest);
   }
 );

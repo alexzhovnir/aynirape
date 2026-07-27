@@ -140,7 +140,7 @@ const jsUrl = `${widgetBaseUrl}/inpost-geowidget.js`;
       modal.classList.add("hidden");
 
       document.dispatchEvent(
-        new CustomEvent("inpost:pointSelected", { detail: e.detail })
+        new CustomEvent("inpost:point-selected", { detail: e.detail })
       );
     });
   })();

@@ -50,25 +50,24 @@ async function scrapeBlogs() {
   const { data: html } = await axios.get(BLOG_URL);
   const $ = cheerio.load(html);
   
-  const postLinks: string[] = [];
-  $('a').each((_, el) => {
-    const href = $(el).attr('href');
-    if (!href) return;
+  // Create a map of URL -> Cover Image
+  const postInfo: Record<string, string> = {};
+  
+  $('.blog__item').each((_, el) => {
+    let href = $(el).find('.item__title').attr('href');
+    let imgSrc = $(el).find('.item__preview img').attr('src');
     
-    // Support both relative and absolute paths
-    const isBlogLink = (href.startsWith('/blog/') || href.startsWith('https://aynirape.com/blog/')) 
-      && !href.endsWith('/blog/') 
-      && href !== '/blog' 
-      && href !== 'https://aynirape.com/blog';
-      
-    if (isBlogLink) {
+    if (href) {
       const fullUrl = href.startsWith('http') ? href : `https://aynirape.com${href}`;
-      if (!postLinks.includes(fullUrl)) {
-        postLinks.push(fullUrl);
+      if (imgSrc) {
+         postInfo[fullUrl] = imgSrc.startsWith('http') ? imgSrc : `https://aynirape.com${imgSrc}`;
+      } else {
+         postInfo[fullUrl] = '';
       }
     }
   });
 
+  const postLinks = Object.keys(postInfo);
   console.log(`Found ${postLinks.length} posts.`);
 
   for (const link of postLinks) {
@@ -81,11 +80,20 @@ async function scrapeBlogs() {
       const slug = slugify(title, { lower: true, strict: true });
       
       let coverImage = '';
-      const ogImage = $$('meta[property="og:image"]').attr('content');
-      if (ogImage) {
-        const ext = path.extname(new URL(ogImage).pathname) || '.jpg';
+      const actualCoverSrc = postInfo[link];
+      
+      if (actualCoverSrc) {
+        const ext = path.extname(new URL(actualCoverSrc).pathname) || '.webp';
         const filename = `${slug}-cover${ext}`;
-        coverImage = await downloadImage(ogImage, filename);
+        coverImage = await downloadImage(actualCoverSrc, filename);
+      } else {
+        // Fallback
+        const ogImage = $$('meta[property="og:image"]').attr('content');
+        if (ogImage && !ogImage.endsWith('og.jpg')) {
+          const ext = path.extname(new URL(ogImage).pathname) || '.jpg';
+          const filename = `${slug}-cover${ext}`;
+          coverImage = await downloadImage(ogImage, filename);
+        }
       }
 
       const contentHtml = $$('article').html() || $$('.post-content').html() || $$('main').html() || '';

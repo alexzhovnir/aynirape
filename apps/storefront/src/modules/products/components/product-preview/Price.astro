@@ -8,9 +8,13 @@ interface Props {
 const { priceType, originalPrice, calculatedPrice } = Astro.props;
 ---
 
-<>
-  {priceType === "sale" && <p data-testid="original-price">{originalPrice}</p>}
-  <p data-testid="price">
+<div class="flex items-center gap-2">
+  {priceType === "sale" && (
+    <p data-testid="original-price" class="text-sm text-[var(--color-text-muted)] line-through font-normal">
+      {originalPrice}
+    </p>
+  )}
+  <p data-testid="price" class={priceType === "sale" ? "text-red-600" : ""}>
     {calculatedPrice}
   </p>
-</>
+</div>

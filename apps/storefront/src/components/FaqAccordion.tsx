@@ -37,38 +37,43 @@ const faqs: FaqItem[] = [
 ];
 
 export const FaqAccordion: React.FC = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleFaq = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <div className="max-w-3xl mx-auto divide-y divide-[var(--color-border-subtle)]">
+    <div className="max-w-4xl mx-auto flex flex-col gap-4">
       {faqs.map((faq, index) => (
-        <div key={index} className="py-5">
+        <div 
+          key={index} 
+          className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-2xl overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md"
+        >
           <button
             onClick={() => toggleFaq(index)}
-            className="flex justify-between items-center w-full text-left font-serif-heading font-bold text-lg text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] focus:outline-none py-1 transition-colors cursor-pointer"
+            className="flex justify-between items-center w-full text-left font-serif-heading font-bold text-[17px] text-[var(--color-text-primary)] focus:outline-none py-5 px-6 transition-colors cursor-pointer group"
           >
             <span>{faq.question}</span>
-            <span className="ml-6 flex-shrink-0 text-[var(--color-accent-gold)]">
-              {openIndex === index ? (
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
-                </svg>
-              ) : (
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12M6 12h12" />
-                </svg>
-              )}
+            <span className={`ml-6 flex-shrink-0 rounded-full p-2 flex items-center justify-center w-8 h-8 transition-colors duration-300 ${openIndex === index ? 'bg-[var(--color-accent-gold)] text-stone-950' : 'bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] text-[var(--color-text-muted)] group-hover:border-[var(--color-accent-gold)] group-hover:text-[var(--color-accent-gold)]'}`}>
+              <svg 
+                className={`h-4 w-4 transition-transform duration-300 ${openIndex === index ? 'rotate-135' : ''}`} 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
             </span>
           </button>
-          {openIndex === index && (
-            <div className="mt-3 pr-8">
-              <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed">{faq.answer}</p>
-            </div>
-          )}
+          <div 
+            className={`transition-all duration-300 ease-in-out px-6 ${
+              openIndex === index ? 'max-h-96 pb-6 opacity-100' : 'max-h-0 opacity-0'
+            }`}
+          >
+            <p className="text-[var(--color-text-secondary)] text-[15px] leading-relaxed border-t border-[var(--color-border-subtle)] pt-4">{faq.answer}</p>
+          </div>
         </div>
       ))}
     </div>

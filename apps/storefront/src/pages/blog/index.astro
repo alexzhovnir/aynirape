@@ -7,7 +7,7 @@ import Breadcrumbs from "@components/Breadcrumbs.astro";
 import { getRegion } from "../../lib/data/regions";
 import { listProducts } from "../../lib/data/products";
 
-const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "de";
+const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "gb";
 
 const slugOf = (id: string) => id.replace(/\/index$/, "");
 

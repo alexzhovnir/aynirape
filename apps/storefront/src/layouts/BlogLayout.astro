@@ -24,7 +24,7 @@ interface Props {
 }
 
 const SITE_NAME = "AyniRape";
-const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "de";
+const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "gb";
 
 const {
   title,
@@ -74,6 +74,7 @@ const regionId = region?.id || null;
     <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonicalUrl.href} />
+    <meta name="robots" content="noindex, nofollow" />
 
     {alternates.map((a) => (
       <link rel="alternate" hreflang={a.lang} href={new URL(a.href, site).href} />

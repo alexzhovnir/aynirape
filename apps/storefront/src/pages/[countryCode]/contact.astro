@@ -2,15 +2,18 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
 
 const { countryCode } = Astro.params;
+
+const t = useTranslations(countryCode);
 ---
 
 <Layout
-  title="Contact Us - Customer Care & Inquiries"
-  description="Get in touch with the Ayni Rapé team for questions about our shamanic products, order support, or custom ceremony supplies."
+  title={t("seo.contact.title")}
+  description={t("seo.contact.description")}
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
     <!-- Breadcrumbs Nav -->
@@ -24,13 +27,13 @@ const { countryCode } = Astro.params;
     <!-- Header Section -->
     <div class="text-center max-w-3xl mx-auto mb-16">
       <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
-        CUSTOMER CARE & SUPPORT
+        {t("contact.hero.subtitle")}
       </span>
       <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
-        Get in Touch <span class="italic font-normal text-[var(--color-accent-gold)]">With Us</span>
+        {t("contact.hero.title")} <span class="italic font-normal text-[var(--color-accent-gold)]">{t("contact.hero.title_italic")}</span>
       </h1>
       <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
-        Have questions about our Amazonian blends, shipping times, or application guidance? We are here to assist your journey.
+        {t("contact.hero.desc")}
       </p>
     </div>
 
@@ -43,9 +46,9 @@ const { countryCode } = Astro.params;
           <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
             ✉️
           </div>
-          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">Direct Email</h2>
+          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">{t("contact.cards.email_title")}</h2>
           <p class="text-xs text-[var(--color-text-secondary)] mb-4 leading-relaxed">
-            Our support team usually responds within 24 business hours.
+            {t("contact.cards.email_desc")}
           </p>
           <a
             href="mailto:info@aynirape.com"
@@ -60,9 +63,9 @@ const { countryCode } = Astro.params;
           <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
             📷
           </div>
-          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">Instagram Community</h2>
+          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">{t("contact.cards.social_title")}</h2>
           <p class="text-xs text-[var(--color-text-secondary)] mb-4 leading-relaxed">
-            Follow our ceremonial updates, tribal origins, and educational posts.
+            {t("contact.cards.social_desc")}
           </p>
           <a
             href="https://www.instagram.com/ayni_rapeh"
@@ -79,9 +82,9 @@ const { countryCode } = Astro.params;
           <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
             🤝
           </div>
-          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">Wholesale & Custom Orders</h2>
+          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">{t("contact.cards.wholesale_title")}</h2>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Are you a facilitator, store owner, or space holder looking for custom quantities or silver Tepi creations? Write to us for special terms.
+            {t("contact.cards.wholesale_desc")}
           </p>
         </div>
       </div>
@@ -89,17 +92,17 @@ const { countryCode } = Astro.params;
       <!-- Right Column: Interactive Form (7 Cols) -->
       <div class="lg:col-span-7 bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 lg:p-12 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
         <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-2">
-          Send Us a Message
+          {t("contact.form.title")}
         </h2>
         <p class="text-xs text-[var(--color-text-secondary)] mb-8 leading-relaxed">
-          Fill out the form below and we will get back to you as soon as possible.
+          {t("contact.form.desc")}
         </p>
 
         <form id="contact-form" class="space-y-6">
           <div class="grid sm:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label for="name" class="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-                Your Name <span class="text-red-500">*</span>
+                {t("contact.form.name")} <span class="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -113,7 +116,7 @@ const { countryCode } = Astro.params;
 
             <div class="space-y-2">
               <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-                Email Address <span class="text-red-500">*</span>
+                {t("contact.form.email")} <span class="text-red-500">*</span>
               </label>
               <input
                 type="email"
@@ -128,7 +131,7 @@ const { countryCode } = Astro.params;
 
           <div class="space-y-2">
             <label for="subject" class="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-              Topic / Inquiry
+              {t("contact.form.subject")}
             </label>
             <select
               id="subject"
@@ -144,7 +147,7 @@ const { countryCode } = Astro.params;
 
           <div class="space-y-2">
             <label for="message" class="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-              Your Message <span class="text-red-500">*</span>
+              {t("contact.form.message")} <span class="text-red-500">*</span>
             </label>
             <textarea
               id="message"
@@ -161,13 +164,13 @@ const { countryCode } = Astro.params;
             id="btn-submit-contact"
             class="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold text-xs uppercase tracking-wider rounded-full transition-all duration-300 shadow-md cursor-pointer flex items-center justify-center gap-2"
           >
-            <span>Send Message</span>
+            <span>{t("contact.form.submit")}</span>
             <span>&rarr;</span>
           </button>
         </form>
 
         <div id="contact-success-msg" class="hidden mt-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-xs font-medium text-center">
-          Thank you! Your message has been sent successfully. We will reply via email shortly.
+          {t("contact.form.success")}
         </div>
       </div>
     </div>

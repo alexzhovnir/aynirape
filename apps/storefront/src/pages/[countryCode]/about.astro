@@ -2,15 +2,18 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
 
 const { countryCode } = Astro.params;
+
+const t = useTranslations(countryCode);
 ---
 
 <Layout
-  title="About Us - Our Mission, Ancestral Roots & Story"
-  description="Learn about Ayni Rapé, our history with Amazonian sacred herbs, our partnerships with indigenous tribes, and our mission to provide authentic shamanic supplies in Europe."
+  title={t("seo.about.title")}
+  description={t("seo.about.description")}
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
     <!-- Breadcrumbs Nav -->
@@ -24,13 +27,13 @@ const { countryCode } = Astro.params;
     <!-- Top Hero Banner -->
     <div class="text-center max-w-3xl mx-auto mb-16">
       <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
-        AYNI RAPÉ &bull; ANCESTRAL HERITAGE
+        {t("about.hero.subtitle")}
       </span>
       <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
-        Our Mission, Story & <span class="italic font-normal text-[var(--color-accent-gold)]">Sacred Reciprocity</span>
+        {t("about.hero.title")} <span class="italic font-normal text-[var(--color-accent-gold)]">{t("about.hero.title_italic")}</span>
       </h1>
       <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
-        Connecting European practitioners with authentic Amazonian plant medicine, ethically harvested by 5 indigenous tribes of Peru and Brazil.
+        {t("about.hero.desc")}
       </p>
     </div>
 
@@ -51,15 +54,15 @@ const { countryCode } = Astro.params;
           <div class="absolute bottom-6 left-6 right-6 p-6 rounded-2xl bg-[var(--color-bg-surface-elevated)]/95 backdrop-blur-md border border-[var(--color-border-subtle)] shadow-lg grid grid-cols-3 gap-4 text-center">
             <div>
               <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">5</span>
-              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Native Tribes</span>
+              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about.stats.tribes")}</span>
             </div>
             <div>
               <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">100%</span>
-              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Direct Trade</span>
+              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about.stats.trade")}</span>
             </div>
             <div>
               <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">1% CO₂</span>
-              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">Climate Pledge</span>
+              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about.stats.pledge")}</span>
             </div>
           </div>
         </div>
@@ -68,9 +71,9 @@ const { countryCode } = Astro.params;
       <!-- Right Column: Rich Expanded Text -->
       <div class="flex flex-col gap-6">
         <div>
-          <span class="text-xs font-bold uppercase tracking-[0.28em] text-[var(--color-accent-gold)] block mb-1">THE ORIGIN OF AYNI</span>
+          <span class="text-xs font-bold uppercase tracking-[0.28em] text-[var(--color-accent-gold)] block mb-1">{t("about.story.subtitle")}</span>
           <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
-            The Cosmic Law of Reciprocity
+            {t("about.story.title")}
           </h2>
         </div>
 
@@ -80,7 +83,7 @@ const { countryCode } = Astro.params;
           </p>
 
           <p>
-            Our journey began in 2020 when we were first introduced to the profound healing power of Râpé in the heart of South America. Experiencing its grounding clarity, emotional release, and spiritual alignment firsthand transformed our path. Over years of immersive practice, fasting, and studying beside revered Amazonian healers and receiving the formal blessing of a renowned Maestro Curandero, we were entrusted with the honor of sharing these sacred herbs across Europe.
+            Our journey began in 2020 when we were first introduced to the profound healing power of <a href={`/${countryCode}/store/category/rape`} class="text-[var(--color-accent-gold)] hover:underline font-semibold" title="Amazonian Rapé">Râpé</a> in the heart of South America. Experiencing its grounding clarity, emotional release, and spiritual alignment firsthand transformed our path. Over years of immersive practice, fasting, and studying beside revered Amazonian healers and receiving the formal blessing of a renowned Maestro Curandero, we were entrusted with the honor of sharing these sacred herbs across Europe.
           </p>
 
           <p>
@@ -88,7 +91,7 @@ const { countryCode } = Astro.params;
           </p>
 
           <p>
-            Beyond the powders themselves, we partner with master artisans who hand-craft our Tepi and Kuripe applicators from sustainably harvested Sawo wood, Teak, and Bamboo, as well as energy-conducting Sterling Silver. Every purchase directly feeds back into tribal welfare, supporting community autonomy, land preservation, and economic self-determination for Amazonian families.
+            Beyond the powders themselves, we partner with master artisans who hand-craft our <a href={`/${countryCode}/store/category/kuripes-tepis`} class="text-[var(--color-accent-gold)] hover:underline font-semibold" title="Handcrafted Tepi and Kuripe Applicators">Tepi and Kuripe applicators</a> from sustainably harvested Sawo wood, Teak, and Bamboo, as well as energy-conducting Sterling Silver. Every purchase directly feeds back into tribal welfare, supporting community autonomy, land preservation, and economic self-determination for Amazonian families.
           </p>
         </div>
       </div>

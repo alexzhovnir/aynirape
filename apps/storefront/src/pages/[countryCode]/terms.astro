@@ -2,15 +2,18 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
 
 const { countryCode } = Astro.params;
+
+const t = useTranslations(countryCode);
 ---
 
 <Layout
-  title="Terms & Conditions"
-  description="Terms and conditions for purchasing sacred Amazonian shamanic supplies, Tepi, Kuripe, and herbal mixtures at Ayni Rapé."
+  title={t("seo.terms.title")}
+  description={t("seo.terms.description")}
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
     <!-- Breadcrumbs Nav -->

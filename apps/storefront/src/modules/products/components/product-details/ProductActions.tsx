@@ -1,6 +1,7 @@
 import { sdk } from "@lib/sdk";
 import { addToCart } from "@lib/stores/cart";
 import { isProductInStock } from "@lib/utils/is-product-in-stock";
+import { convertToLocale } from "@lib/utils/money";
 import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 
@@ -15,6 +16,10 @@ type Variant = {
   manage_inventory: boolean | null;
   allow_backorder: boolean | null;
   inventory_quantity?: number | null;
+  calculated_price?: {
+    calculated_amount: number;
+    currency_code: string;
+  };
 };
 
 interface Props {
@@ -99,10 +104,23 @@ export const ProductActions = ({
     return variants.find((variant) =>
       variant.options?.every(
         (optionValue) =>
-          optionValue.id === selectedOptions[optionValue.option_id!],
+        optionValue.id === selectedOptions[optionValue.option_id!],
       ),
     );
   }, [selectedOptions, variants, options]);
+
+  // Update the static price in the DOM when the selected variant changes
+  useEffect(() => {
+    if (selectedVariant?.calculated_price) {
+      const priceElement = document.getElementById("product-price");
+      if (priceElement) {
+        priceElement.textContent = convertToLocale({
+          amount: selectedVariant.calculated_price.calculated_amount,
+          currencyCode: selectedVariant.calculated_price.currency_code,
+        });
+      }
+    }
+  }, [selectedVariant]);
 
   const handleOptionSelect = (optionId: string, valueId: string) => {
     setSelectedOptions((prev) => ({ ...prev, [optionId]: valueId }));
@@ -151,7 +169,7 @@ export const ProductActions = ({
                   className={clsx(
                     "py-2.5 px-5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-200 min-h-[44px] box-border border",
                     isSelected
-                      ? "bg-[var(--color-accent-gold)] text-stone-950 font-bold border-[var(--color-accent-gold)] shadow-md"
+                      ? "bg-[var(--color-text-primary)] text-[var(--color-bg-primary)] font-bold border-[var(--color-text-primary)] shadow-md"
                       : "bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)]"
                   )}
                   onClick={() => handleOptionSelect(option.id, value.id)}
@@ -166,7 +184,7 @@ export const ProductActions = ({
 
       <button
         className={clsx(
-          "bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold py-4 px-8 rounded-full cursor-pointer hover:shadow-md transition-all duration-200 uppercase tracking-wider text-xs shadow-md",
+          "bg-[var(--color-text-primary)] hover:bg-[var(--color-accent-gold)] text-[var(--color-bg-primary)] hover:text-[var(--color-text-primary)] font-bold py-4 px-8 rounded-full cursor-pointer hover:shadow-md transition-all duration-300 uppercase tracking-wider text-xs shadow-md",
           {
             "opacity-50 cursor-not-allowed": isAddToCardButtonDisabled,
           },

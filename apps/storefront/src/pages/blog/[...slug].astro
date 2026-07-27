@@ -43,12 +43,13 @@ const jsonLd = {
   image: post.data.coverImage ? new URL(post.data.coverImage, site).href : undefined,
   mainEntityOfPage: url,
   publisher: { "@type": "Organization", name: "AyniRape" },
+  author: { "@type": "Person", name: post.data.author || "Ayni Rapé" },
 };
 
 const fmtDate = (d: Date) =>
   d.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 
-const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "de";
+const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "gb";
 const region = await getRegion(DEFAULT_REGION);
 let featuredProducts: any[] = [];
 if (region) {
@@ -98,7 +99,7 @@ if (region) {
     )}
   </div>
 
-  <div class="grid gap-12 lg:grid-cols-[240px_1fr] xl:grid-cols-[240px_1fr_260px] items-start w-full">
+  <div class="grid gap-12 lg:grid-cols-[240px_1fr] xl:grid-cols-[240px_1fr_260px] items-start w-full min-w-0">
     <!-- Left Sidebar: TOC -->
     <aside class="self-start sticky top-28 hidden lg:block space-y-8">
       {toc.length > 0 && (
@@ -128,7 +129,7 @@ if (region) {
     </aside>
 
     <!-- Main article container -->
-    <article class="prose dark:prose-invert max-w-none text-[var(--color-text-primary)]">
+    <article class="prose dark:prose-invert max-w-none text-[var(--color-text-primary)] min-w-0">
       <h1 class="mt-0 font-serif-heading font-bold text-[var(--color-text-primary)]">{post.data.title}</h1>
       <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-[var(--color-text-muted)] mb-8 mt-2">
         <span>{fmtDate(post.data.publishedDate)}</span>

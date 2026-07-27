@@ -98,12 +98,21 @@ async function scrapeProducts() {
       
       let imageUrls: string[] = [];
       
-      $$('.product__swiper-image img').each((_, el) => {
+      $$('.swiper-wrapper img').each((_, el) => {
         const src = $$(el).attr('src');
         if (src) {
           imageUrls.push(src.startsWith('http') ? src : `https://aynirape.com${src}`);
         }
       });
+      
+      if (imageUrls.length === 0) {
+        $$('.product__swiper-image img').each((_, el) => {
+          const src = $$(el).attr('src');
+          if (src) {
+            imageUrls.push(src.startsWith('http') ? src : `https://aynirape.com${src}`);
+          }
+        });
+      }
       
       // Fallback
       if (imageUrls.length === 0) {

@@ -42,7 +42,7 @@ export const LanguageSelect = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const normalizedCode = countryCode ? countryCode.toLowerCase() : "de";
+  const normalizedCode = countryCode ? countryCode.toLowerCase() : "gb";
 
   // Ensure available countries list contains current country if missing
   const allCountries = [...countries];
@@ -116,6 +116,12 @@ export const LanguageSelect = ({
     const pathname = window.location.pathname;
     const segments = pathname.split("/").filter(Boolean);
 
+    // If on a non-commerce or unlocalized page like /blog, changing language redirects to the new region's home
+    if (segments.length > 0 && (segments[0] === "blog" || segments[0] === "keystatic")) {
+      window.location.href = `/${targetCode}`;
+      return;
+    }
+
     if (segments.length > 0 && segments[0].length === 2) {
       segments[0] = targetCode;
     } else {
@@ -131,13 +137,14 @@ export const LanguageSelect = ({
     window.location.href = newPath;
   };
 
+
   return (
     <div className={`relative inline-block text-left ${className}`} ref={dropdownRef}>
       <button
         ref={buttonRef}
         type="button"
         onClick={handleToggle}
-        className="text-xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] bg-[var(--color-bg-surface-elevated)] hover:bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] px-2.5 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[var(--color-accent-gold)]"
+        className="text-xs font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] bg-[var(--color-bg-surface-elevated)] hover:bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] h-10 px-3.5 rounded-full transition-all duration-300 flex items-center gap-1.5 cursor-pointer shadow-xs focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-label="Select language"

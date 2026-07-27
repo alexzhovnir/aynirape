@@ -61,10 +61,51 @@ const { cheapestPrice } = getProductPrice({
   productVariants: variants ?? [],
 });
 
-// Split description into short selling snippet vs full detailed text
-const descriptionParagraphs = (description ?? "").split("\n\n").filter(Boolean);
+const descriptionParagraphs = (description ?? "").split(/\r?\n\n/).filter(Boolean);
 const shortSellingDescription = descriptionParagraphs[0] || description || "";
-const detailedStoryParagraphs = descriptionParagraphs.length > 1 ? descriptionParagraphs.slice(1) : [shortSellingDescription];
+let detailedStoryParagraphs = descriptionParagraphs.length > 1 ? descriptionParagraphs.slice(1) : [shortSellingDescription];
+
+// Provide contextual fallback descriptions if the product lacks a detailed description
+if (!detailedStoryParagraphs[0] || detailedStoryParagraphs[0].trim().length < 20) {
+  const t = title?.toLowerCase() || "";
+  if (t.includes("kuripe")) {
+    detailedStoryParagraphs = [
+      "This traditional Kuripe is an essential personal tool for the self-administration of sacred Rapé medicine.",
+      "Handcrafted with deep reverence for indigenous traditions, it is designed to seamlessly connect your breath with the spirit of the forest. The shape and angle are carefully crafted to ensure a precise, smooth, and grounded application.",
+      "By working with this tool, you invite clarity, focus, and a profound sense of presence into your daily spiritual practice."
+    ];
+  } else if (t.includes("tepi")) {
+    detailedStoryParagraphs = [
+      "The Tepi is a sacred applicator designed for sharing Rapé medicine with another person in ceremony or deep energetic work.",
+      "Crafted by skilled artisans, the extended length of the pipe allows for a powerful and guided transfer of breath and intention from the server to the receiver.",
+      "This tool embodies the spirit of connection, healing, and mutual trust, making it a vital piece for facilitators and practitioners."
+    ];
+  } else if (t.includes("rape") || t.includes("rapé") || t.includes("blend")) {
+    detailedStoryParagraphs = [
+      "This sacred Rapé blend is meticulously prepared by indigenous tribes of the Amazon, using ancestral recipes passed down through generations.",
+      "Combining wild-harvested Mapacho with profound master plant ashes, it works deeply on the energetic body to clear blockages, quiet the mind, and anchor the spirit.",
+      "Approach this medicine with respect and clear intention to receive its grounding and heart-opening teachings."
+    ];
+  } else if (t.includes("agua") || t.includes("florida") || t.includes("cologne")) {
+    detailedStoryParagraphs = [
+      "A classic ceremonial staple, this aromatic cologne is traditionally used by healers for energy clearing, aura protection, and consecrating sacred space.",
+      "Its vibrant, uplifting scent acts as an energetic reset, instantly raising the vibration of a room or your personal energy field.",
+      "Use it before rituals, meditation, or simply as an everyday tool to refresh the mind and spirit."
+    ];
+  } else if (t.includes("palo santo") || t.includes("incense") || t.includes("smudge")) {
+    detailedStoryParagraphs = [
+      "Sustainably and ethically sourced, this aromatic botanical is a cornerstone of traditional space-clearing practices.",
+      "When burned, the fragrant smoke clears stagnant energies, offering a sweet, woody scent that instantly brings peace and clarity to any environment.",
+      "Perfect for preparing your altar or simply unwinding after a long day in a pure, peaceful atmosphere."
+    ];
+  } else {
+    detailedStoryParagraphs = [
+      "This authentic piece is sourced with the utmost respect for nature and indigenous traditions.",
+      "Crafted to support your spiritual practice, it serves as a powerful anchor for your intentions and daily rituals.",
+      "Integrate it into your ceremonies to deepen your connection to ancestral wisdom and inner peace."
+    ];
+  }
+}
 
 // Find bundle / set items (e.g., Kuripe pipe + Agua de Florida + Palo Santo)
 const kuripeBundleItem = allProducts.find(p => p.handle?.includes('kuripe') || p.categories?.some(c => c.handle?.includes('tepi')));
@@ -77,6 +118,10 @@ const schemaData = {
   "image": images && images.length > 0 ? images.map((img) => img.url) : (thumbnail ? [thumbnail] : []),
   "description": description,
   "sku": variants?.[0]?.sku || productId,
+  "brand": {
+    "@type": "Brand",
+    "name": "Ayni Rapé"
+  },
   "offers": {
     "@type": "AggregateOffer",
     "priceCurrency": cheapestPrice?.currency_code?.toUpperCase() || "EUR",
@@ -131,10 +176,10 @@ const schemaData = {
                 <!-- Badges & Category -->
                 <div>
                   <div class="flex flex-wrap items-center gap-2 mb-3">
-                    <span class="bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-[var(--color-accent-gold)]/20">
+                    <span class="bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-[var(--color-accent-gold)]">
                       ETHICALLY SOURCED
                     </span>
-                    <span class="bg-emerald-500/10 text-emerald-500 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-emerald-500/20">
+                    <span class="bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-emerald-500">
                       IN STOCK
                     </span>
                   </div>
@@ -146,7 +191,7 @@ const schemaData = {
 
                 <!-- Price Display -->
                 <div class="flex items-baseline gap-4 border-y border-[var(--color-border-subtle)] py-4">
-                  <span class="text-3xl md:text-4xl font-bold text-[var(--color-accent-gold)]">
+                  <span id="product-price" class="text-3xl md:text-4xl font-bold text-[var(--color-accent-gold)]">
                     {cheapestPrice?.calculated_price}
                   </span>
                   <span class="text-xs text-[var(--color-text-muted)]">Includes EU VAT. Fast Dispatch.</span>
@@ -355,7 +400,7 @@ const schemaData = {
 
               <div id="related-products-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-4 scroll-smooth snap-x snap-mandatory -mx-4 px-4">
                 {relatedProducts.map((p) => (
-                  <div class="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] snap-start shrink-0">
+                  <div class="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start">
                     <ProductPreview
                       id={p.id}
                       handle={p.handle}

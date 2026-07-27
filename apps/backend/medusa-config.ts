@@ -16,6 +16,33 @@ module.exports = defineConfig({
   modules: [
     {
       resolve: "./src/modules/contact",
-    }
+    },
+    {
+      resolve: "@medusajs/payment",
+      options: {
+        providers: [
+          {
+            resolve: "./src/modules/paypal",
+            id: "paypal",
+            options: {
+              clientId: process.env.PAYPAL_CLIENT_ID || "test",
+              clientSecret: process.env.PAYPAL_CLIENT_SECRET || "test",
+              sandbox: process.env.NODE_ENV !== "production",
+            },
+          },
+          {
+            resolve: "./src/modules/bank-transfer",
+            id: "bank-transfer",
+            options: {
+              bankName: process.env.BANK_NAME || "Revolut Business",
+              iban: process.env.BANK_IBAN || "",
+              swift: process.env.BANK_SWIFT || "",
+              accountHolder: process.env.BANK_ACCOUNT_HOLDER || "Ayni Rapé",
+            },
+          },
+        ],
+      },
+    },
   ]
 })
+

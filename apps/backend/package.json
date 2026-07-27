@@ -37,6 +37,7 @@
     "zod": "4.2.0"
   },
   "devDependencies": {
+    "@medusajs/eslint-plugin": "^2.18.0",
     "@medusajs/test-utils": "2.17.2",
     "@swc/core": "^1.7.28",
     "@swc/jest": "^0.2.36",
@@ -51,7 +52,9 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
     "vite": "^5.4.14",
-    "yalc": "^1.0.0-pre.53"
+    "yalc": "^1.0.0-pre.53",
+    "jiti": "^2.4.2",
+    "@medusajs/eslint-plugin": "2.17.2"
   },
   "engines": {
     "node": ">=20"

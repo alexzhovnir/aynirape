@@ -2,15 +2,18 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
 
 const { countryCode } = Astro.params;
+
+const t = useTranslations(countryCode);
 ---
 
 <Layout
-  title="Privacy Policy - Data Protection & Security Commitment"
-  description="Learn how Ayni Rapé protects your personal data, order information, and privacy in compliance with EU GDPR standards."
+  title={t("seo.privacy.title")}
+  description={t("seo.privacy.description")}
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
     <!-- Breadcrumbs Nav -->

@@ -49,7 +49,7 @@ const sidebarAuthors = Array.from(authorsMap.entries()).map(([name, info]) => ({
   count: info.count,
 }));
 
-const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "de";
+const DEFAULT_REGION = import.meta.env.DEFAULT_REGION ?? "gb";
 const region = await getRegion(DEFAULT_REGION);
 let featuredProducts: any[] = [];
 if (region) {

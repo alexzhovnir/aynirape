@@ -32,7 +32,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-      className="relative flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:scale-105 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]"
+      className="relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] hover:bg-[var(--color-bg-surface)] shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]"
     >
       {theme === "dark" ? (
         // Sun Icon (Switch to Light)

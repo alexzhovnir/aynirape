@@ -21,6 +21,7 @@
     "@keystatic/core": "^0.5.51",
     "@medusajs/js-sdk": "^2.13.1",
     "@nanostores/react": "^1.0.0",
+    "@paypal/react-paypal-js": "^10.2.0",
     "@stripe/react-stripe-js": "^5.6.1",
     "@stripe/stripe-js": "^8.9.0",
     "@tailwindcss/vite": "^4.1.18",

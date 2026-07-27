@@ -6,6 +6,7 @@ import type { RegionCountry } from "@modules/checkout/components/AddressFields";
 import { CheckoutPage } from "@modules/checkout/components/CheckoutPage";
 import InPostGeoWidget from "@modules/checkout/components/InPostGeoWidget.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
 
@@ -42,9 +43,11 @@ try {
 } catch (err) {
   console.error("Failed to fetch region countries for checkout:", err);
 }
+
+const t = useTranslations(countryCode);
 ---
 
-<Layout title="Checkout" description="Complete your purchase." noindex>
+<Layout title={t("seo.checkout.title")} description={t("seo.checkout.description")} noindex>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
     <Breadcrumbs
       items={[

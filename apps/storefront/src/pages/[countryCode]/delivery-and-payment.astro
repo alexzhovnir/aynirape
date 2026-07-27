@@ -2,15 +2,18 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
 
 const { countryCode } = Astro.params;
+
+const t = useTranslations(countryCode);
 ---
 
 <Layout
-  title="Delivery & Payment Terms - Fast EU Express Shipping"
-  description="Learn about our shipping options, delivery times, accepted secure payment methods, and return policy at Ayni Rapé."
+  title={t("seo.delivery.title")}
+  description={t("seo.delivery.description")}
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
     <!-- Breadcrumbs Nav -->
@@ -24,13 +27,13 @@ const { countryCode } = Astro.params;
     <!-- Header Section -->
     <div class="text-center max-w-3xl mx-auto mb-16">
       <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
-        TRANSPARENCY & FULFILLMENT
+        {t("delivery.hero.subtitle")}
       </span>
       <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
-        Delivery & Payment <span class="italic font-normal text-[var(--color-accent-gold)]">Terms</span>
+        {t("delivery.hero.title")} <span class="italic font-normal text-[var(--color-accent-gold)]">{t("delivery.hero.title_italic")}</span>
       </h1>
       <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
-        Everything you need to know about our EU express shipping, secure payment options, and climate commitments.
+        {t("delivery.hero.desc")}
       </p>
     </div>
 
@@ -39,9 +42,9 @@ const { countryCode } = Astro.params;
       <!-- Section 1: Delivery Options -->
       <div>
         <div class="mb-8">
-          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">SHIPPING METHODS</span>
-          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-1">Delivery Options</h2>
-          <p class="text-xs text-[var(--color-text-secondary)] mt-1">We deliver across Europe with tracked, discreet packaging.</p>
+          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("delivery.shipping.subtitle")}</span>
+          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-1">{t("delivery.shipping.title")}</h2>
+          <p class="text-xs text-[var(--color-text-secondary)] mt-1">{t("delivery.shipping.desc")}</p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-8">
@@ -113,9 +116,9 @@ const { countryCode } = Astro.params;
       <!-- Section 2: Payment Methods -->
       <div>
         <div class="mb-8">
-          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">PAYMENT SECURITY</span>
-          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-1">Accepted Payment Methods</h2>
-          <p class="text-xs text-[var(--color-text-secondary)] mt-1">All transactions are encrypted with 256-bit SSL security.</p>
+          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("delivery.payment.subtitle")}</span>
+          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-1">{t("delivery.payment.title")}</h2>
+          <p class="text-xs text-[var(--color-text-secondary)] mt-1">{t("delivery.payment.desc")}</p>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -186,7 +189,7 @@ const { countryCode } = Astro.params;
         </div>
         <div class="space-y-3 text-xs text-[var(--color-text-secondary)] leading-relaxed max-w-3xl">
           <p>
-            Returns are accepted for products in the categories <strong>"Tepi and Kuripe"</strong> and <strong>"Ornaments and decoration"</strong> in the event of damage having occurred during shipping or manufacturing defects.
+            Returns are accepted for products in the categories <strong><a href={`/${countryCode}/store/category/kuripes-tepis`} class="hover:text-[var(--color-accent-gold)] transition-colors underline decoration-[var(--color-border-subtle)] underline-offset-4">"Tepi and Kuripe"</a></strong> and <strong>"Ornaments and decoration"</strong> in the event of damage having occurred during shipping or manufacturing defects.
           </p>
           <p>
             If you receive a damaged item, please email us at <a href="mailto:info@aynirape.com" class="text-[var(--color-accent-gold)] font-bold hover:underline">info@aynirape.com</a> within 7 days of delivery with photos of the issue. Our support team will resolve it promptly with a replacement or full refund.

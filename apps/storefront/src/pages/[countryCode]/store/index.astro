@@ -5,10 +5,12 @@ import { listProducts, listCategories } from "@lib/data/products";
 import { getRegionParams } from "@lib/params/region-params";
 import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
 
 const { countryCode } = Astro.params;
+const t = useTranslations(countryCode);
 
 const region = await getRegion(countryCode);
 
@@ -53,17 +55,18 @@ function getCategoryIcon(name: string, handle: string) {
 ---
 
 <Layout
-  title="All Products - Shamanic Supplies Shop"
-  description="Explore our authentic Amazonian shamanic supplies, including Rapé blends, Tepis, Kuripes, sacred Palo Santo, and ceremony accessories."
+  title={t("seo.store.title")}
+  description={t("seo.store.description")}
 >
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `https://aynirape.com/${countryCode}` },
-      { "@type": "ListItem", position: 2, name: "Shop", item: `https://aynirape.com/${countryCode}/store` },
-    ],
-  })} />
+  <script type="application/ld+json" set:html={JSON.stringify([
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": t("seo.store.title"),
+      "description": t("seo.store.description"),
+      "url": `https://aynirape.com/${countryCode}/store`
+    }
+  ])} />
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
     <!-- Breadcrumbs Nav -->
@@ -78,20 +81,20 @@ function getCategoryIcon(name: string, handle: string) {
     <div class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-12 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
       <div>
         <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
-          SHAMANIC BOTANICALS & TOOLS
+          {t("store.hero.subtitle")}
         </span>
         <h1 class="mt-2 text-3xl sm:text-4xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight">
-          All Products <span class="italic font-normal text-[var(--color-accent-gold)]">Catalogue</span>
+          {t("store.hero.title")} <span class="italic font-normal text-[var(--color-accent-gold)]">{t("store.hero.title_italic")}</span>
         </h1>
         <p class="mt-2 text-xs sm:text-sm text-[var(--color-text-secondary)] max-w-xl leading-relaxed">
-          Ethically sourced directly from indigenous tribes across Peru and Brazil. Delivered fast across Europe.
+          {t("store.hero.desc")}
         </p>
       </div>
 
       <div class="flex items-center gap-3 bg-[var(--color-bg-surface)] px-4 py-2.5 rounded-2xl border border-[var(--color-border-subtle)]">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span class="text-xs font-semibold text-[var(--color-text-primary)]">
-          {products.length} Products Available
+          {products.length} {t("store.products_available")}
         </span>
       </div>
     </div>
@@ -104,7 +107,7 @@ function getCategoryIcon(name: string, handle: string) {
         <!-- Desktop Sidebar Card -->
         <div class="hidden lg:flex flex-col gap-6 sticky top-28 bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
           <div class="flex justify-between items-center pb-3 border-b border-[var(--color-border-subtle)]">
-            <h2 class="text-xs font-bold text-[var(--color-accent-gold)] uppercase tracking-wider">Categories</h2>
+            <h2 class="text-xs font-bold text-[var(--color-accent-gold)] uppercase tracking-wider">{t("store.categories")}</h2>
             <span class="text-[10px] text-[var(--color-text-muted)] font-mono">{categories.length}</span>
           </div>
 
@@ -115,7 +118,7 @@ function getCategoryIcon(name: string, handle: string) {
             >
               <div class="flex items-center gap-2.5">
                 <Fragment set:html={getCategoryIcon("all", "all")} />
-                <span>All Products</span>
+                <span>{t("store.all_products")}</span>
               </div>
               <span class="text-xs font-mono bg-stone-950/20 px-2 py-0.5 rounded-full">{products.length}</span>
             </a>
@@ -138,11 +141,11 @@ function getCategoryIcon(name: string, handle: string) {
           <div class="pt-4 border-t border-[var(--color-border-subtle)] space-y-2 text-[10px] text-[var(--color-text-muted)]">
             <div class="flex items-center gap-2">
               <span>🌿</span>
-              <span>100% Authentic Tribal Recipe</span>
+              <span>{t("store.trust_authentic")}</span>
             </div>
             <div class="flex items-center gap-2">
               <span>📦</span>
-              <span>DHL Express 3–5 Days</span>
+              <span>{t("store.trust_shipping")}</span>
             </div>
           </div>
         </div>
@@ -154,7 +157,7 @@ function getCategoryIcon(name: string, handle: string) {
             class="flex items-center gap-1.5 whitespace-nowrap px-4 py-2.5 rounded-full text-xs text-stone-950 bg-[var(--color-accent-gold)] font-bold transition-all duration-200 cursor-pointer shadow-sm"
           >
             <Fragment set:html={getCategoryIcon("all", "all")} />
-            <span>All Products</span>
+            <span>{t("store.all_products")}</span>
           </a>
           {
             categories?.map((cat) => (

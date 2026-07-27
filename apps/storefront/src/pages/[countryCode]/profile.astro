@@ -3,21 +3,28 @@ import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import { ProfileDashboard } from "@modules/profile/components/ProfileDashboard";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
 
 const { countryCode } = Astro.params;
+
+if (!countryCode) {
+  return Astro.redirect("/not-found");
+}
+
+const t = useTranslations(countryCode);
 ---
 
 <Layout
-  title="My Profile - Ayni Rapé"
-  description="Manage your order history, favorite Amazonian supplies, and reviews in your Ayni Rapé account."
+  title={t("seo.profile.title")}
+  description={t("seo.profile.description")}
+  noindex
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)] min-h-[calc(100vh-140px)]">
     <!-- Breadcrumbs Nav -->
     <Breadcrumbs
       items={[
-        { label: "Home", href: `/${countryCode}` },
         { label: "Account Profile" }
       ]}
     />
