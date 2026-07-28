@@ -32,7 +32,11 @@ export function useTranslations(countryCode: string | undefined) {
       return value;
     }
 
-    // Return the key itself if not found or not a string
+    if (value !== undefined) {
+      return value;
+    }
+
+    // Return the key itself if not found
     return key;
   };
 }
