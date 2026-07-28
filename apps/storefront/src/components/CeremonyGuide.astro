@@ -1,49 +1,52 @@
 ---
+import { useTranslations } from "@lib/i18n/utils";
+const countryCode = Astro.params.countryCode;
+const t = useTranslations(countryCode);
 ---
 
 <div class="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
   <div class="text-center mb-12">
     <h2 class="text-3xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-      The Sacred Ceremony & Application
+      {t("store.ceremony.title")}
     </h2>
     <p class="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed">
-      Râpé is an ancient ceremonial practice rooted in ancestral healing traditions. Approach it with respect, intention, and a focused state of mind.
+      {t("store.ceremony.subtitle")}
     </p>
   </div>
 
   <div class="grid gap-8 md:grid-cols-3">
     <div class="bg-[var(--color-card-bg)] p-8 rounded-3xl border border-[var(--color-card-border)] flex flex-col justify-between shadow-md hover:shadow-xl transition-all duration-300">
       <div>
-        <div class="text-[var(--color-accent-gold)] font-mono text-sm font-bold mb-4 tracking-wider">STEP 01</div>
-        <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-3">Prepare Intention</h3>
+        <div class="text-[var(--color-accent-gold)] font-mono text-sm font-bold mb-4 tracking-wider">{t("store.ceremony.step1")}</div>
+        <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-3">{t("store.ceremony.step1_title")}</h3>
         <p class="text-[var(--color-text-secondary)] text-sm leading-relaxed">
-          Sit comfortably with your back straight to allow energy to flow. Pour a pea-sized amount of powder into your non-dominant palm, set your intention, and bring the pipe to your forehead and heart to express gratitude.
+          {t("store.ceremony.step1_desc")}
         </p>
       </div>
     </div>
 
     <div class="bg-[var(--color-card-bg)] p-8 rounded-3xl border border-[var(--color-card-border)] flex flex-col justify-between shadow-md hover:shadow-xl transition-all duration-300">
       <div>
-        <div class="text-[var(--color-accent-gold)] font-mono text-sm font-bold mb-4 tracking-wider">STEP 02</div>
-        <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-3">The Application</h3>
+        <div class="text-[var(--color-accent-gold)] font-mono text-sm font-bold mb-4 tracking-wider">{t("store.ceremony.step2")}</div>
+        <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-3">{t("store.ceremony.step2_title")}</h3>
         <p class="text-[var(--color-text-secondary)] text-sm leading-relaxed">
-          Inhale deeply and hold your breath. Place the long end of the kuripe pipe in your nostril (or use a tepi for serving another person) and blow the powder in. Inhale and breathe gently through your mouth.
+          {t("store.ceremony.step2_desc")}
         </p>
       </div>
     </div>
 
     <div class="bg-[var(--color-card-bg)] p-8 rounded-3xl border border-[var(--color-card-border)] flex flex-col justify-between shadow-md hover:shadow-xl transition-all duration-300">
       <div>
-        <div class="text-[var(--color-accent-gold)] font-mono text-sm font-bold mb-4 tracking-wider">STEP 03</div>
-        <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-3">Cleanse & Integrate</h3>
+        <div class="text-[var(--color-accent-gold)] font-mono text-sm font-bold mb-4 tracking-wider">{t("store.ceremony.step3")}</div>
+        <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-3">{t("store.ceremony.step3_title")}</h3>
         <p class="text-[var(--color-text-secondary)] text-sm leading-relaxed">
-          Immediately repeat with the second nostril to maintain balance. The active substances absorb within 10–15 minutes. Remain in a calm environment, focus on the warmth and gratitude, and allow integration.
+          {t("store.ceremony.step3_desc")}
         </p>
       </div>
     </div>
   </div>
 
   <div class="mt-8 bg-[var(--color-card-bg)] border border-[var(--color-card-border)] p-6 rounded-2xl text-[var(--color-text-muted)] text-xs leading-relaxed max-w-3xl mx-auto shadow-sm">
-    <span class="font-semibold text-[var(--color-accent-gold)]">Important Disclaimer:</span> The above description is provided for historical, cultural and educational purposes only. We expressly offer our Râpé for incense and ritual burning purposes only. The use and application of our products is solely at the customer's decision, responsibility, and risk.
+    <span class="font-semibold text-[var(--color-accent-gold)]">{t("store.ceremony.disclaimer_title")}</span> {t("store.ceremony.disclaimer_desc")}
   </div>
 </div>

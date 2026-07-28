@@ -1,4 +1,5 @@
 ---
+import { useTranslations } from "../../../../lib/i18n/utils";
 import { getProductPrice } from "../../../../lib/utils/get-product-price";
 import type { ProductVariant } from "../../../../types/global";
 import Thumbnail from "../thumbnail/Thumbnail.astro";
@@ -16,6 +17,7 @@ interface Props {
 
 const { id, handle, variants, thumbnailUrl, imageUrl, title, priority } = Astro.props;
 const countryCode = Astro.params.countryCode;
+const t = useTranslations(countryCode);
 const productSlug = handle || id;
 
 const { cheapestPrice } = getProductPrice({
@@ -42,7 +44,7 @@ const defaultVariantId = variants?.[0]?.id;
     
     <!-- Popular Badge -->
     <div class="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-md bg-[#8C7355] text-white text-[10px] font-semibold uppercase tracking-widest shadow-sm">
-      Popular
+      {t("store.preview.popular")}
     </div>
     
     <Thumbnail imageUrl={thumbnailUrl || imageUrl} title={title} priority={priority} />
@@ -56,7 +58,7 @@ const defaultVariantId = variants?.[0]?.id;
     </div>
     
     <div class="text-[var(--color-accent-gold)] text-[13px] font-medium mt-0.5">
-      In stock
+      {t("store.preview.in_stock")}
     </div>
     
     <div class="flex items-center gap-1.5 text-[13px] mt-1 mb-2">

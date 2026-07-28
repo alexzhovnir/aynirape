@@ -1,4 +1,5 @@
 ---
+import { useTranslations } from "../../../../lib/i18n/utils";
 interface Props {
   material?: string | null;
   origin_country?: string | null;
@@ -12,22 +13,24 @@ interface Props {
 
 const { material, origin_country, type, weight, length, width, height, metadata } =
   Astro.props;
+const countryCode = Astro.params.countryCode;
+const t = useTranslations(countryCode);
 ---
 
 <div class="mb-2">
-  <h3 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-4">Specifications & Origin</h3>
+  <h3 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-4">{t("store.attributes.title")}</h3>
   
   <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
     {metadata?.tribe && (
       <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Tribe / Origin</span>
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">{t("store.attributes.tribe")}</span>
         <strong class="text-[var(--color-text-primary)]">{metadata.tribe}</strong>
       </div>
     )}
     
     {metadata?.strength && (
       <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Strength</span>
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">{t("store.attributes.strength")}</span>
         <span class="inline-block bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] font-bold px-2 py-0.5 rounded-md mt-0.5">
           {metadata.strength}
         </span>
@@ -36,42 +39,42 @@ const { material, origin_country, type, weight, length, width, height, metadata 
     
     {metadata?.ingredients && (
       <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)] col-span-2 sm:col-span-1">
-        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Ingredients</span>
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">{t("store.attributes.ingredients")}</span>
         <strong class="text-[var(--color-text-primary)]">{metadata.ingredients}</strong>
       </div>
     )}
 
     {material && (
       <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Material</span>
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">{t("store.attributes.material")}</span>
         <strong class="text-[var(--color-text-primary)]">{material}</strong>
       </div>
     )}
 
     {origin_country && (
       <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Country of Origin</span>
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">{t("store.attributes.country")}</span>
         <strong class="text-[var(--color-text-primary)]">{origin_country}</strong>
       </div>
     )}
 
     {type?.value && (
       <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Category Type</span>
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">{t("store.attributes.category")}</span>
         <strong class="text-[var(--color-text-primary)]">{type.value}</strong>
       </div>
     )}
 
     {weight && (
       <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Weight</span>
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">{t("store.attributes.weight")}</span>
         <strong class="text-[var(--color-text-primary)]">{weight}g</strong>
       </div>
     )}
 
     {(length || width || height) && (
       <div class="bg-[var(--color-bg-surface-elevated)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-        <span class="block text-[var(--color-text-muted)] font-medium mb-1">Dimensions</span>
+        <span class="block text-[var(--color-text-muted)] font-medium mb-1">{t("store.attributes.dimensions")}</span>
         <strong class="text-[var(--color-text-primary)]">{length || '-'}L x {width || '-'}W x {height || '-'}H</strong>
       </div>
     )}

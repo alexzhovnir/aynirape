@@ -1,5 +1,6 @@
 export const dictionaries: Record<string, any> = {
   en: {
+    nav: { home: "Home", shop: "Shop", product: "Product" },
     seo: {
       home: {
         title: "Sacred Amazonian Shamanic Supplies",
@@ -171,10 +172,74 @@ export const dictionaries: Record<string, any> = {
         fallback_desc: "Explore our handpicked selection of authentic {0} supplies.",
         no_products: "No products found in this category.",
         browse_all: "Browse All Products &rarr;"
+      },
+      product: {
+        ethically_sourced: "ETHICALLY SOURCED",
+        in_stock: "IN STOCK",
+        includes_vat: "Includes EU VAT. Fast Dispatch.",
+        bullets: [
+          "Authentic traditional Amazonian formulation",
+          "Prepared under strict ceremonial standards",
+          "100% natural, unadulterated botanical specimen"
+        ],
+        trust_organic: "100% Organic Amazonian",
+        trust_climate: "1% CO₂ Climate Pledge",
+        heritage: "HERITAGE & DETAILS",
+        about: "About {0}",
+        usage_guidance: "USAGE GUIDANCE",
+        when_how: "When & How to Use",
+        when_title: "When to Use",
+        when_desc: "Recommended before meditation, yoga, breathwork rituals, or when seeking deep grounding after an overwhelming day. Ideal at the start of ceremonies to clear mental chatter and open the heart.",
+        how_title: "How to Apply",
+        how_desc: "Administer a pea-sized portion into a Kuripe applicator (for self-application) or a Tepi pipe (for blowing to another person). Hold your breath, set your intention, and blow gently into each nostril.",
+        complete_set: "COMPLETE YOUR RITUAL SET",
+        recommended_acc: "Recommended Accessories",
+        recommended_desc: "To work with this blend, you will need an applicator pipe and cleansing aromatics:",
+        applicator_pipe: "Applicator Pipe",
+        cleansing_essential: "Cleansing Essential",
+        recommended_for_you: "RECOMMENDED FOR YOU",
+        people_also_viewed: "People also viewed this item",
+        fallback_desc: {
+          kuripe: "This traditional Kuripe is an essential personal tool for the self-administration of sacred Rapé medicine.\n\nHandcrafted with deep reverence for indigenous traditions, it is designed to seamlessly connect your breath with the spirit of the forest. The shape and angle are carefully crafted to ensure a precise, smooth, and grounded application.\n\nBy working with this tool, you invite clarity, focus, and a profound sense of presence into your daily spiritual practice.",
+          tepi: "The Tepi is a sacred applicator designed for sharing Rapé medicine with another person in ceremony or deep energetic work.\n\nCrafted by skilled artisans, the extended length of the pipe allows for a powerful and guided transfer of breath and intention from the server to the receiver.\n\nThis tool embodies the spirit of connection, healing, and mutual trust, making it a vital piece for facilitators and practitioners.",
+          rape: "This sacred Rapé blend is meticulously prepared by indigenous tribes of the Amazon, using ancestral recipes passed down through generations.\n\nCombining wild-harvested Mapacho with profound master plant ashes, it works deeply on the energetic body to clear blockages, quiet the mind, and anchor the spirit.\n\nApproach this medicine with respect and clear intention to receive its grounding and heart-opening teachings.",
+          agua: "A classic ceremonial staple, this aromatic cologne is traditionally used by healers for energy clearing, aura protection, and consecrating sacred space.\n\nIts vibrant, uplifting scent acts as an energetic reset, instantly raising the vibration of a room or your personal energy field.\n\nUse it before rituals, meditation, or simply as an everyday tool to refresh the mind and spirit.",
+          palo_santo: "Sustainably and ethically sourced, this aromatic botanical is a cornerstone of traditional space-clearing practices.\n\nWhen burned, the fragrant smoke clears stagnant energies, offering a sweet, woody scent that instantly brings peace and clarity to any environment.\n\nPerfect for preparing your altar or simply unwinding after a long day in a pure, peaceful atmosphere.",
+          default: "This authentic piece is sourced with the utmost respect for nature and indigenous traditions.\n\nCrafted to support your spiritual practice, it serves as a powerful anchor for your intentions and daily rituals.\n\nIntegrate it into your ceremonies to deepen your connection to ancestral wisdom and inner peace."
+        }
+      },
+      preview: { popular: "Popular", in_stock: "In stock" },
+      actions: { add_to_cart: "Add to Cart", adding: "Adding..." },
+      attributes: {
+        title: "Specifications & Origin",
+        tribe: "Tribe / Origin",
+        strength: "Strength",
+        ingredients: "Ingredients",
+        material: "Material",
+        country: "Country of Origin",
+        category: "Category Type",
+        weight: "Weight",
+        dimensions: "Dimensions"
+      },
+      ceremony: {
+        title: "The Sacred Ceremony & Application",
+        subtitle: "Râpé is an ancient ceremonial practice rooted in ancestral healing traditions. Approach it with respect, intention, and a focused state of mind.",
+        step1: "STEP 01",
+        step1_title: "Prepare Intention",
+        step1_desc: "Sit comfortably with your back straight to allow energy to flow. Pour a pea-sized amount of powder into your non-dominant palm, set your intention, and bring the pipe to your forehead and heart to express gratitude.",
+        step2: "STEP 02",
+        step2_title: "The Application",
+        step2_desc: "Inhale deeply and hold your breath. Place the long end of the kuripe pipe in your nostril (or use a tepi for serving another person) and blow the powder in. Inhale and breathe gently through your mouth.",
+        step3: "STEP 03",
+        step3_title: "Cleanse & Integrate",
+        step3_desc: "Immediately repeat with the second nostril to maintain balance. The active substances absorb within 10–15 minutes. Remain in a calm environment, focus on the warmth and gratitude, and allow integration.",
+        disclaimer_title: "Important Disclaimer:",
+        disclaimer_desc: "The above description is provided for historical, cultural and educational purposes only. We expressly offer our Râpé for incense and ritual burning purposes only. The use and application of our products is solely at the customer's decision, responsibility, and risk."
       }
     }
   },
   de: {
+    nav: { home: "Startseite", shop: "Shop", product: "Produkt" },
     seo: {
       home: {
         title: "Heiliger Amazonischer Schamanenbedarf",
@@ -346,10 +411,74 @@ export const dictionaries: Record<string, any> = {
         fallback_desc: "Entdecken Sie unsere handverlesene Auswahl an authentischem {0} Bedarf.",
         no_products: "Keine Produkte in dieser Kategorie gefunden.",
         browse_all: "Alle Produkte ansehen &rarr;"
+      },
+      product: {
+        ethically_sourced: "ETHISCH BEZOGEN",
+        in_stock: "AUF LAGER",
+        includes_vat: "Inkl. EU-MwSt. Schneller Versand.",
+        bullets: [
+          "Authentische traditionelle amazonische Rezeptur",
+          "Unter strengen zeremoniellen Standards zubereitet",
+          "100% natürliches, reines botanisches Exemplar"
+        ],
+        trust_organic: "100% Bio-Amazonas",
+        trust_climate: "1% CO₂ Klimaversprechen",
+        heritage: "HERKUNFT & DETAILS",
+        about: "Über {0}",
+        usage_guidance: "ANWENDUNGSHINWEISE",
+        when_how: "Wann & Wie anzuwenden",
+        when_title: "Wann anzuwenden",
+        when_desc: "Empfohlen vor Meditation, Yoga, Atemübungen oder wenn Sie nach einem überwältigenden Tag nach tiefer Erdung suchen. Ideal zu Beginn von Zeremonien, um den Geist zu klären und das Herz zu öffnen.",
+        how_title: "Wie anzuwenden",
+        how_desc: "Geben Sie eine erbsengroße Menge in einen Kuripe-Applikator (zur Selbstanwendung) oder eine Tepi-Pfeife (zum Blasen in eine andere Person). Halten Sie den Atem an, setzen Sie Ihre Intention und blasen Sie sanft in jedes Nasenloch.",
+        complete_set: "VERVOLLSTÄNDIGEN SIE IHR RITUAL-SET",
+        recommended_acc: "Empfohlenes Zubehör",
+        recommended_desc: "Für diese Mischung benötigen Sie eine Applikatorpfeife und reinigende Aromastoffe:",
+        applicator_pipe: "Applikatorpfeife",
+        cleansing_essential: "Reinigungsessenz",
+        recommended_for_you: "FÜR SIE EMPFOHLEN",
+        people_also_viewed: "Kunden, die diesen Artikel angesehen haben, haben auch angesehen",
+        fallback_desc: {
+          kuripe: "Diese traditionelle Kuripe ist ein unverzichtbares persönliches Werkzeug für die Selbstanwendung der heiligen Rapé-Medizin.\n\nSie wird in tiefer Ehrfurcht vor indigenen Traditionen handgefertigt und ist so konzipiert, dass sie Ihren Atem nahtlos mit dem Geist des Waldes verbindet. Form und Winkel sind sorgfältig ausgearbeitet, um eine präzise, reibungslose und geerdete Anwendung zu gewährleisten.\n\nDurch die Arbeit mit diesem Werkzeug laden Sie Klarheit, Fokus und ein tiefes Gefühl der Präsenz in Ihre tägliche spirituelle Praxis ein.",
+          tepi: "Die Tepi ist ein heiliger Applikator, der entwickelt wurde, um Rapé-Medizin in einer Zeremonie oder tiefen energetischen Arbeit mit einer anderen Person zu teilen.\n\nSie wird von geschickten Kunsthandwerkern hergestellt und die verlängerte Länge der Pfeife ermöglicht eine kraftvolle und geführte Übertragung von Atem und Absicht vom Geber zum Empfänger.\n\nDieses Werkzeug verkörpert den Geist der Verbindung, der Heilung und des gegenseitigen Vertrauens, was es zu einem wichtigen Stück für Moderatoren und Praktiker macht.",
+          rape: "Diese heilige Rapé-Mischung wird von indigenen Stämmen des Amazonas unter Verwendung überlieferter Ahnenrezepte sorgfältig zubereitet.\n\nSie kombiniert wild gesammelten Mapacho mit tiefer Meisterpflanzenasche und wirkt tief auf den Energiekörper, um Blockaden zu lösen, den Geist zu beruhigen und den Geist zu verankern.\n\nNähern Sie sich dieser Medizin mit Respekt und klarer Absicht, um ihre erdenden und herzöffnenden Lehren zu empfangen.",
+          agua: "Dieses aromatische Cologne ist ein klassisches zeremonielles Grundnahrungsmittel und wird traditionell von Heilern zur Energiereinigung, zum Schutz der Aura und zur Weihe heiliger Räume verwendet.\n\nSein lebendiger, erhebender Duft wirkt wie ein energetischer Reset und erhöht sofort die Schwingung eines Raumes oder Ihres persönlichen Energiefeldes.\n\nVerwenden Sie es vor Ritualen, der Meditation oder einfach als alltägliches Werkzeug, um Geist und Seele zu erfrischen.",
+          palo_santo: "Diese nachhaltig und ethisch bezogene aromatische Pflanze ist ein Eckpfeiler traditioneller Praktiken zur Raumreinigung.\n\nWenn es verbrannt wird, reinigt der duftende Rauch stagnierende Energien und verströmt einen süßen, holzigen Duft, der jeder Umgebung sofort Frieden und Klarheit bringt.\n\nPerfekt, um Ihren Altar vorzubereiten oder sich einfach nach einem langen Tag in einer reinen, friedlichen Atmosphäre zu entspannen.",
+          default: "Dieses authentische Stück wird mit größtem Respekt für die Natur und indigene Traditionen bezogen.\n\nEs wurde entwickelt, um Ihre spirituelle Praxis zu unterstützen, und dient als kraftvoller Anker für Ihre Absichten und täglichen Rituale.\n\nIntegrieren Sie es in Ihre Zeremonien, um Ihre Verbindung zur Weisheit der Ahnen und zum inneren Frieden zu vertiefen."
+        }
+      },
+      preview: { popular: "Beliebt", in_stock: "Auf Lager" },
+      actions: { add_to_cart: "In den Warenkorb", adding: "Hinzufügen..." },
+      attributes: {
+        title: "Spezifikationen & Herkunft",
+        tribe: "Stamm / Herkunft",
+        strength: "Stärke",
+        ingredients: "Zutaten",
+        material: "Material",
+        country: "Herkunftsland",
+        category: "Kategorietyp",
+        weight: "Gewicht",
+        dimensions: "Abmessungen"
+      },
+      ceremony: {
+        title: "Die heilige Zeremonie & Anwendung",
+        subtitle: "Râpé ist eine alte zeremonielle Praxis, die in überlieferten Heiltraditionen verwurzelt ist. Nähern Sie sich ihr mit Respekt, Absicht und einem fokussierten Geisteszustand.",
+        step1: "SCHRITT 01",
+        step1_title: "Intention vorbereiten",
+        step1_desc: "Sitzen Sie bequem mit geradem Rücken, damit die Energie fließen kann. Geben Sie eine erbsengroße Menge Pulver in Ihre nicht dominante Handfläche, setzen Sie Ihre Absicht und bringen Sie die Pfeife zu Stirn und Herz, um Dankbarkeit auszudrücken.",
+        step2: "SCHRITT 02",
+        step2_title: "Die Anwendung",
+        step2_desc: "Atmen Sie tief ein und halten Sie den Atem an. Stecken Sie das lange Ende der Kuripe-Pfeife in Ihr Nasenloch (oder verwenden Sie eine Tepi für eine andere Person) und blasen Sie das Pulver hinein. Atmen Sie sanft durch den Mund ein und aus.",
+        step3: "SCHRITT 03",
+        step3_title: "Reinigen & Integrieren",
+        step3_desc: "Wiederholen Sie dies sofort mit dem zweiten Nasenloch, um das Gleichgewicht zu erhalten. Die Wirkstoffe werden innerhalb von 10–15 Minuten aufgenommen. Bleiben Sie in einer ruhigen Umgebung, konzentrieren Sie sich auf Wärme und Dankbarkeit und lassen Sie die Integration zu.",
+        disclaimer_title: "Wichtiger Haftungsausschluss:",
+        disclaimer_desc: "Die obige Beschreibung dient nur historischen, kulturellen und pädagogischen Zwecken. Wir bieten unser Râpé ausdrücklich nur für Räucher- und rituelle Verbrennungszwecke an. Die Verwendung und Anwendung unserer Produkte erfolgt ausschließlich auf Entscheidung, Verantwortung und Risiko des Kunden."
       }
     }
   },
   fr: {
+    nav: { home: "Accueil", shop: "Boutique", product: "Produit" },
     seo: {
       home: {
         title: "Articles Chamaniques Sacrés d'Amazonie",
@@ -521,10 +650,74 @@ export const dictionaries: Record<string, any> = {
         fallback_desc: "Découvrez notre sélection de fournitures authentiques {0}.",
         no_products: "Aucun produit trouvé dans cette catégorie.",
         browse_all: "Parcourir tous les produits &rarr;"
+      },
+      product: {
+        ethically_sourced: "SOURCE ÉTHIQUE",
+        in_stock: "EN STOCK",
+        includes_vat: "TVA UE incluse. Expédition rapide.",
+        bullets: [
+          "Formule traditionnelle amazonienne authentique",
+          "Préparé selon des normes cérémonielles strictes",
+          "Spécimen botanique 100% naturel et pur"
+        ],
+        trust_organic: "100% Biologique Amazonien",
+        trust_climate: "1% CO₂ Engagement Climat",
+        heritage: "HÉRITAGE ET DÉTAILS",
+        about: "À propos de {0}",
+        usage_guidance: "CONSEILS D'UTILISATION",
+        when_how: "Quand et comment l'utiliser",
+        when_title: "Quand l'utiliser",
+        when_desc: "Recommandé avant la méditation, le yoga, les rituels de respiration ou lorsque vous recherchez un enracinement profond après une journée écrasante. Idéal au début des cérémonies pour effacer le bavardage mental et ouvrir le cœur.",
+        how_title: "Comment l'appliquer",
+        how_desc: "Administrez une portion de la taille d'un pois dans un applicateur Kuripe (pour une auto-application) ou une pipe Tepi (pour souffler sur une autre personne). Retenez votre souffle, définissez votre intention et soufflez doucement dans chaque narine.",
+        complete_set: "COMPLÉTEZ VOTRE SET RITUEL",
+        recommended_acc: "Accessoires recommandés",
+        recommended_desc: "Pour travailler avec ce mélange, vous aurez besoin d'une pipe applicatrice et d'aromates purifiants :",
+        applicator_pipe: "Pipe applicatrice",
+        cleansing_essential: "Essentiel de purification",
+        recommended_for_you: "RECOMMANDÉ POUR VOUS",
+        people_also_viewed: "Les clients qui ont consulté cet article ont également consulté",
+        fallback_desc: {
+          kuripe: "Ce Kuripe traditionnel est un outil personnel essentiel pour l'auto-administration de la médecine sacrée du Rapé.\n\nFabriqué à la main avec une profonde révérence pour les traditions indigènes, il est conçu pour relier de manière transparente votre souffle à l'esprit de la forêt. La forme et l'angle sont soigneusement conçus pour assurer une application précise, douce et ancrée.\n\nEn travaillant avec cet outil, vous invitez la clarté, la concentration et un profond sentiment de présence dans votre pratique spirituelle quotidienne.",
+          tepi: "Le Tepi est un applicateur sacré conçu pour partager la médecine du Rapé avec une autre personne lors d'une cérémonie ou d'un travail énergétique profond.\n\nFabriqué par des artisans qualifiés, la longueur étendue de la pipe permet un transfert puissant et guidé du souffle et de l'intention du serveur au receveur.\n\nCet outil incarne l'esprit de connexion, de guérison et de confiance mutuelle, ce qui en fait une pièce essentielle pour les facilitateurs et les praticiens.",
+          rape: "Ce mélange sacré de Rapé est méticuleusement préparé par des tribus indigènes d'Amazonie, en utilisant des recettes ancestrales transmises de génération en génération.\n\nCombinant du Mapacho récolté à l'état sauvage avec de profondes cendres de plantes maîtresses, il agit en profondeur sur le corps énergétique pour éliminer les blocages, apaiser l'esprit et ancrer l'esprit.\n\nAbordez ce médicament avec respect et intention claire de recevoir ses enseignements d'ancrage et d'ouverture du cœur.",
+          agua: "Cet aliment de base cérémoniel classique, cette eau de Cologne aromatique est traditionnellement utilisée par les guérisseurs pour le nettoyage énergétique, la protection de l'aura et la consécration de l'espace sacré.\n\nSon parfum vibrant et exaltant agit comme une réinitialisation énergétique, augmentant instantanément la vibration d'une pièce ou de votre champ énergétique personnel.\n\nUtilisez-le avant les rituels, la méditation ou simplement comme outil quotidien pour rafraîchir l'esprit et l'esprit.",
+          palo_santo: "Issu de sources durables et éthiques, cet aromate botanique est une pierre angulaire des pratiques traditionnelles de purification de l'espace.\n\nLorsqu'elle est brûlée, la fumée parfumée dissipe les énergies stagnantes, offrant un parfum doux et boisé qui apporte instantanément paix et clarté à n'importe quel environnement.\n\nParfait pour préparer votre autel ou simplement vous détendre après une longue journée dans une atmosphère pure et paisible.",
+          default: "Cette pièce authentique provient du plus grand respect de la nature et des traditions indigènes.\n\nConçu pour soutenir votre pratique spirituelle, il sert d'ancrage puissant pour vos intentions et vos rituels quotidiens.\n\nIntégrez-le à vos cérémonies pour approfondir votre connexion à la sagesse ancestrale et à la paix intérieure."
+        }
+      },
+      preview: { popular: "Populaire", in_stock: "En stock" },
+      actions: { add_to_cart: "Ajouter au panier", adding: "Ajout..." },
+      attributes: {
+        title: "Spécifications et Origine",
+        tribe: "Tribu / Origine",
+        strength: "Force",
+        ingredients: "Ingrédients",
+        material: "Matériau",
+        country: "Pays d'origine",
+        category: "Type de catégorie",
+        weight: "Poids",
+        dimensions: "Dimensions"
+      },
+      ceremony: {
+        title: "La Cérémonie Sacrée et l'Application",
+        subtitle: "Le Râpé est une ancienne pratique cérémonielle enracinée dans les traditions de guérison ancestrales. Abordez-la avec respect, intention et un état d'esprit concentré.",
+        step1: "ÉTAPE 01",
+        step1_title: "Préparer l'intention",
+        step1_desc: "Asseyez-vous confortablement avec le dos droit pour permettre à l'énergie de circuler. Versez une quantité de poudre de la taille d'un pois dans votre paume non dominante, définissez votre intention et portez la pipe à votre front et à votre cœur pour exprimer votre gratitude.",
+        step2: "ÉTAPE 02",
+        step2_title: "L'Application",
+        step2_desc: "Inspirez profondément et retenez votre respiration. Placez la longue extrémité de la pipe kuripe dans votre narine (ou utilisez un tepi pour servir une autre personne) et soufflez la poudre à l'intérieur. Inspirez et respirez doucement par la bouche.",
+        step3: "ÉTAPE 03",
+        step3_title: "Nettoyer et Intégrer",
+        step3_desc: "Répétez immédiatement avec la deuxième narine pour maintenir l'équilibre. Les substances actives s'absorbent en 10 à 15 minutes. Restez dans un environnement calme, concentrez-vous sur la chaleur et la gratitude, et permettez l'intégration.",
+        disclaimer_title: "Avis important :",
+        disclaimer_desc: "La description ci-dessus est fournie à des fins historiques, culturelles et éducatives uniquement. Nous proposons expressément notre Râpé uniquement à des fins d'encens et de combustion rituelle. L'utilisation et l'application de nos produits relèvent de la seule décision, responsabilité et risque du client."
       }
     }
   },
   es: {
+    nav: { home: "Inicio", shop: "Tienda", product: "Producto" },
     seo: {
       home: {
         title: "Artículos Chamánicos Sagrados del Amazonas",
@@ -696,10 +889,74 @@ export const dictionaries: Record<string, any> = {
         fallback_desc: "Explora nuestra selección cuidadosamente elegida de auténticos suministros de {0}.",
         no_products: "No se encontraron productos en esta categoría.",
         browse_all: "Ver todos los productos &rarr;"
+      },
+      product: {
+        ethically_sourced: "DE ORIGEN ÉTICO",
+        in_stock: "EN STOCK",
+        includes_vat: "IVA de la UE incluido. Envío rápido.",
+        bullets: [
+          "Auténtica formulación amazónica tradicional",
+          "Preparado bajo estrictos estándares ceremoniales",
+          "Espécimen botánico 100% natural y puro"
+        ],
+        trust_organic: "100% Orgánico Amazónico",
+        trust_climate: "1% CO₂ Compromiso Climático",
+        heritage: "PATRIMONIO Y DETALLES",
+        about: "Acerca de {0}",
+        usage_guidance: "GUÍA DE USO",
+        when_how: "Cuándo y Cómo usar",
+        when_title: "Cuándo usar",
+        when_desc: "Recomendado antes de la meditación, yoga, rituales de respiración, o cuando busque un enraizamiento profundo después de un día abrumador. Ideal al inicio de las ceremonias para limpiar el parloteo mental y abrir el corazón.",
+        how_title: "Cómo aplicar",
+        how_desc: "Administre una porción del tamaño de un guisante en un aplicador Kuripe (para autoaplicación) o una pipa Tepi (para soplar a otra persona). Aguante la respiración, fije su intención y sople suavemente en cada fosa nasal.",
+        complete_set: "COMPLETA TU SET RITUAL",
+        recommended_acc: "Accesorios Recomendados",
+        recommended_desc: "Para trabajar con esta mezcla, necesitará una pipa aplicadora y aromas de limpieza:",
+        applicator_pipe: "Pipa Aplicadora",
+        cleansing_essential: "Esencial de Limpieza",
+        recommended_for_you: "RECOMENDADO PARA TI",
+        people_also_viewed: "Los clientes que vieron este artículo también vieron",
+        fallback_desc: {
+          kuripe: "Este Kuripe tradicional es una herramienta personal esencial para la autoadministración de la medicina sagrada del Rapé.\n\nElaborado a mano con profunda reverencia por las tradiciones indígenas, está diseñado para conectar a la perfección su respiración con el espíritu del bosque. La forma y el ángulo están cuidadosamente elaborados para asegurar una aplicación precisa, suave y firme.\n\nAl trabajar con esta herramienta, invitas a la claridad, el enfoque y una profunda sensación de presencia a tu práctica espiritual diaria.",
+          tepi: "El Tepi es un aplicador sagrado diseñado para compartir la medicina Rapé con otra persona en ceremonia o trabajo energético profundo.\n\nElaborado por hábiles artesanos, la longitud extendida de la tubería permite una transferencia poderosa y guiada de la respiración y la intención del servidor al receptor.\n\nEsta herramienta encarna el espíritu de conexión, curación y confianza mutua, por lo que es una pieza vital para facilitadores y practicantes.",
+          rape: "Esta sagrada mezcla de Rapé es preparada meticulosamente por tribus indígenas de la Amazonía, utilizando recetas ancestrales transmitidas de generación en generación.\n\nCombinando Mapacho cosechado de forma silvestre con profundas cenizas de plantas maestras, trabaja profundamente en el cuerpo energético para limpiar bloqueos, aquietar la mente y anclar el espíritu.\n\nAcérquese a esta medicina con respeto e intención clara de recibir sus enseñanzas de arraigo y apertura del corazón.",
+          agua: "Un elemento básico ceremonial clásico, esta colonia aromática es utilizada tradicionalmente por los curanderos para la limpieza energética, la protección del aura y la consagración del espacio sagrado.\n\nSu aroma vibrante y edificante actúa como un reinicio energético, elevando instantáneamente la vibración de una habitación o de tu campo de energía personal.\n\nÚselo antes de los rituales, la meditación o simplemente como una herramienta diaria para refrescar la mente y el espíritu.",
+          palo_santo: "De origen ético y sostenible, este botánico aromático es la piedra angular de las prácticas tradicionales de limpieza del espacio.\n\nCuando se quema, el humo fragante aclara las energías estancadas, ofreciendo un aroma dulce y amaderado que instantáneamente trae paz y claridad a cualquier ambiente.\n\nPerfecto para preparar tu altar o simplemente para relajarte después de un largo día en un ambiente puro y pacífico.",
+          default: "Esta auténtica pieza se obtiene con el máximo respeto por la naturaleza y las tradiciones indígenas.\n\nDiseñado para apoyar su práctica espiritual, sirve como un poderoso ancla para sus intenciones y rituales diarios.\n\nIntégrelo en sus ceremonias para profundizar su conexión con la sabiduría ancestral y la paz interior."
+        }
+      },
+      preview: { popular: "Popular", in_stock: "En stock" },
+      actions: { add_to_cart: "Añadir al Carrito", adding: "Añadiendo..." },
+      attributes: {
+        title: "Especificaciones y Origen",
+        tribe: "Tribu / Origen",
+        strength: "Fuerza",
+        ingredients: "Ingredientes",
+        material: "Material",
+        country: "País de Origen",
+        category: "Tipo de Categoría",
+        weight: "Peso",
+        dimensions: "Dimensiones"
+      },
+      ceremony: {
+        title: "La Ceremonia Sagrada y la Aplicación",
+        subtitle: "El Râpé es una antigua práctica ceremonial arraigada en las tradiciones de curación ancestrales. Acérquese con respeto, intención y un estado mental enfocado.",
+        step1: "PASO 01",
+        step1_title: "Preparar Intención",
+        step1_desc: "Siéntese cómodamente con la espalda recta para permitir que fluya la energía. Vierta una cantidad de polvo del tamaño de un guisante en su palma no dominante, fije su intención y lleve la pipa a su frente y corazón para expresar gratitud.",
+        step2: "PASO 02",
+        step2_title: "La Aplicación",
+        step2_desc: "Inhale profundamente y aguante la respiración. Coloque el extremo largo de la pipa kuripe en su fosa nasal (o use un tepi para servir a otra persona) y sople el polvo dentro. Inhale y respire suavemente por la boca.",
+        step3: "PASO 03",
+        step3_title: "Limpiar e Integrar",
+        step3_desc: "Repita inmediatamente con la segunda fosa nasal para mantener el equilibrio. Las sustancias activas se absorben en 10-15 minutos. Permanezca en un ambiente tranquilo, concéntrese en el calor y la gratitud, y permita la integración.",
+        disclaimer_title: "Aviso importante:",
+        disclaimer_desc: "La descripción anterior se proporciona únicamente con fines históricos, culturales y educativos. Ofrecemos expresamente nuestro Râpé solo para fines de incienso y quema ritual. El uso y la aplicación de nuestros productos son decisión, responsabilidad y riesgo exclusivos del cliente."
       }
     }
   },
   it: {
+    nav: { home: "Home", shop: "Negozio", product: "Prodotto" },
     seo: {
       home: {
         title: "Articoli Sciamanici Sacri dell'Amazzonia",
@@ -871,6 +1128,69 @@ export const dictionaries: Record<string, any> = {
         fallback_desc: "Esplora la nostra selezione curata di autentiche forniture {0}.",
         no_products: "Nessun prodotto trovato in questa categoria.",
         browse_all: "Sfoglia tutti i prodotti &rarr;"
+      },
+      product: {
+        ethically_sourced: "ORIGINE ETICA",
+        in_stock: "IN STOCK",
+        includes_vat: "IVA UE inclusa. Spedizione veloce.",
+        bullets: [
+          "Autentica formulazione amazzonica tradizionale",
+          "Preparato secondo rigidi standard cerimoniali",
+          "Campione botanico puro e naturale al 100%"
+        ],
+        trust_organic: "100% Organico Amazzonico",
+        trust_climate: "1% CO₂ Impegno per il clima",
+        heritage: "PATRIMONIO E DETTAGLI",
+        about: "Informazioni su {0}",
+        usage_guidance: "GUIDA ALL'USO",
+        when_how: "Quando e come usare",
+        when_title: "Quando usare",
+        when_desc: "Consigliato prima di meditazione, yoga, rituali di respirazione o quando si cerca un profondo radicamento dopo una giornata travolgente. Ideale all'inizio delle cerimonie per ripulire le chiacchiere mentali e aprire il cuore.",
+        how_title: "Come applicare",
+        how_desc: "Somministrare una porzione delle dimensioni di un pisello in un applicatore Kuripe (per auto-applicazione) o in un tubo Tepi (per soffiare a un'altra persona). Trattieni il respiro, imposta la tua intenzione e soffia delicatamente in ogni narice.",
+        complete_set: "COMPLETA IL TUO SET RITUALE",
+        recommended_acc: "Accessori Consigliati",
+        recommended_desc: "Per lavorare con questa miscela, avrai bisogno di un tubo applicatore e di aromatici purificanti:",
+        applicator_pipe: "Tubo Applicatore",
+        cleansing_essential: "Essenziale di Purificazione",
+        recommended_for_you: "CONSIGLIATO PER TE",
+        people_also_viewed: "Chi ha visualizzato questo articolo ha visualizzato anche",
+        fallback_desc: {
+          kuripe: "Questo tradizionale Kuripe è uno strumento personale essenziale per l'autosomministrazione della sacra medicina del Rapé.\n\nRealizzato a mano con profonda riverenza per le tradizioni indigene, è progettato per collegare perfettamente il tuo respiro con lo spirito della foresta. La forma e l'angolo sono accuratamente realizzati per garantire un'applicazione precisa, liscia e radicata.\n\nLavorando con questo strumento, inviti chiarezza, concentrazione e un profondo senso di presenza nella tua pratica spirituale quotidiana.",
+          tepi: "Il Tepi è un sacro applicatore progettato per condividere la medicina Rapé con un'altra persona durante cerimonie o profondi lavori energetici.\n\nRealizzato da abili artigiani, la lunghezza estesa del tubo consente un trasferimento potente e guidato del respiro e dell'intenzione dal server al ricevitore.\n\nQuesto strumento incarna lo spirito di connessione, guarigione e fiducia reciproca, rendendolo un pezzo vitale per facilitatori e praticanti.",
+          rape: "Questa sacra miscela di Rapé è preparata meticolosamente dalle tribù indigene dell'Amazzonia, utilizzando ricette ancestrali tramandate di generazione in generazione.\n\nCombinando il Mapacho raccolto in natura con profonde ceneri delle piante maestre, agisce profondamente sul corpo energetico per eliminare i blocchi, calmare la mente e ancorare lo spirito.\n\nAvvicinati a questa medicina con rispetto e con la chiara intenzione di ricevere i suoi insegnamenti di radicamento e di apertura del cuore.",
+          agua: "Un classico alimento cerimoniale, questa colonia aromatica è tradizionalmente utilizzata dai guaritori per la pulizia energetica, la protezione dell'aura e la consacrazione dello spazio sacro.\n\nIl suo profumo vibrante ed edificante agisce come un ripristino energetico, aumentando istantaneamente la vibrazione di una stanza o del tuo campo energetico personale.\n\nUsalo prima dei rituali, della meditazione o semplicemente come strumento quotidiano per rinfrescare la mente e lo spirito.",
+          palo_santo: "Di provenienza sostenibile ed etica, questo botanico aromatico è una pietra miliare delle tradizionali pratiche di pulizia degli spazi.\n\nQuando viene bruciato, il fumo fragrante pulisce le energie stagnanti, offrendo un profumo dolce e legnoso che porta istantaneamente pace e chiarezza in qualsiasi ambiente.\n\nPerfetto per preparare il tuo altare o semplicemente per rilassarti dopo una lunga giornata in un'atmosfera pura e tranquilla.",
+          default: "Questo pezzo autentico proviene dal massimo rispetto per la natura e le tradizioni indigene.\n\nProgettato per supportare la tua pratica spirituale, funge da potente ancoraggio per le tue intenzioni e i tuoi rituali quotidiani.\n\nIntegralo nelle tue cerimonie per approfondire la tua connessione con la saggezza ancestrale e la pace interiore."
+        }
+      },
+      preview: { popular: "Popolare", in_stock: "Disponibile" },
+      actions: { add_to_cart: "Aggiungi al Carrello", adding: "Aggiunta..." },
+      attributes: {
+        title: "Specifiche e Origine",
+        tribe: "Tribù / Origine",
+        strength: "Forza",
+        ingredients: "Ingredienti",
+        material: "Materiale",
+        country: "Paese di Origine",
+        category: "Tipo di Categoria",
+        weight: "Peso",
+        dimensions: "Dimensioni"
+      },
+      ceremony: {
+        title: "La Sacra Cerimonia e l'Applicazione",
+        subtitle: "Il Râpé è un'antica pratica cerimoniale radicata nelle tradizioni curative ancestrali. Avvicinati ad essa con rispetto, intenzione e uno stato mentale concentrato.",
+        step1: "FASE 01",
+        step1_title: "Prepara l'Intenzione",
+        step1_desc: "Siediti comodamente con la schiena dritta per consentire all'energia di fluire. Versa una quantità di polvere delle dimensioni di un pisello nel palmo della mano non dominante, imposta la tua intenzione e porta la pipa alla fronte e al cuore per esprimere gratitudine.",
+        step2: "FASE 02",
+        step2_title: "L'Applicazione",
+        step2_desc: "Inspira profondamente e trattieni il respiro. Posiziona l'estremità lunga del tubo kuripe nella narice (o usa un tepi per servire un'altra persona) e soffia la polvere all'interno. Inspira e respira delicatamente attraverso la bocca.",
+        step3: "FASE 03",
+        step3_title: "Pulisci e Integra",
+        step3_desc: "Ripeti immediatamente con la seconda narice per mantenere l'equilibrio. Le sostanze attive si assorbono in 10-15 minuti. Rimani in un ambiente calmo, concentrati sul calore e sulla gratitudine e consenti l'integrazione.",
+        disclaimer_title: "Avviso importante:",
+        disclaimer_desc: "La descrizione di cui sopra è fornita solo per scopi storici, culturali ed educativi. Offriamo espressamente il nostro Râpé solo per scopi di incenso e combustione rituale. L'uso e l'applicazione dei nostri prodotti è esclusivamente a decisione, responsabilità e rischio del cliente."
       }
     }
   }

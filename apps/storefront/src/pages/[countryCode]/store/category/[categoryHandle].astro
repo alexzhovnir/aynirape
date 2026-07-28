@@ -178,9 +178,9 @@ function getCategoryIcon(name: string, handle: string) {
     <!-- Breadcrumbs Nav -->
     <Breadcrumbs
       items={[
-        { label: "Home", href: `/${countryCode}` },
-        { label: "Shop", href: `/${countryCode}/store` },
-        { label: displayCategoryName }
+        { label: String(t("nav.home")), href: `/${countryCode}` },
+        { label: String(t("nav.shop")), href: `/${countryCode}/store` },
+        { label: currentCategory?.name || displayCategoryName }
       ]}
     />
 

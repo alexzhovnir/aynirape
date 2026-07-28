@@ -9,7 +9,7 @@ import { ProductActions } from "@modules/products/components/product-details/Pro
 import ProductAttributes from "@modules/products/components/product-details/ProductAttributes.astro";
 import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
 import CeremonyGuide from "@components/CeremonyGuide.astro";
-
+import { useTranslations } from "@lib/i18n/utils";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 
 export const getStaticPaths = getProductParams;
@@ -19,6 +19,8 @@ const { countryCode, productId } = Astro.params;
 if (!countryCode || !productId) {
   return Astro.redirect("/not-found");
 }
+
+const t = useTranslations(countryCode!);
 
 const region = await getRegion(countryCode);
 
@@ -67,43 +69,19 @@ let detailedStoryParagraphs = descriptionParagraphs.length > 1 ? descriptionPara
 
 // Provide contextual fallback descriptions if the product lacks a detailed description
 if (!detailedStoryParagraphs[0] || detailedStoryParagraphs[0].trim().length < 20) {
-  const t = title?.toLowerCase() || "";
-  if (t.includes("kuripe")) {
-    detailedStoryParagraphs = [
-      "This traditional Kuripe is an essential personal tool for the self-administration of sacred Rapé medicine.",
-      "Handcrafted with deep reverence for indigenous traditions, it is designed to seamlessly connect your breath with the spirit of the forest. The shape and angle are carefully crafted to ensure a precise, smooth, and grounded application.",
-      "By working with this tool, you invite clarity, focus, and a profound sense of presence into your daily spiritual practice."
-    ];
-  } else if (t.includes("tepi")) {
-    detailedStoryParagraphs = [
-      "The Tepi is a sacred applicator designed for sharing Rapé medicine with another person in ceremony or deep energetic work.",
-      "Crafted by skilled artisans, the extended length of the pipe allows for a powerful and guided transfer of breath and intention from the server to the receiver.",
-      "This tool embodies the spirit of connection, healing, and mutual trust, making it a vital piece for facilitators and practitioners."
-    ];
-  } else if (t.includes("rape") || t.includes("rapé") || t.includes("blend")) {
-    detailedStoryParagraphs = [
-      "This sacred Rapé blend is meticulously prepared by indigenous tribes of the Amazon, using ancestral recipes passed down through generations.",
-      "Combining wild-harvested Mapacho with profound master plant ashes, it works deeply on the energetic body to clear blockages, quiet the mind, and anchor the spirit.",
-      "Approach this medicine with respect and clear intention to receive its grounding and heart-opening teachings."
-    ];
-  } else if (t.includes("agua") || t.includes("florida") || t.includes("cologne")) {
-    detailedStoryParagraphs = [
-      "A classic ceremonial staple, this aromatic cologne is traditionally used by healers for energy clearing, aura protection, and consecrating sacred space.",
-      "Its vibrant, uplifting scent acts as an energetic reset, instantly raising the vibration of a room or your personal energy field.",
-      "Use it before rituals, meditation, or simply as an everyday tool to refresh the mind and spirit."
-    ];
-  } else if (t.includes("palo santo") || t.includes("incense") || t.includes("smudge")) {
-    detailedStoryParagraphs = [
-      "Sustainably and ethically sourced, this aromatic botanical is a cornerstone of traditional space-clearing practices.",
-      "When burned, the fragrant smoke clears stagnant energies, offering a sweet, woody scent that instantly brings peace and clarity to any environment.",
-      "Perfect for preparing your altar or simply unwinding after a long day in a pure, peaceful atmosphere."
-    ];
+  const t_title = title?.toLowerCase() || "";
+  if (t_title.includes("kuripe")) {
+    detailedStoryParagraphs = t("store.product.fallback_desc.kuripe").split('\n\n');
+  } else if (t_title.includes("tepi")) {
+    detailedStoryParagraphs = t("store.product.fallback_desc.tepi").split('\n\n');
+  } else if (t_title.includes("rape") || t_title.includes("rapé") || t_title.includes("blend")) {
+    detailedStoryParagraphs = t("store.product.fallback_desc.rape").split('\n\n');
+  } else if (t_title.includes("agua") || t_title.includes("florida") || t_title.includes("cologne")) {
+    detailedStoryParagraphs = t("store.product.fallback_desc.agua").split('\n\n');
+  } else if (t_title.includes("palo santo") || t_title.includes("incense") || t_title.includes("smudge")) {
+    detailedStoryParagraphs = t("store.product.fallback_desc.palo_santo").split('\n\n');
   } else {
-    detailedStoryParagraphs = [
-      "This authentic piece is sourced with the utmost respect for nature and indigenous traditions.",
-      "Crafted to support your spiritual practice, it serves as a powerful anchor for your intentions and daily rituals.",
-      "Integrate it into your ceremonies to deepen your connection to ancestral wisdom and inner peace."
-    ];
+    detailedStoryParagraphs = t("store.product.fallback_desc.default").split('\n\n');
   }
 }
 
@@ -153,10 +131,10 @@ const schemaData = {
           <!-- Breadcrumbs Nav -->
           <Breadcrumbs
             items={[
-              { label: "Home", href: `/${countryCode}` },
-              { label: "Shop", href: `/${countryCode}/store` },
+              { label: String(t("nav.home")), href: `/${countryCode}` },
+              { label: String(t("nav.shop")), href: `/${countryCode}/store` },
               ...(product.categories?.[0] ? [{ label: product.categories[0].name, href: `/${countryCode}/store/category/${product.categories[0].handle}` }] : []),
-              { label: title ?? "Product" }
+              { label: title ?? String(t("nav.product")) }
             ]}
           />
 
@@ -177,10 +155,10 @@ const schemaData = {
                 <div>
                   <div class="flex flex-wrap items-center gap-2 mb-3">
                     <span class="bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-[var(--color-accent-gold)]">
-                      ETHICALLY SOURCED
+                      {t("store.product.ethically_sourced")}
                     </span>
                     <span class="bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-emerald-500">
-                      IN STOCK
+                      {t("store.product.in_stock")}
                     </span>
                   </div>
 
@@ -194,7 +172,7 @@ const schemaData = {
                   <span id="product-price" class="text-3xl md:text-4xl font-bold text-[var(--color-accent-gold)]">
                     {cheapestPrice?.calculated_price}
                   </span>
-                  <span class="text-xs text-[var(--color-text-muted)]">Includes EU VAT. Fast Dispatch.</span>
+                  <span class="text-xs text-[var(--color-text-muted)]">{t("store.product.includes_vat")}</span>
                 </div>
 
                 <!-- Short Selling Excerpt -->
@@ -203,9 +181,9 @@ const schemaData = {
                     {shortSellingDescription}
                   </p>
                   <ul class="text-xs text-[var(--color-text-muted)] space-y-1 pt-1 list-disc pl-4">
-                    <li>Authentic traditional Amazonian formulation</li>
-                    <li>Prepared under strict ceremonial standards</li>
-                    <li>100% natural, unadulterated botanical specimen</li>
+                    {t("store.product.bullets").map((bullet: string) => (
+                      <li>{bullet}</li>
+                    ))}
                   </ul>
                 </div>
 
@@ -217,6 +195,10 @@ const schemaData = {
                       variants={variants ?? []}
                       productId={productId}
                       regionId={region.id}
+                      labels={{
+                        add_to_cart: String(t("store.actions.add_to_cart")),
+                        adding: String(t("store.actions.adding"))
+                      }}
                       client:visible
                     />
                   </div>
@@ -240,19 +222,19 @@ const schemaData = {
                 <div class="grid grid-cols-2 gap-3">
                   <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
                     <span>📦</span>
-                    <span><strong>DHL Express</strong> 3-5 days</span>
+                    <span set:html={t("store.trust_shipping")} />
                   </div>
                   <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
                     <span>🌿</span>
-                    <span><strong>100% Organic</strong> Amazonian</span>
+                    <span set:html={t("store.product.trust_organic")} />
                   </div>
                   <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
                     <span>🛡️</span>
-                    <span><strong>Authentic</strong> Tribal recipe</span>
+                    <span set:html={t("store.trust_authentic")} />
                   </div>
                   <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
                     <span>🌱</span>
-                    <span><strong>1% CO₂</strong> Climate Pledge</span>
+                    <span set:html={t("store.product.trust_climate")} />
                   </div>
                 </div>
               </div>
@@ -265,9 +247,9 @@ const schemaData = {
             <div class="lg:col-span-2 space-y-8">
               <!-- Full Detailed Description -->
               <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
-                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">HERITAGE & DETAILS</span>
+                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("store.product.heritage")}</span>
                 <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
-                  About {title}
+                  {t("store.product.about").replace("{0}", title ?? "")}
                 </h2>
                 <div class="text-[var(--color-text-secondary)] space-y-4 text-sm leading-relaxed">
                   {detailedStoryParagraphs.map((paragraph) => (
@@ -278,25 +260,25 @@ const schemaData = {
 
               <!-- When & How to Use Section -->
               <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-6">
-                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">USAGE GUIDANCE</span>
+                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("store.product.usage_guidance")}</span>
                 <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
-                  When & How to Use
+                  {t("store.product.when_how")}
                 </h2>
                 
                 <div class="grid sm:grid-cols-2 gap-6 text-xs">
                   <div class="bg-[var(--color-bg-surface)] p-5 rounded-2xl border border-[var(--color-border-subtle)] space-y-2">
                     <span class="text-xl block mb-1">🕯️</span>
-                    <strong class="block text-sm text-[var(--color-text-primary)] font-serif-heading">When to Use</strong>
+                    <strong class="block text-sm text-[var(--color-text-primary)] font-serif-heading">{t("store.product.when_title")}</strong>
                     <p class="text-[var(--color-text-secondary)] leading-relaxed">
-                      Recommended before meditation, yoga, breathwork rituals, or when seeking deep grounding after an overwhelming day. Ideal at the start of ceremonies to clear mental chatter and open the heart.
+                      {t("store.product.when_desc")}
                     </p>
                   </div>
 
                   <div class="bg-[var(--color-bg-surface)] p-5 rounded-2xl border border-[var(--color-border-subtle)] space-y-2">
                     <span class="text-xl block mb-1">🪵</span>
-                    <strong class="block text-sm text-[var(--color-text-primary)] font-serif-heading">How to Apply</strong>
+                    <strong class="block text-sm text-[var(--color-text-primary)] font-serif-heading">{t("store.product.how_title")}</strong>
                     <p class="text-[var(--color-text-secondary)] leading-relaxed">
-                      Administer a pea-sized portion into a Kuripe applicator (for self-application) or a Tepi pipe (for blowing to another person). Hold your breath, set your intention, and blow gently into each nostril.
+                      {t("store.product.how_desc")}
                     </p>
                   </div>
                 </div>
@@ -321,11 +303,11 @@ const schemaData = {
 
               <!-- Complete Your Set Bundle Box -->
               <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
-                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-[10px] uppercase block">COMPLETE YOUR RITUAL SET</span>
+                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-[10px] uppercase block">{t("store.product.complete_set")}</span>
                 <h3 class="text-lg font-serif-heading font-bold text-[var(--color-text-primary)]">
-                  Recommended Accessories
+                  {t("store.product.recommended_acc")}
                 </h3>
-                <p class="text-xs text-[var(--color-text-secondary)]">To work with this blend, you will need an applicator pipe and cleansing aromatics:</p>
+                <p class="text-xs text-[var(--color-text-secondary)]">{t("store.product.recommended_desc")}</p>
 
                 <div class="space-y-3 pt-2">
                   {kuripeBundleItem && (
@@ -344,7 +326,7 @@ const schemaData = {
                         <strong class="block text-xs text-[var(--color-text-primary)] truncate font-semibold group-hover:text-[var(--color-accent-gold)] transition-colors">
                           {kuripeBundleItem.title}
                         </strong>
-                        <span class="text-[10px] text-[var(--color-text-muted)]">Applicator Pipe</span>
+                        <span class="text-[10px] text-[var(--color-text-muted)]">{t("store.product.applicator_pipe")}</span>
                       </div>
                       <span class="text-xs font-bold text-[var(--color-accent-gold)]">&rarr;</span>
                     </a>
@@ -366,7 +348,7 @@ const schemaData = {
                         <strong class="block text-xs text-[var(--color-text-primary)] truncate font-semibold group-hover:text-[var(--color-accent-gold)] transition-colors">
                           {aguaBundleItem.title}
                         </strong>
-                        <span class="text-[10px] text-[var(--color-text-muted)]">Cleansing Essential</span>
+                        <span class="text-[10px] text-[var(--color-text-muted)]">{t("store.product.cleansing_essential")}</span>
                       </div>
                       <span class="text-xs font-bold text-[var(--color-accent-gold)]">&rarr;</span>
                     </a>
@@ -386,9 +368,9 @@ const schemaData = {
             <div class="pt-8 pb-12 overflow-hidden">
               <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
                 <div>
-                  <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">RECOMMENDED FOR YOU</span>
+                  <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("store.product.recommended_for_you")}</span>
                   <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] sm:text-4xl mt-2">
-                    People also viewed this item
+                    {t("store.product.people_also_viewed")}
                   </h2>
                 </div>
                 

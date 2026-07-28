@@ -34,6 +34,10 @@ interface Props {
   variants: Variant[];
   productId: string;
   regionId: string;
+  labels?: {
+    add_to_cart: string;
+    adding: string;
+  };
 }
 
 export const ProductActions = ({
@@ -41,6 +45,7 @@ export const ProductActions = ({
   variants: initialVariants,
   productId,
   regionId,
+  labels = { add_to_cart: "Add to Cart", adding: "Adding..." },
 }: Props) => {
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
@@ -192,7 +197,7 @@ export const ProductActions = ({
         disabled={isAddToCardButtonDisabled}
         onClick={handleAddToCart}
       >
-        {isAdding ? "Adding..." : "Add to Cart"}
+        {isAdding ? labels.adding : labels.add_to_cart}
       </button>
     </div>
   );
