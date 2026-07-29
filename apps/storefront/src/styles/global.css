@@ -123,3 +123,18 @@ body {
   font-family: var(--font-sans);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* Prose Content Links Styling (Brand Gold) */
+.prose a {
+  color: var(--color-accent-gold) !important;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-accent);
+  text-underline-offset: 4px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.prose a:hover {
+  color: var(--color-accent-gold-hover) !important;
+  text-decoration-color: var(--color-accent-gold);
+}
