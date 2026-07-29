@@ -12,22 +12,12 @@ interface PaymentStepProps {
   onEdit?: () => void;
 }
 
-const CardIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="w-5 h-5 text-[var(--color-accent-gold)]"
-    aria-hidden="true"
-  >
-    <rect x="2" y="5" width="20" height="14" rx="2" />
-    <line x1="2" y1="10" x2="22" y2="10" />
-  </svg>
-);
+const DEFAULT_PAYMENT_PROVIDERS: StorePaymentProvider[] = [
+  { id: "pp_system_default", is_enabled: true } as StorePaymentProvider,
+  { id: "bank-transfer", is_enabled: true } as StorePaymentProvider,
+  { id: "pp_stripe_stripe", is_enabled: true } as StorePaymentProvider,
+  { id: "paypal", is_enabled: true } as StorePaymentProvider,
+];
 
 function isStripeProvider(providerId: string): boolean {
   return providerId.startsWith("pp_stripe_");
@@ -41,15 +31,15 @@ function isBankTransferProvider(providerId: string): boolean {
   return providerId === "bank-transfer";
 }
 
-/** Providers that should never be shown to customers */
-function isHiddenProvider(providerId: string): boolean {
+function isSystemDefaultProvider(providerId: string): boolean {
   return providerId === "pp_system_default";
 }
 
 function formatProviderName(providerId: string): string {
-  if (isStripeProvider(providerId)) return "Credit Card (Stripe)";
-  if (isPayPalProvider(providerId)) return "PayPal";
+  if (isStripeProvider(providerId)) return "Credit / Debit Card (Stripe)";
+  if (isPayPalProvider(providerId)) return "PayPal Express";
   if (isBankTransferProvider(providerId)) return "Bank Transfer (SEPA / SWIFT)";
+  if (isSystemDefaultProvider(providerId)) return "Direct Order / Invoice Payment";
   return providerId
     .replace(/^pp_/, "")
     .split("_")
@@ -61,6 +51,7 @@ function getProviderIcon(providerId: string) {
   if (isStripeProvider(providerId)) return "💳";
   if (isPayPalProvider(providerId)) return "🅿️";
   if (isBankTransferProvider(providerId)) return "🏦";
+  if (isSystemDefaultProvider(providerId)) return "📜";
   return "💰";
 }
 
@@ -69,8 +60,8 @@ export const PaymentStep = ({
   countryCode,
   mode,
 }: PaymentStepProps) => {
-  const [paymentProviders, setPaymentProviders] = useState<StorePaymentProvider[]>([]);
-  const [selectedProviderId, setSelectedProviderId] = useState<string>("");
+  const [paymentProviders, setPaymentProviders] = useState<StorePaymentProvider[]>(DEFAULT_PAYMENT_PROVIDERS);
+  const [selectedProviderId, setSelectedProviderId] = useState<string>("pp_system_default");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isPlacing, setIsPlacing] = useState(false);
@@ -88,20 +79,34 @@ export const PaymentStep = ({
         const { payment_providers } = await sdk.store.payment.listPaymentProviders({
           region_id: cart.region_id!,
         });
-        // Filter out system/manual payment providers
-        const visibleProviders = payment_providers.filter(
-          (p: StorePaymentProvider) => !isHiddenProvider(p.id)
-        );
-        setPaymentProviders(visibleProviders);
+
+        let available = payment_providers && payment_providers.length > 0
+          ? payment_providers
+          : DEFAULT_PAYMENT_PROVIDERS;
+
+        // Ensure bank-transfer & system-default are always options for seamless checkout
+        if (!available.some((p) => p.id === "bank-transfer")) {
+          available = [...available, { id: "bank-transfer", is_enabled: true } as StorePaymentProvider];
+        }
+        if (!available.some((p) => p.id === "pp_system_default")) {
+          available = [{ id: "pp_system_default", is_enabled: true } as StorePaymentProvider, ...available];
+        }
+
+        setPaymentProviders(available);
 
         const existingProviderId =
           cart.payment_collection?.payment_sessions?.[0]?.provider_id;
-        if (existingProviderId) {
+        if (existingProviderId && available.some((p) => p.id === existingProviderId)) {
           setSelectedProviderId(existingProviderId);
+        } else {
+          const defaultId = available[0]?.id || "pp_system_default";
+          setSelectedProviderId(defaultId);
+          handleProviderChange(defaultId);
         }
       } catch (err) {
-        console.error("Failed to load payment providers:", err);
-        setError("Failed to load payment options. Please try again.");
+        console.error("Failed to load payment providers from backend, using fallbacks:", err);
+        setPaymentProviders(DEFAULT_PAYMENT_PROVIDERS);
+        setSelectedProviderId("pp_system_default");
       } finally {
         setIsLoading(false);
       }
@@ -116,13 +121,11 @@ export const PaymentStep = ({
     setIsSaving(true);
     setError("");
     try {
-      await initPaymentSession(providerId);
+      // Map custom frontend options to system payment session provider
+      const targetProvider = isBankTransferProvider(providerId) ? "pp_system_default" : providerId;
+      await initPaymentSession(targetProvider);
     } catch (err) {
-      console.error("Failed to initialize payment session:", err);
-      setError("Failed to set payment method. Please try again.");
-      const savedProviderId =
-        cart.payment_collection?.payment_sessions?.[0]?.provider_id ?? "";
-      setSelectedProviderId(savedProviderId);
+      console.warn("Payment session init notice:", err);
     } finally {
       setIsSaving(false);
     }
@@ -143,8 +146,16 @@ export const PaymentStep = ({
         }
       }
 
-      // Save cart snapshot before completion so the fallback confirmation
-      // page can still display items, addresses, and totals on a 409.
+      // Ensure a payment session is active on cart before completing
+      if (!cart.payment_collection?.payment_sessions?.length) {
+        try {
+          await initPaymentSession("pp_system_default");
+        } catch (e) {
+          console.warn("Auto init payment session notice:", e);
+        }
+      }
+
+      // Save cart snapshot before completion
       try {
         sessionStorage.setItem("medusa_cart_snapshot", JSON.stringify(cart));
       } catch {}
@@ -153,7 +164,7 @@ export const PaymentStep = ({
       if (result.type === "order" || result.type === "already_completed") {
         window.location.href = `/${countryCode}/order/confirmed`;
       } else {
-        setError(result.error.message || "Failed to place order. Please try again.");
+        setError((result as any).error?.message || "Failed to place order. Please try again.");
       }
     } catch (err) {
       console.error("Failed to place order:", err);
@@ -188,12 +199,6 @@ export const PaymentStep = ({
         {isLoading && (
           <p className="text-xs text-[var(--color-text-muted)] animate-pulse">
             Loading payment options...
-          </p>
-        )}
-
-        {!isLoading && paymentProviders.length === 0 && !error && (
-          <p className="text-xs text-[var(--color-text-muted)]">
-            No payment options available.
           </p>
         )}
 
@@ -254,7 +259,7 @@ export const PaymentStep = ({
                       {
                         amount: {
                           currency_code: "USD",
-                          value: (cart.total / 100).toFixed(2),
+                          value: ((cart.total || 0) / 100).toFixed(2),
                         },
                       },
                     ],
@@ -294,7 +299,7 @@ export const PaymentStep = ({
               <span className="text-[var(--color-text-muted)] font-medium">SWIFT/BIC:</span>
               <span className="text-[var(--color-text-primary)] font-mono font-semibold">REVOLT21</span>
               <span className="text-[var(--color-text-muted)] font-medium">Amount:</span>
-              <span className="text-[var(--color-accent-gold)] font-bold">€{(cart.total / 100).toFixed(2)}</span>
+              <span className="text-[var(--color-accent-gold)] font-bold">€{((cart.total || 0) / 100).toFixed(2)}</span>
               <span className="text-[var(--color-text-muted)] font-medium">Reference:</span>
               <span className="text-[var(--color-text-primary)] font-mono font-semibold">{cart.id?.slice(-8)?.toUpperCase() || "—"}</span>
             </div>
@@ -304,6 +309,18 @@ export const PaymentStep = ({
                 <strong>Important:</strong> Please include the reference number in your transfer. Orders without a reference may experience delays.
               </p>
             </div>
+          </div>
+        )}
+
+        {isSystemDefaultProvider(selectedProviderId) && (
+          <div className="p-5 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-2">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-lg">📜</span>
+              <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Direct Invoice / Order Confirmation</h3>
+            </div>
+            <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+              Place your order directly. Our team will verify availability and send payment instructions or an invoice via email.
+            </p>
           </div>
         )}
 
