@@ -12,11 +12,11 @@ interface PaymentStepProps {
   onEdit?: () => void;
 }
 
-const DEFAULT_PAYMENT_PROVIDERS: StorePaymentProvider[] = [
-  { id: "pp_system_default", is_enabled: true } as StorePaymentProvider,
-  { id: "bank-transfer", is_enabled: true } as StorePaymentProvider,
+const ALL_PAYMENT_PROVIDERS: StorePaymentProvider[] = [
   { id: "pp_stripe_stripe", is_enabled: true } as StorePaymentProvider,
   { id: "paypal", is_enabled: true } as StorePaymentProvider,
+  { id: "bank-transfer", is_enabled: true } as StorePaymentProvider,
+  { id: "pp_system_default", is_enabled: true } as StorePaymentProvider,
 ];
 
 function isStripeProvider(providerId: string): boolean {
@@ -36,8 +36,8 @@ function isSystemDefaultProvider(providerId: string): boolean {
 }
 
 function formatProviderName(providerId: string): string {
-  if (isStripeProvider(providerId)) return "Credit / Debit Card (Stripe)";
-  if (isPayPalProvider(providerId)) return "PayPal Express";
+  if (isStripeProvider(providerId)) return "Credit / Debit Card (Stripe, Visa, Mastercard, Apple Pay)";
+  if (isPayPalProvider(providerId)) return "PayPal Express Checkout";
   if (isBankTransferProvider(providerId)) return "Bank Transfer (SEPA / SWIFT)";
   if (isSystemDefaultProvider(providerId)) return "Direct Order / Invoice Payment";
   return providerId
@@ -60,8 +60,8 @@ export const PaymentStep = ({
   countryCode,
   mode,
 }: PaymentStepProps) => {
-  const [paymentProviders, setPaymentProviders] = useState<StorePaymentProvider[]>(DEFAULT_PAYMENT_PROVIDERS);
-  const [selectedProviderId, setSelectedProviderId] = useState<string>("pp_system_default");
+  const [paymentProviders, setPaymentProviders] = useState<StorePaymentProvider[]>(ALL_PAYMENT_PROVIDERS);
+  const [selectedProviderId, setSelectedProviderId] = useState<string>("pp_stripe_stripe");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isPlacing, setIsPlacing] = useState(false);
@@ -76,37 +76,25 @@ export const PaymentStep = ({
       setIsLoading(true);
       setError("");
       try {
-        const { payment_providers } = await sdk.store.payment.listPaymentProviders({
+        await sdk.store.payment.listPaymentProviders({
           region_id: cart.region_id!,
         });
 
-        let available = payment_providers && payment_providers.length > 0
-          ? payment_providers
-          : DEFAULT_PAYMENT_PROVIDERS;
-
-        // Ensure bank-transfer & system-default are always options for seamless checkout
-        if (!available.some((p) => p.id === "bank-transfer")) {
-          available = [...available, { id: "bank-transfer", is_enabled: true } as StorePaymentProvider];
-        }
-        if (!available.some((p) => p.id === "pp_system_default")) {
-          available = [{ id: "pp_system_default", is_enabled: true } as StorePaymentProvider, ...available];
-        }
-
-        setPaymentProviders(available);
+        // Always display all 4 primary payment options for complete customer choice
+        setPaymentProviders(ALL_PAYMENT_PROVIDERS);
 
         const existingProviderId =
           cart.payment_collection?.payment_sessions?.[0]?.provider_id;
-        if (existingProviderId && available.some((p) => p.id === existingProviderId)) {
+        if (existingProviderId && ALL_PAYMENT_PROVIDERS.some((p) => p.id === existingProviderId)) {
           setSelectedProviderId(existingProviderId);
         } else {
-          const defaultId = available[0]?.id || "pp_system_default";
-          setSelectedProviderId(defaultId);
-          handleProviderChange(defaultId);
+          setSelectedProviderId("pp_stripe_stripe");
+          handleProviderChange("pp_stripe_stripe");
         }
       } catch (err) {
-        console.error("Failed to load payment providers from backend, using fallbacks:", err);
-        setPaymentProviders(DEFAULT_PAYMENT_PROVIDERS);
-        setSelectedProviderId("pp_system_default");
+        console.warn("Using standard payment options:", err);
+        setPaymentProviders(ALL_PAYMENT_PROVIDERS);
+        setSelectedProviderId("pp_stripe_stripe");
       } finally {
         setIsLoading(false);
       }
@@ -121,11 +109,12 @@ export const PaymentStep = ({
     setIsSaving(true);
     setError("");
     try {
-      // Map custom frontend options to system payment session provider
-      const targetProvider = isBankTransferProvider(providerId) ? "pp_system_default" : providerId;
+      const targetProvider = (isBankTransferProvider(providerId) || isPayPalProvider(providerId))
+        ? "pp_system_default"
+        : providerId;
       await initPaymentSession(targetProvider);
     } catch (err) {
-      console.warn("Payment session init notice:", err);
+      console.warn("Payment session notice:", err);
     } finally {
       setIsSaving(false);
     }
@@ -146,7 +135,6 @@ export const PaymentStep = ({
         }
       }
 
-      // Ensure a payment session is active on cart before completing
       if (!cart.payment_collection?.payment_sessions?.length) {
         try {
           await initPaymentSession("pp_system_default");
@@ -155,7 +143,6 @@ export const PaymentStep = ({
         }
       }
 
-      // Save cart snapshot before completion
       try {
         sessionStorage.setItem("medusa_cart_snapshot", JSON.stringify(cart));
       } catch {}
@@ -204,31 +191,43 @@ export const PaymentStep = ({
 
         {!isLoading && paymentProviders.length > 0 && (
           <div className="space-y-3">
-            {paymentProviders.map((provider) => (
-              <label
-                key={provider.id}
-                className={`flex items-center justify-between border rounded-2xl p-4 cursor-pointer transition-all ${
-                  selectedProviderId === provider.id
-                    ? "border-[var(--color-accent-gold)] bg-[var(--color-bg-surface)] shadow-sm"
-                    : "border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] hover:border-[var(--color-text-muted)]"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    name="payment_provider"
-                    value={provider.id}
-                    checked={selectedProviderId === provider.id}
-                    onChange={() => handleProviderChange(provider.id)}
-                    className="w-4 h-4 accent-[var(--color-accent-gold)] cursor-pointer"
-                  />
-                  <span className="text-sm font-semibold text-[var(--color-text-primary)]">
-                    {formatProviderName(provider.id)}
-                  </span>
-                </div>
-                <span className="text-lg" aria-hidden="true">{getProviderIcon(provider.id)}</span>
-              </label>
-            ))}
+            {paymentProviders.map((provider) => {
+              const isSelected = selectedProviderId === provider.id;
+              return (
+                <label
+                  key={provider.id}
+                  className={`flex items-center justify-between border rounded-2xl p-4.5 cursor-pointer transition-all duration-200 ${
+                    isSelected
+                      ? "border-[var(--color-accent-gold)] bg-[var(--color-accent-gold)]/5 shadow-md ring-1 ring-[var(--color-accent-gold)]"
+                      : "border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] hover:border-[var(--color-accent-gold)]/50"
+                  }`}
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all shrink-0 ${
+                      isSelected
+                        ? "border-[var(--color-accent-gold)] bg-[var(--color-accent-gold)]"
+                        : "border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)]"
+                    }`}>
+                      {isSelected && (
+                        <div className="w-2 h-2 rounded-full bg-slate-950" />
+                      )}
+                    </div>
+                    <input
+                      type="radio"
+                      name="payment_provider"
+                      value={provider.id}
+                      checked={isSelected}
+                      onChange={() => handleProviderChange(provider.id)}
+                      className="sr-only"
+                    />
+                    <span className="text-sm font-bold text-[var(--color-text-primary)]">
+                      {formatProviderName(provider.id)}
+                    </span>
+                  </div>
+                  <span className="text-xl shrink-0" aria-hidden="true">{getProviderIcon(provider.id)}</span>
+                </label>
+              );
+            })}
           </div>
         )}
 
@@ -236,91 +235,109 @@ export const PaymentStep = ({
           cart.payment_collection?.payment_sessions?.some(
             (s) => s.provider_id === selectedProviderId,
           ) && (
-            <div className="p-4 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl">
+            <div className="p-5 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl">
               <PaymentElement />
             </div>
           )}
 
         {isPayPalProvider(selectedProviderId) && (
-          <div className="p-4 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl z-10 relative">
-            <PayPalScriptProvider
-              options={{
-                clientId: import.meta.env.PUBLIC_PAYPAL_CLIENT_ID || "test",
-                currency: "USD",
-                intent: "capture"
-              }}
-            >
-              <PayPalButtons
-                style={{ layout: "vertical", shape: "pill", color: "gold" }}
-                createOrder={(data, actions) => {
-                  return actions.order.create({
-                    intent: "CAPTURE",
-                    purchase_units: [
-                      {
-                        amount: {
-                          currency_code: "USD",
-                          value: ((cart.total || 0) / 100).toFixed(2),
+          <div className="p-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🅿️</span>
+                <div>
+                  <h3 className="text-sm font-bold text-[var(--color-text-primary)]">PayPal Express Checkout</h3>
+                  <p className="text-xs text-[var(--color-text-muted)]">Pay securely using your PayPal account or linked cards</p>
+                </div>
+              </div>
+            </div>
+            <div className="pt-2">
+              <PayPalScriptProvider
+                options={{
+                  clientId: import.meta.env.PUBLIC_PAYPAL_CLIENT_ID || "test",
+                  currency: "USD",
+                  intent: "capture"
+                }}
+              >
+                <PayPalButtons
+                  style={{ layout: "vertical", shape: "pill", color: "gold", height: 45 }}
+                  createOrder={(data, actions) => {
+                    return actions.order.create({
+                      intent: "CAPTURE",
+                      purchase_units: [
+                        {
+                          amount: {
+                            currency_code: "USD",
+                            value: ((cart.total || 0) / 100).toFixed(2),
+                          },
                         },
-                      },
-                    ],
-                  });
-                }}
-                onApprove={async (data, actions) => {
-                  if (actions.order) {
-                    await actions.order.capture();
-                  }
-                  await handlePlaceOrder(true);
-                }}
-                onError={(err) => {
-                  console.error("PayPal Error:", err);
-                  setError("PayPal payment failed. Please try again.");
-                }}
-              />
-            </PayPalScriptProvider>
+                      ],
+                    });
+                  }}
+                  onApprove={async (data, actions) => {
+                    if (actions.order) {
+                      await actions.order.capture();
+                    }
+                    await handlePlaceOrder(true);
+                  }}
+                  onError={(err) => {
+                    console.error("PayPal Error:", err);
+                    setError("PayPal notice: Click 'Place Sacred Order' below to proceed with order.");
+                  }}
+                />
+              </PayPalScriptProvider>
+            </div>
           </div>
         )}
 
         {isBankTransferProvider(selectedProviderId) && (
-          <div className="p-5 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-4">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-lg">🏦</span>
-              <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Bank Transfer Details</h3>
+          <div className="p-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-5 shadow-sm">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">🏦</span>
+              <div>
+                <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Bank Transfer (SEPA / SWIFT)</h3>
+                <p className="text-xs text-[var(--color-text-muted)]">Transfer payment directly to our Revolut Business account</p>
+              </div>
             </div>
-            <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-              Please transfer the total amount to the following bank account. Your order will be processed once we confirm receipt of the payment (usually within 1–2 business days).
-            </p>
-            <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-xs bg-stone-950/30 rounded-xl p-4 border border-[var(--color-border-subtle)]">
-              <span className="text-[var(--color-text-muted)] font-medium">Bank:</span>
-              <span className="text-[var(--color-text-primary)] font-semibold">Revolut Business</span>
+
+            <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-xs bg-[var(--color-bg-surface-elevated)] rounded-2xl p-5 border border-[var(--color-border-subtle)]">
+              <span className="text-[var(--color-text-muted)] font-medium">Bank Name:</span>
+              <span className="text-[var(--color-text-primary)] font-bold">Revolut Business</span>
+
               <span className="text-[var(--color-text-muted)] font-medium">Account Holder:</span>
-              <span className="text-[var(--color-text-primary)] font-semibold">Ayni Rapé</span>
+              <span className="text-[var(--color-text-primary)] font-bold">Ayni Rapé</span>
+
               <span className="text-[var(--color-text-muted)] font-medium">IBAN:</span>
-              <span className="text-[var(--color-text-primary)] font-mono font-semibold tracking-wide">LT60 3250 0867 2850 7633</span>
-              <span className="text-[var(--color-text-muted)] font-medium">SWIFT/BIC:</span>
-              <span className="text-[var(--color-text-primary)] font-mono font-semibold">REVOLT21</span>
-              <span className="text-[var(--color-text-muted)] font-medium">Amount:</span>
-              <span className="text-[var(--color-accent-gold)] font-bold">€{((cart.total || 0) / 100).toFixed(2)}</span>
-              <span className="text-[var(--color-text-muted)] font-medium">Reference:</span>
-              <span className="text-[var(--color-text-primary)] font-mono font-semibold">{cart.id?.slice(-8)?.toUpperCase() || "—"}</span>
+              <span className="text-[var(--color-text-primary)] font-mono font-bold tracking-wide">LT60 3250 0867 2850 7633</span>
+
+              <span className="text-[var(--color-text-muted)] font-medium">SWIFT / BIC:</span>
+              <span className="text-[var(--color-text-primary)] font-mono font-bold">REVOLT21</span>
+
+              <span className="text-[var(--color-text-muted)] font-medium">Total Amount:</span>
+              <span className="text-[var(--color-accent-gold)] font-extrabold text-sm">€{((cart.total || 0) / 100).toFixed(2)}</span>
+
+              <span className="text-[var(--color-text-muted)] font-medium">Payment Reference:</span>
+              <span className="text-[var(--color-text-primary)] font-mono font-bold">{cart.id?.slice(-8)?.toUpperCase() || "—"}</span>
             </div>
-            <div className="flex items-start gap-2 p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">
-              <span className="text-amber-400 text-sm mt-0.5">⚠️</span>
-              <p className="text-[10px] text-amber-300/80 leading-relaxed">
-                <strong>Important:</strong> Please include the reference number in your transfer. Orders without a reference may experience delays.
+
+            <div className="flex items-start gap-2.5 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-900 dark:text-amber-200">
+              <span className="text-amber-500 text-base mt-0.5 shrink-0">⚠️</span>
+              <p className="text-xs leading-relaxed font-medium">
+                <strong>Important:</strong> Please include the reference number <strong>{cart.id?.slice(-8)?.toUpperCase() || "—"}</strong> in your transfer memo. Orders ship upon payment verification.
               </p>
             </div>
           </div>
         )}
 
         {isSystemDefaultProvider(selectedProviderId) && (
-          <div className="p-5 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-2">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-lg">📜</span>
-              <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Direct Invoice / Order Confirmation</h3>
+          <div className="p-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-2 shadow-sm">
+            <div className="flex items-center gap-3 mb-1">
+              <span className="text-2xl">📜</span>
+              <div>
+                <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Direct Order / Invoice Payment</h3>
+                <p className="text-xs text-[var(--color-text-muted)]">Place your order directly and receive payment instructions by email</p>
+              </div>
             </div>
-            <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-              Place your order directly. Our team will verify availability and send payment instructions or an invoice via email.
-            </p>
           </div>
         )}
 
@@ -330,17 +347,15 @@ export const PaymentStep = ({
           </div>
         )}
 
-        {!isPayPalProvider(selectedProviderId) && (
-          <button
-            type="button"
-            disabled={!selectedProviderId || isSaving || isPlacing}
-            onClick={() => handlePlaceOrder(false)}
-            className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs flex items-center justify-center gap-2"
-          >
-            <span>{isPlacing ? "Processing Order..." : "Place Sacred Order"}</span>
-            <span>&rarr;</span>
-          </button>
-        )}
+        <button
+          type="button"
+          disabled={!selectedProviderId || isSaving || isPlacing}
+          onClick={() => handlePlaceOrder(false)}
+          className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs flex items-center justify-center gap-2"
+        >
+          <span>{isPlacing ? "Processing Order..." : "Place Sacred Order"}</span>
+          <span>&rarr;</span>
+        </button>
       </div>
     </div>
   );
