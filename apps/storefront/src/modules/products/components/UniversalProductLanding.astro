@@ -47,10 +47,60 @@ const showReviews = metadata.show_reviews !== false;
 const showFaqs = metadata.show_faqs !== false;
 const showPairings = metadata.show_pairings !== false;
 
+// Helper to generate dynamic category-tailored localized fallback descriptions
+const getFallbackDescription = (tName: string, hName: string, cCode: string) => {
+  const tLower = (tName || "").toLowerCase();
+  const hLower = (hName || "").toLowerCase();
+  const lang = (cCode || "gb").toLowerCase();
+
+  const isDE = lang === "de";
+  const isFR = lang === "fr";
+  const isES = lang === "es";
+  const isIT = lang === "it";
+
+  if (tLower.includes("kuripe") || tLower.includes("tepi") || hLower.includes("kuripe") || hLower.includes("tepi")) {
+    if (isDE) return "Handgefertigter amazonischer schamanischer Applikator für sanften, ergonomischen Luftstrom bei heiligen Rapé-Ritualen.";
+    if (isFR) return "Applicateur chamanique amazonien fait main, conçu pour un flux d'air fluide et ergonomique lors des rituels sacrés du Rapé.";
+    if (isES) return "Aplicador chamánico amazónico hecho a mano, diseñado para un flujo de aire suave y ergonómico durante los rituales sagrados de Rapé.";
+    if (isIT) return "Applicatore sciamanico amazzonico fatto a mano, progettato per un flusso d'aria fluido ed ergonomico durante i rituali sacri di Rapé.";
+    return "Handcrafted Amazonian shamanic applicator designed for smooth, ergonomic airflow during sacred Rapé facilitation and meditation rituals.";
+  }
+
+  if (tLower.includes("agua") || tLower.includes("florida") || tLower.includes("palo santo") || hLower.includes("agua") || hLower.includes("palo-santo")) {
+    if (isDE) return "Authentische peruanische zeremonielle aromatische Essenz zur sofortigen Raumreinigung, Aura-Klärung und Ritualvorbereitung.";
+    if (isFR) return "Essence aromatique cérémonielle péruvienne authentique pour la purification instantanée de l'espace, le nettoyage de l'aura et la préparation aux rituels.";
+    if (isES) return "Esencia aromática ceremonial peruana auténtica para la purificación instantánea del espacio, limpieza del aura y preparación ritual.";
+    if (isIT) return "Essenza aromatica cerimoniale peruviana autentica per la purificazione istantanea dello spazio, la pulizia dell'aura e la preparazione ai rituali.";
+    return "Authentic Peruvian ceremonial aromatic essence for instant space purification, aura cleansing, and ritual preparation.";
+  }
+
+  if (tLower.includes("bundle") || tLower.includes("carpet") || tLower.includes("bracelet") || hLower.includes("bundle") || hLower.includes("carpet")) {
+    if (isDE) return "Kuratierte schamanische Ausrüstung aus natürlichen Materialien zur Erdung Ihrer Energie und Bereicherung Ihrer spirituellen Praxis.";
+    if (isFR) return "Ensemble chamanique sélectionné, fabriqué à partir de matériaux naturels pour ancrer votre énergie et enrichir votre pratique spirituelle.";
+    if (isES) return "Conjunto chamánico seleccionado, elaborado con materiales naturales para enraizar tu energía y enriquecer tu práctica espiritual.";
+    if (isIT) return "Set sciamanico curato, realizzato con materiali naturali per radicare la tua energia e arricchire la tua pratica spirituale.";
+    return "Curated shamanic set crafted with natural materials to ground your energy and enhance your spiritual practice.";
+  }
+
+  // Rapé blends default
+  if (isDE) return "Authentische biologische amazonische Rapé-Mischung, zubereitet mit traditioneller Baumrindenasche und wildem Mapacho von Stammesältesten.";
+  if (isFR) return "Mélange authentique de Rapé amazonien biologique préparé avec de la cendre d'écorce sacrée et du Mapacho sauvage par les aînés des tribus.";
+  if (isES) return "Mezcla auténtica de Rapé amazónico orgánico preparada con ceniza sagrada de corteza de árbol y Mapacho silvestre por los ancianos tribales.";
+  if (isIT) return "Miscela autentica di Rapé amazzonico biologico preparata con cenere di corteccia sacra e Mapacho selvatico dagli anziani della tribù.";
+  return "Authentic organic Amazonian Rapé blend prepared with traditional sacred tree bark ash and wild Mapacho leaf by tribal elders.";
+};
+
 const displayImages = images && images.length > 0 ? images : (thumbnail ? [{ url: thumbnail }] : []);
-const descriptionParagraphs = (description ?? "").split(/\r?\n\n/).filter(Boolean);
-const shortSellingDescription = descriptionParagraphs[0] || description || "";
-const detailedStoryParagraphs = descriptionParagraphs.length > 1 ? descriptionParagraphs.slice(1) : [shortSellingDescription];
+const descriptionParagraphs = (description ?? "").split(/\r?\n\n/).map(p => p.trim()).filter(Boolean);
+const hasCustomDescription = descriptionParagraphs.length > 0;
+
+const shortSellingDescription = hasCustomDescription
+  ? descriptionParagraphs[0]
+  : getFallbackDescription(title || "", product.handle || "", countryCode);
+
+const secondaryDescription = hasCustomDescription && descriptionParagraphs.length > 1
+  ? descriptionParagraphs[1]
+  : null;
 
 // Determine product category type
 const titleLower = (title || "").toLowerCase();
@@ -430,9 +480,9 @@ const displayDimensions = (length && width && height) ? `${length} × ${width} �
           <p class="font-medium text-xs sm:text-sm text-[var(--color-text-primary)] leading-relaxed">
             {shortSellingDescription}
           </p>
-          {detailedStoryParagraphs.length > 0 && (
+          {secondaryDescription && (
             <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border-subtle)] pt-2">
-              {detailedStoryParagraphs[0]}
+              {secondaryDescription}
             </p>
           )}
         </div>
