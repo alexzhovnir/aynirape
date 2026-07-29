@@ -286,98 +286,94 @@ const schemaData = {
     </section>
   </div>
 
-  <!-- Categories Carousel Section (Full Bleed) -->
-  <section class="py-12 overflow-hidden w-full">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
-      <div>
-        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("home.categories.subtitle")}</span>
-        <h2 class="text-3xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl mt-2">{t("home.categories.title")}</h2>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <button id="cat-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous categories">&larr;</button>
-        <button id="cat-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next categories">&rarr;</button>
-      </div>
-    </div>
-
-    <div id="cat-slider" class="flex gap-4 overflow-x-auto scrollbar-none pb-8 pt-4 scroll-smooth snap-x snap-mandatory full-bleed-slider">
-      {featuredCategories.map((cat) => (
-        <div class="w-[240px] sm:w-[260px] md:w-[280px] snap-start shrink-0">
-          <a
-            href={cat.href}
-            class="group block bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 transition-all duration-300 hover:border-[var(--color-accent-gold)] shadow-sm hover:shadow-xl flex flex-col h-full justify-between"
-          >
-            <div>
-              <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)]">
-                {cat.imageUrl ? (
-                  <img
-                    src={cat.imageUrl}
-                    alt={cat.name}
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                ) : (
-                  <div class="w-full h-full flex items-center justify-center text-4xl text-[var(--color-accent-gold)]">
-                    🌿
-                  </div>
-                )}
-              </div>
-              <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-gold)] transition-colors mb-2">
-                {cat.name}
-              </h3>
-              <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-2 mb-4">
-                {cat.desc}
-              </p>
-            </div>
-
-            <div class="flex items-center text-xs font-bold text-[var(--color-accent-gold)] group-hover:translate-x-1 transition-transform">
-              <span>{t("home.categories.explore")}</span>
-              <span class="ml-1">&rarr;</span>
-            </div>
-          </a>
+    <!-- Categories Carousel Section -->
+    <section class="py-12 overflow-hidden">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
+        <div>
+          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("home.categories.subtitle")}</span>
+          <h2 class="text-3xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl mt-2">{t("home.categories.title")}</h2>
         </div>
-      ))}
-    </div>
-  </section>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center gap-2">
+          <button id="cat-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous categories">&larr;</button>
+          <button id="cat-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next categories">&rarr;</button>
+        </div>
+      </div>
+
+      <div id="cat-slider" class="flex gap-4 overflow-x-auto scrollbar-none pb-8 pt-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scroll-smooth snap-x snap-mandatory">
+        {featuredCategories.map((cat) => (
+          <div class="w-[240px] sm:w-[260px] md:w-[280px] snap-start shrink-0">
+            <a
+              href={cat.href}
+              class="group block bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 transition-all duration-300 hover:border-[var(--color-accent-gold)] shadow-sm hover:shadow-xl flex flex-col h-full justify-between"
+            >
+              <div>
+                <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)]">
+                  {cat.imageUrl ? (
+                    <img
+                      src={cat.imageUrl}
+                      alt={cat.name}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center text-4xl text-[var(--color-accent-gold)]">
+                      🌿
+                    </div>
+                  )}
+                </div>
+                <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-gold)] transition-colors mb-2">
+                  {cat.name}
+                </h3>
+                <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-2 mb-4">
+                  {cat.desc}
+                </p>
+              </div>
+
+              <div class="flex items-center text-xs font-bold text-[var(--color-accent-gold)] group-hover:translate-x-1 transition-transform">
+                <span>{t("home.categories.explore")}</span>
+                <span class="ml-1">&rarr;</span>
+              </div>
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
     <!-- Sacred Ceremony Guide Section -->
     <section class="py-6 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl my-8">
       <CeremonyGuide />
     </section>
   </div>
 
-  <!-- Bestsellers Carousel Section (Full Bleed) -->
-  {bestsellersList.length > 0 && (
-    <section class="py-12 overflow-hidden w-full">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
-        <div>
-          <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("home.bestsellers.subtitle")}</span>
-          <h2 class="text-3xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl mt-2">{t("home.bestsellers.title")}</h2>
-        </div>
-        
-        <div class="flex items-center gap-2">
-          <button id="best-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous bestsellers">&larr;</button>
-          <button id="best-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next bestsellers">&rarr;</button>
-        </div>
-      </div>
-
-      <div id="bestsellers-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-8 pt-4 scroll-smooth snap-x snap-mandatory full-bleed-slider">
-        {bestsellersList.map((product) => (
-          <div class="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start">
-            <ProductPreview
-              id={product.id}
-              variants={product.variants ?? []}
-              thumbnailUrl={product.thumbnail ?? undefined}
-              imageUrl={product.images?.[0]?.url}
-              title={product.title}
-            />
+    <!-- Bestsellers Carousel Section -->
+    {bestsellersList.length > 0 && (
+      <section class="py-12 overflow-hidden">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
+          <div>
+            <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("home.bestsellers.subtitle")}</span>
+            <h2 class="text-3xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl mt-2">{t("home.bestsellers.title")}</h2>
           </div>
-        ))}
-      </div>
-    </section>
-  )}
+          
+          <div class="flex items-center gap-2">
+            <button id="best-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous bestsellers">&larr;</button>
+            <button id="best-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next bestsellers">&rarr;</button>
+          </div>
+        </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div id="bestsellers-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-8 pt-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scroll-smooth snap-x snap-mandatory">
+          {bestsellersList.map((product) => (
+            <div class="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start">
+              <ProductPreview
+                id={product.id}
+                variants={product.variants ?? []}
+                thumbnailUrl={product.thumbnail ?? undefined}
+                imageUrl={product.images?.[0]?.url}
+                title={product.title}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
     <!-- Real Customer Reviews Section -->
     <section class="py-12 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl my-8 px-6 md:px-12">
       <div class="text-center max-w-2xl mx-auto mb-12">
