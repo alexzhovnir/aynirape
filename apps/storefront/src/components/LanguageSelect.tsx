@@ -116,8 +116,8 @@ export const LanguageSelect = ({
     const pathname = window.location.pathname;
     const segments = pathname.split("/").filter(Boolean);
 
-    // If on a non-commerce or unlocalized page like /blog, changing language redirects to the new region's home
-    if (segments.length > 0 && (segments[0] === "blog" || segments[0] === "keystatic")) {
+    // If on keystatic admin, redirect to new region home
+    if (segments.length > 0 && segments[0] === "keystatic") {
       window.location.href = `/${targetCode}`;
       return;
     }

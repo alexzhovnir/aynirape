@@ -4,14 +4,9 @@ import { retrieveProduct, listProducts } from "@lib/data/products";
 import { getRegion } from "@lib/data/regions";
 import { getProductParams } from "@lib/params/product-params";
 import { getProductPrice } from "@lib/utils/get-product-price";
-import ImageCarouselWrapper from "@modules/products/components/product-details/image-carousel/ImageCarouselWrapper.astro";
-import { ProductActions } from "@modules/products/components/product-details/ProductActions";
-import ProductAttributes from "@modules/products/components/product-details/ProductAttributes.astro";
-import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
-import CeremonyGuide from "@components/CeremonyGuide.astro";
 import { useTranslations } from "@lib/i18n/utils";
-import Breadcrumbs from "@components/Breadcrumbs.astro";
 import SilverTepiLanding from "@modules/products/components/SilverTepiLanding.astro";
+import UniversalProductLanding from "@modules/products/components/UniversalProductLanding.astro";
 
 export const getStaticPaths = getProductParams;
 
@@ -48,16 +43,7 @@ const {
   description,
   images,
   thumbnail,
-  options,
   variants,
-  material,
-  origin_country,
-  type,
-  weight,
-  length,
-  width,
-  height,
-  metadata,
 } = product ?? {};
 
 const { cheapestPrice } = getProductPrice({
@@ -66,29 +52,6 @@ const { cheapestPrice } = getProductPrice({
 
 const descriptionParagraphs = (description ?? "").split(/\r?\n\n/).filter(Boolean);
 const shortSellingDescription = descriptionParagraphs[0] || description || "";
-let detailedStoryParagraphs = descriptionParagraphs.length > 1 ? descriptionParagraphs.slice(1) : [shortSellingDescription];
-
-// Provide contextual fallback descriptions if the product lacks a detailed description
-if (!detailedStoryParagraphs[0] || detailedStoryParagraphs[0].trim().length < 20) {
-  const t_title = title?.toLowerCase() || "";
-  if (t_title.includes("kuripe")) {
-    detailedStoryParagraphs = t("store.product.fallback_desc.kuripe").split('\n\n');
-  } else if (t_title.includes("tepi")) {
-    detailedStoryParagraphs = t("store.product.fallback_desc.tepi").split('\n\n');
-  } else if (t_title.includes("rape") || t_title.includes("rapé") || t_title.includes("blend")) {
-    detailedStoryParagraphs = t("store.product.fallback_desc.rape").split('\n\n');
-  } else if (t_title.includes("agua") || t_title.includes("florida") || t_title.includes("cologne")) {
-    detailedStoryParagraphs = t("store.product.fallback_desc.agua").split('\n\n');
-  } else if (t_title.includes("palo santo") || t_title.includes("incense") || t_title.includes("smudge")) {
-    detailedStoryParagraphs = t("store.product.fallback_desc.palo_santo").split('\n\n');
-  } else {
-    detailedStoryParagraphs = t("store.product.fallback_desc.default").split('\n\n');
-  }
-}
-
-// Find bundle / set items (e.g., Kuripe pipe + Agua de Florida + Palo Santo)
-const kuripeBundleItem = allProducts.find(p => p.handle?.includes('kuripe') || p.categories?.some(c => c.handle?.includes('tepi')));
-const aguaBundleItem = allProducts.find(p => p.handle?.includes('agua-de-florida') || p.handle?.includes('palo-santo'));
 
 const schemaData = {
   "@context": "https://schema.org/",
@@ -127,369 +90,26 @@ const isSilverTepiDoubleCobra = product?.handle === "silver-tepi-double-cobra" |
   <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 
   {
-    isSilverTepiDoubleCobra && product ? (
-      <SilverTepiLanding
-        product={product}
-        region={region}
-        cheapestPrice={cheapestPrice}
-        t={t}
-        countryCode={countryCode!}
-        relatedProducts={relatedProducts}
-      />
-    ) : (
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
-        {error && <p class="text-red-500 mb-6">{error.message}</p>}
-        {
-          product && (
-            <div class="space-y-12">
-          <!-- Breadcrumbs Nav -->
-          <Breadcrumbs
-            items={[
-              { label: String(t("nav.home")), href: `/${countryCode}` },
-              { label: String(t("nav.shop")), href: `/${countryCode}/store` },
-              ...(product.categories?.[0] ? [{ label: product.categories[0].name, href: `/${countryCode}/store/category/${product.categories[0].handle}` }] : []),
-              { label: title ?? String(t("nav.product")) }
-            ]}
-          />
-
-          <!-- Main Product Buy Box Showcase Card -->
-          <div class="bg-[var(--color-bg-surface-elevated)] p-6 sm:p-10 lg:p-12 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
-            <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 items-start">
-              <!-- Left Column: Gallery -->
-              <div class="lg:sticky lg:top-24">
-                <ImageCarouselWrapper
-                  images={images && images.length > 0 ? images : (thumbnail ? [{ url: thumbnail }] : [])}
-                  alt={title ?? "Product image"}
-                />
-              </div>
-
-              <!-- Right Column: Compact Selling Box -->
-              <div class="flex flex-col gap-6">
-                <!-- Badges & Category -->
-                <div>
-                  <div class="flex flex-wrap items-center gap-2 mb-3">
-                    <span class="bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-[var(--color-accent-gold)]">
-                      {t("store.product.ethically_sourced")}
-                    </span>
-                    <span class="bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border border-emerald-500">
-                      {t("store.product.in_stock")}
-                    </span>
-                  </div>
-
-                  <h1 class="text-3xl md:text-4xl lg:text-5xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight">
-                    {title}
-                  </h1>
-                </div>
-
-                <!-- Price Display -->
-                <div class="flex items-baseline gap-4 border-y border-[var(--color-border-subtle)] py-4">
-                  <span id="product-price" class="text-3xl md:text-4xl font-bold text-[var(--color-accent-gold)]">
-                    {cheapestPrice?.calculated_price}
-                  </span>
-                  <span class="text-xs text-[var(--color-text-muted)]">{t("store.product.includes_vat")}</span>
-                </div>
-
-                <!-- Short Selling Excerpt -->
-                <div class="text-[var(--color-text-secondary)] text-sm leading-relaxed bg-[var(--color-bg-surface)] p-4 rounded-2xl border border-[var(--color-border-subtle)] space-y-2">
-                  <p class="font-medium text-[var(--color-text-primary)] leading-snug">
-                    {shortSellingDescription}
-                  </p>
-                  <ul class="text-xs text-[var(--color-text-muted)] space-y-1 pt-1 list-disc pl-4">
-                    {t("store.product.bullets").map((bullet: string) => (
-                      <li>{bullet}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <!-- Add to Cart & Favorites Buttons -->
-                <div class="flex gap-4 items-center pt-1">
-                  <div class="flex-1">
-                    <ProductActions
-                      options={options ?? []}
-                      variants={variants ?? []}
-                      productId={productId}
-                      regionId={region.id}
-                      labels={{
-                        add_to_cart: String(t("store.actions.add_to_cart")),
-                        adding: String(t("store.actions.adding"))
-                      }}
-                      client:visible
-                    />
-                  </div>
-
-                  <button
-                    id="btn-add-favorite"
-                    data-id={productId}
-                    data-title={title}
-                    data-thumbnail={thumbnail}
-                    data-handle={product?.handle}
-                    class="p-4 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] rounded-full transition-all duration-300 flex items-center justify-center cursor-pointer shadow-sm min-h-[50px] shrink-0"
-                    aria-label="Add to Favorites"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-[var(--color-text-muted)] fav-heart-icon transition-colors">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                    </svg>
-                  </button>
-                </div>
-
-                <!-- Trust Guarantees Grid -->
-                <div class="grid grid-cols-2 gap-3">
-                  <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-                    <span>📦</span>
-                    <span set:html={t("store.trust_shipping")} />
-                  </div>
-                  <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-                    <span>🌿</span>
-                    <span set:html={t("store.product.trust_organic")} />
-                  </div>
-                  <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-                    <span>🛡️</span>
-                    <span set:html={t("store.trust_authentic")} />
-                  </div>
-                  <div class="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-xl border border-[var(--color-border-subtle)]">
-                    <span>🌱</span>
-                    <span set:html={t("store.product.trust_climate")} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 2: Detailed Story, Usage & Specifications -->
-          <div class="grid lg:grid-cols-3 gap-8">
-            <!-- Left 2 Cols: Detailed Story & How/When to Use -->
-            <div class="lg:col-span-2 space-y-8">
-              <!-- Full Detailed Description -->
-              <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
-                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("store.product.heritage")}</span>
-                <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
-                  {t("store.product.about").replace("{0}", title ?? "")}
-                </h2>
-                <div class="text-[var(--color-text-secondary)] space-y-4 text-sm leading-relaxed">
-                  {detailedStoryParagraphs.map((paragraph) => (
-                    <p class="whitespace-pre-line">{paragraph}</p>
-                  ))}
-                </div>
-              </div>
-
-              <!-- When & How to Use Section -->
-              <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-6">
-                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("store.product.usage_guidance")}</span>
-                <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
-                  {t("store.product.when_how")}
-                </h2>
-                
-                <div class="grid sm:grid-cols-2 gap-6 text-xs">
-                  <div class="bg-[var(--color-bg-surface)] p-5 rounded-2xl border border-[var(--color-border-subtle)] space-y-2">
-                    <span class="text-xl block mb-1">🕯️</span>
-                    <strong class="block text-sm text-[var(--color-text-primary)] font-serif-heading">{t("store.product.when_title")}</strong>
-                    <p class="text-[var(--color-text-secondary)] leading-relaxed">
-                      {t("store.product.when_desc")}
-                    </p>
-                  </div>
-
-                  <div class="bg-[var(--color-bg-surface)] p-5 rounded-2xl border border-[var(--color-border-subtle)] space-y-2">
-                    <span class="text-xl block mb-1">🪵</span>
-                    <strong class="block text-sm text-[var(--color-text-primary)] font-serif-heading">{t("store.product.how_title")}</strong>
-                    <p class="text-[var(--color-text-secondary)] leading-relaxed">
-                      {t("store.product.how_desc")}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right 1 Col: Specifications & Complete Set Recommendations -->
-            <div class="space-y-8">
-              <!-- Specifications Component -->
-              <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
-                <ProductAttributes
-                  material={material}
-                  origin_country={origin_country}
-                  type={type}
-                  weight={weight}
-                  length={length}
-                  width={width}
-                  height={height}
-                  metadata={metadata}
-                />
-              </div>
-
-              <!-- Complete Your Set Bundle Box -->
-              <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
-                <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-[10px] uppercase block">{t("store.product.complete_set")}</span>
-                <h3 class="text-lg font-serif-heading font-bold text-[var(--color-text-primary)]">
-                  {t("store.product.recommended_acc")}
-                </h3>
-                <p class="text-xs text-[var(--color-text-secondary)]">{t("store.product.recommended_desc")}</p>
-
-                <div class="space-y-3 pt-2">
-                  {kuripeBundleItem && (
-                    <a
-                      href={`/${countryCode}/store/${kuripeBundleItem.handle || kuripeBundleItem.id}`}
-                      class="flex items-center gap-3 bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] transition-colors group"
-                    >
-                      <div class="w-12 h-12 rounded-xl overflow-hidden bg-[var(--color-bg-surface-elevated)] shrink-0">
-                        {kuripeBundleItem.thumbnail ? (
-                          <img src={kuripeBundleItem.thumbnail} alt={kuripeBundleItem.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                        ) : (
-                          <div class="w-full h-full flex items-center justify-center text-lg">🪵</div>
-                        )}
-                      </div>
-                      <div class="flex-1 min-w-0">
-                        <strong class="block text-xs text-[var(--color-text-primary)] truncate font-semibold group-hover:text-[var(--color-accent-gold)] transition-colors">
-                          {kuripeBundleItem.title}
-                        </strong>
-                        <span class="text-[10px] text-[var(--color-text-muted)]">{t("store.product.applicator_pipe")}</span>
-                      </div>
-                      <span class="text-xs font-bold text-[var(--color-accent-gold)]">&rarr;</span>
-                    </a>
-                  )}
-
-                  {aguaBundleItem && (
-                    <a
-                      href={`/${countryCode}/store/${aguaBundleItem.handle || aguaBundleItem.id}`}
-                      class="flex items-center gap-3 bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] transition-colors group"
-                    >
-                      <div class="w-12 h-12 rounded-xl overflow-hidden bg-[var(--color-bg-surface-elevated)] shrink-0">
-                        {aguaBundleItem.thumbnail ? (
-                          <img src={aguaBundleItem.thumbnail} alt={aguaBundleItem.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                        ) : (
-                          <div class="w-full h-full flex items-center justify-center text-lg">🌸</div>
-                        )}
-                      </div>
-                      <div class="flex-1 min-w-0">
-                        <strong class="block text-xs text-[var(--color-text-primary)] truncate font-semibold group-hover:text-[var(--color-accent-gold)] transition-colors">
-                          {aguaBundleItem.title}
-                        </strong>
-                        <span class="text-[10px] text-[var(--color-text-muted)]">{t("store.product.cleansing_essential")}</span>
-                      </div>
-                      <span class="text-xs font-bold text-[var(--color-accent-gold)]">&rarr;</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sacred Ceremony Guide Section -->
-          <div class="py-6 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl my-8">
-            <CeremonyGuide />
-          </div>
-
-          <!-- Related Products Carousel Slider -->
-          {
-            product && relatedProducts.length > 0 && (
-              <section class="py-12 overflow-hidden border-t border-[var(--color-border-subtle)] mt-12">
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
-                  <div>
-                    <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("store.product.recommended_for_you")}</span>
-                    <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] sm:text-4xl mt-2">
-                      {t("store.product.people_also_viewed")}
-                    </h2>
-                  </div>
-                  
-                  <div class="flex items-center gap-2">
-                    <button id="rel-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous related products">&larr;</button>
-                    <button id="rel-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next related products">&rarr;</button>
-                  </div>
-                </div>
-
-                <div id="related-products-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-8 pt-4 px-1 scroll-smooth snap-x snap-mandatory">
-                  {relatedProducts.map((p) => (
-                    <div class="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start">
-                      <ProductPreview
-                        id={p.id}
-                        handle={p.handle}
-                        variants={p.variants ?? []}
-                        thumbnailUrl={p.thumbnail ?? undefined}
-                        imageUrl={p.images?.[0]?.url}
-                        title={p.title}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )
-          }
-
-        </div>
+    product && (
+      isSilverTepiDoubleCobra ? (
+        <SilverTepiLanding
+          product={product}
+          region={region}
+          cheapestPrice={cheapestPrice}
+          t={t}
+          countryCode={countryCode!}
+          relatedProducts={relatedProducts}
+        />
+      ) : (
+        <UniversalProductLanding
+          product={product}
+          region={region}
+          cheapestPrice={cheapestPrice}
+          t={t}
+          countryCode={countryCode!}
+          relatedProducts={relatedProducts}
+        />
       )
-    }
-  </div>
     )
   }
 </Layout>
-
-<script is:inline>
-  document.addEventListener('astro:page-load', () => {
-    // Related products carousel control
-    const relSlider = document.getElementById('related-products-slider');
-    const relNextBtn = document.getElementById('rel-slider-next');
-    const relPrevBtn = document.getElementById('rel-slider-prev');
-    
-    if (relSlider) {
-      relNextBtn?.addEventListener('click', () => {
-        relSlider.scrollLeft += 320;
-      });
-      relPrevBtn?.addEventListener('click', () => {
-        relSlider.scrollLeft -= 320;
-      });
-    }
-
-    // Favorites Heart Button logic
-    const favBtn = document.getElementById('btn-add-favorite');
-    const icon = favBtn?.querySelector('.fav-heart-icon');
-
-    if (!favBtn) return;
-
-    const prodId = favBtn.getAttribute('data-id');
-    const title = favBtn.getAttribute('data-title');
-    const thumbnail = favBtn.getAttribute('data-thumbnail');
-    const handle = favBtn.getAttribute('data-handle');
-
-    function getFavorites() {
-      try {
-        return JSON.parse(localStorage.getItem('ayni_favorites') || '[]');
-      } catch {
-        return [];
-      }
-    }
-
-    function isFavorite() {
-      const favs = getFavorites();
-      return favs.some(item => item.id === prodId);
-    }
-
-    function updateUI() {
-      if (isFavorite()) {
-        if (icon) {
-          icon.setAttribute('fill', '#ef4444');
-          icon.setAttribute('stroke', '#ef4444');
-          icon.classList.remove('text-[var(--color-text-muted)]');
-          icon.classList.add('text-red-500');
-        }
-      } else {
-        if (icon) {
-          icon.setAttribute('fill', 'none');
-          icon.setAttribute('stroke', 'currentColor');
-          icon.classList.remove('text-red-500');
-          icon.classList.add('text-[var(--color-text-muted)]');
-        }
-      }
-    }
-
-    updateUI();
-
-    favBtn.addEventListener('click', () => {
-      let favs = getFavorites();
-      if (isFavorite()) {
-        favs = favs.filter(item => item.id !== prodId);
-      } else {
-        favs.push({ id: prodId, title, thumbnail, handle });
-      }
-      localStorage.setItem('ayni_favorites', JSON.stringify(favs));
-      updateUI();
-    });
-  });
-</script>

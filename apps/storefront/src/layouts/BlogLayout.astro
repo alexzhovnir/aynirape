@@ -17,6 +17,7 @@ interface Props {
   canonicalPath?: string;
   image?: string;
   lang?: string;
+  countryCode?: string;
   type?: "website" | "article";
   publishedTime?: string;
   alternates?: Alternate[];
@@ -32,18 +33,20 @@ const {
   canonicalPath,
   image,
   lang = "en",
+  countryCode,
   type = "website",
   publishedTime,
   alternates = [],
   jsonLd,
 } = Astro.props;
 
+const activeCountryCode = countryCode || DEFAULT_REGION;
 const site = Astro.site ?? new URL(Astro.url.origin);
 const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, site);
 const ogImage = image ? new URL(image, site).href : undefined;
 const pageTitle = `${title} | ${SITE_NAME}`;
 
-const region = await getRegion(DEFAULT_REGION);
+const region = await getRegion(activeCountryCode);
 const regionId = region?.id || null;
 ---
 
@@ -94,12 +97,12 @@ const regionId = region?.id || null;
   </head>
   <body class="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
     <div class="flex min-h-screen w-full flex-col">
-      <Nav client:load countryCode={DEFAULT_REGION} regionId={regionId} />
+      <Nav client:load countryCode={activeCountryCode} regionId={regionId} />
       <main class="flex-1 min-h-[calc(100vh-72px)] max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         <slot />
       </main>
-      <Footer countryCode={DEFAULT_REGION} />
-      <CartSidebar client:load countryCode={DEFAULT_REGION} />
+      <Footer countryCode={activeCountryCode} />
+      <CartSidebar client:load countryCode={activeCountryCode} />
     </div>
   </body>
 </html>

@@ -1,0 +1,166 @@
+---
+export const prerender = true;
+
+import { getCollection, render } from "astro:content";
+import BlogLayout from "@layouts/BlogLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { getRegionParams } from "@lib/params/region-params";
+import { getRegion } from "@lib/data/regions";
+import { listProducts } from "@lib/data/products";
+
+const toSlug = (id: string) => id.replace(/\/index$/, "");
+
+export async function getStaticPaths() {
+  const regions = await getRegionParams();
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  const paths: any[] = [];
+
+  regions.forEach(({ params: { countryCode } }) => {
+    posts.forEach((post) => {
+      paths.push({
+        params: {
+          countryCode,
+          slug: toSlug(post.id),
+        },
+        props: {
+          post,
+          countryCode,
+        },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const { post, countryCode } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2);
+
+const site = Astro.site ?? new URL(Astro.url.origin);
+const url = new URL(`/${countryCode}/blog/${toSlug(post.id)}`, site).href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: post.data.title,
+  description: post.data.excerpt,
+  datePublished: post.data.publishedDate.toISOString(),
+  image: post.data.coverImage ? new URL(post.data.coverImage, site).href : undefined,
+  mainEntityOfPage: url,
+  publisher: { "@type": "Organization", name: "AyniRape" },
+  author: { "@type": "Person", name: post.data.author || "Ayni Rapé" },
+};
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString(countryCode === "fr" ? "fr-FR" : "en-GB", { day: "2-digit", month: "long", year: "numeric" });
+
+const region = await getRegion(countryCode);
+let featuredProducts: any[] = [];
+if (region) {
+  try {
+    const productsList = await listProducts(region.id);
+    featuredProducts = productsList.filter((p) => ['nukini-sansara', 'agua-de-florida'].includes(p.handle)).slice(0, 2);
+    if (featuredProducts.length === 0) {
+      featuredProducts = productsList.slice(0, 2);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+---
+
+<BlogLayout
+  title={post.data.title}
+  description={post.data.excerpt}
+  lang={countryCode}
+  countryCode={countryCode}
+  canonicalPath={`/${countryCode}/blog/${toSlug(post.id)}`}
+  image={post.data.coverImage}
+  type="article"
+  publishedTime={post.data.publishedDate.toISOString()}
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs
+    items={[
+      { label: "Home", href: `/${countryCode}` },
+      { label: "Journal", href: `/${countryCode}/blog` },
+      { label: post.data.title }
+    ]}
+  />
+
+  <article class="max-w-4xl mx-auto space-y-8 py-4">
+    <!-- Header -->
+    <header class="space-y-4 text-center max-w-3xl mx-auto">
+      <div class="flex items-center justify-center gap-3 text-xs text-[var(--color-text-muted)]">
+        <span class="bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] px-3 py-1 rounded-full font-bold uppercase tracking-wider text-[11px]">
+          {post.data.category || "Rituals"}
+        </span>
+        <span>•</span>
+        <time datetime={post.data.publishedDate.toISOString()}>{fmtDate(post.data.publishedDate)}</time>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight">
+        {post.data.title}
+      </h1>
+
+      <p class="text-sm sm:text-base text-[var(--color-text-secondary)] leading-relaxed">
+        {post.data.excerpt}
+      </p>
+
+      <div class="flex items-center justify-center gap-2 pt-2 text-xs text-[var(--color-text-muted)]">
+        <span>Written by <strong class="text-[var(--color-text-primary)]">{post.data.author || "Ayni Team"}</strong></span>
+      </div>
+    </header>
+
+    <!-- Cover Image -->
+    {post.data.coverImage && (
+      <div class="rounded-3xl overflow-hidden border border-[var(--color-border-subtle)] shadow-lg aspect-[16/9] bg-[var(--color-bg-surface)]">
+        <img src={post.data.coverImage} alt={post.data.title} class="w-full h-full object-cover" />
+      </div>
+    )}
+
+    <!-- Table of contents if present -->
+    {toc.length > 0 && (
+      <nav class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-3">
+        <p class="font-serif-heading font-bold text-sm uppercase tracking-wider text-[var(--color-accent-gold)]">Table of Contents</p>
+        <ul class="space-y-2 text-xs text-[var(--color-text-secondary)]">
+          {toc.map((h) => (
+            <li>
+              <a href={`#${h.slug}`} class="hover:text-[var(--color-accent-gold)] transition-colors">
+                • {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
+
+    <!-- Main Post Content -->
+    <div class="prose dark:prose-invert max-w-none text-sm sm:text-base leading-relaxed text-[var(--color-text-secondary)]">
+      <Content />
+    </div>
+
+    <!-- Related Products Callout -->
+    {featuredProducts.length > 0 && (
+      <section class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] space-y-4 mt-12">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)]">Explore Sacred Tools Mentioned</h2>
+          <a href={`/${countryCode}/store`} class="text-xs font-bold text-[var(--color-accent-gold)] hover:underline">View All &rarr;</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {featuredProducts.map((p) => (
+            <a href={`/${countryCode}/store/${p.handle}`} class="flex items-center gap-4 bg-[var(--color-bg-surface)] p-4 rounded-2xl border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] transition-all">
+              {p.thumbnail && <img src={p.thumbnail} alt={p.title} class="w-12 h-12 object-cover rounded-xl shrink-0" />}
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-bold text-[var(--color-text-primary)] truncate">{p.title}</p>
+                <p class="text-[11px] text-[var(--color-accent-gold)] font-bold mt-1">Explore Item &rarr;</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</BlogLayout>

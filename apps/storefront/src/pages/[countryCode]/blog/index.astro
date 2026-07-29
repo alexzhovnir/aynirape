@@ -1,0 +1,207 @@
+---
+export const prerender = true;
+
+import { getCollection } from "astro:content";
+import BlogLayout from "@layouts/BlogLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { getRegionParams } from "@lib/params/region-params";
+import { getRegion } from "@lib/data/regions";
+import { listProducts } from "@lib/data/products";
+
+export const getStaticPaths = getRegionParams;
+
+const { countryCode = "gb" } = Astro.params;
+
+const slugOf = (id: string) => id.replace(/\/index$/, "");
+
+let allPosts = (
+  await getCollection(
+    "blog",
+    ({ data }) => data.language === countryCode && !data.draft,
+  )
+).sort((a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime());
+
+// Fallback to English posts if no localized posts exist for this language
+if (allPosts.length === 0) {
+  allPosts = (
+    await getCollection(
+      "blog",
+      ({ data }) => data.language === "en" && !data.draft,
+    )
+  ).sort((a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime());
+}
+
+// Calculate categories and authors dynamically
+const categoriesMap = new Map<string, number>();
+const authorsMap = new Map<string, { slug: string; count: number }>();
+
+allPosts.forEach((post) => {
+  const cat = post.data.category || "Rituals";
+  const author = post.data.author || "Ayni Team";
+  const authorSlug = post.data.authorSlug || "ayni-team";
+
+  categoriesMap.set(cat, (categoriesMap.get(cat) || 0) + 1);
+  authorsMap.set(author, {
+    slug: authorSlug,
+    count: (authorsMap.get(author)?.count || 0) + 1,
+  });
+});
+
+const categories = Array.from(categoriesMap.entries()).map(([name, count]) => ({
+  name,
+  slug: name.toLowerCase(),
+  count,
+}));
+
+const authors = Array.from(authorsMap.entries()).map(([name, info]) => ({
+  name,
+  slug: info.slug,
+  count: info.count,
+}));
+
+const region = await getRegion(countryCode);
+let featuredProducts: any[] = [];
+if (region) {
+  try {
+    const productsList = await listProducts(region.id);
+    featuredProducts = productsList.filter((p) => ['nukini-sansara', 'agua-de-florida'].includes(p.handle)).slice(0, 2);
+    if (featuredProducts.length === 0) {
+      featuredProducts = productsList.slice(0, 2);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString(countryCode === "fr" ? "fr-FR" : "en-GB", { day: "2-digit", month: "short", year: "numeric" });
+---
+
+<BlogLayout
+  title="Journal - Sacred Amazonian Wisdom & Ceremony Guides"
+  description="Explore our blog for shamanic guides, traditional Rapé preparation methods, Palo Santo ceremonies, and deep insights into Amazonian sacred herbs."
+  lang={countryCode}
+  countryCode={countryCode}
+  canonicalPath={`/${countryCode}/blog`}
+>
+  <Breadcrumbs
+    items={[
+      { label: "Home", href: `/${countryCode}` },
+      { label: "Journal" }
+    ]}
+  />
+  <h1 class="mb-2 text-4xl font-serif-heading font-bold text-[var(--color-text-primary)]">Journal</h1>
+  <p class="mb-8 text-[var(--color-text-secondary)] text-base">
+    Preparation, care and meaning behind the sacred tools we offer.
+  </p>
+
+  <div class="grid gap-12 lg:grid-cols-[1fr_260px] w-full">
+    <!-- Main content: posts list -->
+    <div>
+      {allPosts.length === 0 && (
+        <p class="text-[var(--color-text-muted)]">No posts yet. Add one at <a href="/keystatic" class="underline text-[var(--color-accent-gold)]">/keystatic</a>.</p>
+      )}
+
+      <ul class="grid gap-6 grid-cols-1">
+        {allPosts.map((post) => (
+          <li class="group">
+            <a href={`/${countryCode}/blog/${slugOf(post.id)}`} class="flex flex-col md:flex-row gap-6 no-underline items-start bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] p-6 rounded-3xl transition-all duration-300 shadow-sm hover:shadow-md">
+              <div class="aspect-[3/2] w-full md:w-[280px] lg:w-[320px] rounded-2xl overflow-hidden bg-[var(--color-bg-surface)] relative border border-[var(--color-border-subtle)] shrink-0">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center select-none bg-[var(--color-bg-surface)] z-0">
+                  <span class="font-serif-heading italic text-lg text-[var(--color-accent-gold)] mb-1">Ayni Râpé</span>
+                  <span class="text-xs uppercase tracking-[0.2em] text-[var(--color-text-muted)] font-semibold">Journal</span>
+                </div>
+                {post.data.coverImage && (
+                  <img
+                    src={post.data.coverImage}
+                    alt={post.data.title}
+                    class="w-full h-full object-cover relative z-10 transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                )}
+              </div>
+
+              <div class="flex-1 flex flex-col justify-between h-full py-1">
+                <div>
+                  <div class="flex items-center gap-3 text-xs text-[var(--color-text-muted)] mb-3">
+                    <span class="bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-[10px]">
+                      {post.data.category || "Rituals"}
+                    </span>
+                    <span>•</span>
+                    <time datetime={post.data.publishedDate.toISOString()}>{fmtDate(post.data.publishedDate)}</time>
+                  </div>
+
+                  <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-gold)] transition-colors leading-snug mb-3">
+                    {post.data.title}
+                  </h2>
+
+                  <p class="text-xs sm:text-sm text-[var(--color-text-secondary)] line-clamp-2 leading-relaxed mb-4">
+                    {post.data.excerpt}
+                  </p>
+                </div>
+
+                <div class="flex items-center justify-between pt-3 border-t border-[var(--color-border-subtle)] text-xs text-[var(--color-text-muted)] mt-auto">
+                  <span class="font-medium">{post.data.author || "Ayni Team"}</span>
+                  <span class="font-bold text-[var(--color-accent-gold)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                    Read Article &rarr;
+                  </span>
+                </div>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="space-y-8">
+      <!-- Categories Widget -->
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-4">
+        <h3 class="font-serif-heading font-bold text-base text-[var(--color-text-primary)] uppercase tracking-wider text-xs">Categories</h3>
+        <ul class="space-y-2 text-xs">
+          {categories.map((cat) => (
+            <li>
+              <a href={`/${countryCode}/blog/category/${cat.slug}`} class="flex items-center justify-between text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors py-1">
+                <span>{cat.name}</span>
+                <span class="bg-[var(--color-bg-surface)] px-2 py-0.5 rounded-full text-[10px] text-[var(--color-text-muted)] font-bold">{cat.count}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Authors Widget -->
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-4">
+        <h3 class="font-serif-heading font-bold text-base text-[var(--color-text-primary)] uppercase tracking-wider text-xs">Authors</h3>
+        <ul class="space-y-2 text-xs">
+          {authors.map((aut) => (
+            <li>
+              <a href={`/${countryCode}/blog/author/${aut.slug}`} class="flex items-center justify-between text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors py-1">
+                <span>{aut.name}</span>
+                <span class="bg-[var(--color-bg-surface)] px-2 py-0.5 rounded-full text-[10px] text-[var(--color-text-muted)] font-bold">{aut.count}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Featured Shop Products -->
+      {featuredProducts.length > 0 && (
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-4">
+          <h3 class="font-serif-heading font-bold text-base text-[var(--color-text-primary)] uppercase tracking-wider text-xs">Sacred Shop</h3>
+          <div class="space-y-3">
+            {featuredProducts.map((p) => (
+              <a href={`/${countryCode}/store/${p.handle}`} class="flex items-center gap-3 bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] transition-all">
+                {p.thumbnail && <img src={p.thumbnail} alt={p.title} class="w-10 h-10 object-cover rounded-xl shrink-0" />}
+                <div class="min-w-0 flex-1">
+                  <p class="text-xs font-bold text-[var(--color-text-primary)] truncate">{p.title}</p>
+                  <p class="text-[10px] text-[var(--color-accent-gold)] font-bold">Shop Now &rarr;</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </aside>
+  </div>
+</BlogLayout>

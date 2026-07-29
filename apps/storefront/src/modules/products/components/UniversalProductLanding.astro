@@ -1,0 +1,650 @@
+---
+import ImageCarouselWrapper from "./product-details/image-carousel/ImageCarouselWrapper.astro";
+import { ProductActions } from "./product-details/ProductActions";
+import ProductPreview from "./product-preview/ProductPreview.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+
+interface Props {
+  product: any;
+  region: any;
+  cheapestPrice: any;
+  t: (key: string) => any;
+  countryCode: string;
+  relatedProducts?: any[];
+}
+
+const { product, region, cheapestPrice, t, countryCode, relatedProducts = [] } = Astro.props;
+
+const {
+  title,
+  description,
+  images,
+  thumbnail,
+  options,
+  variants,
+  metadata,
+} = product;
+
+const displayImages = images && images.length > 0 ? images : (thumbnail ? [{ url: thumbnail }] : []);
+const descriptionParagraphs = (description ?? "").split(/\r?\n\n/).filter(Boolean);
+const shortSellingDescription = descriptionParagraphs[0] || description || "";
+const detailedStoryParagraphs = descriptionParagraphs.length > 1 ? descriptionParagraphs.slice(1) : [shortSellingDescription];
+
+// Determine product category type
+const titleLower = (title || "").toLowerCase();
+const handleLower = (product.handle || "").toLowerCase();
+
+const isApplicator = titleLower.includes("kuripe") || titleLower.includes("tepi") || handleLower.includes("kuripe") || handleLower.includes("tepi");
+const isAromatic = titleLower.includes("agua") || titleLower.includes("florida") || titleLower.includes("palo santo") || titleLower.includes("incense") || handleLower.includes("agua") || handleLower.includes("palo-santo");
+const isBundle = titleLower.includes("bundle") || titleLower.includes("discovery") || handleLower.includes("bundle");
+const isOrnament = titleLower.includes("carpet") || titleLower.includes("bracelet") || titleLower.includes("cloth") || handleLower.includes("carpet") || handleLower.includes("bracelet");
+const isRape = !isApplicator && !isAromatic && !isBundle && !isOrnament; // Default to Rapé blend
+
+// Dynamic Category Badges & Labels
+let categoryBadge = "🌿 Amazonian Sacred Medicine";
+let subBadge = "✨ Ethically Sourced & Fair Trade";
+if (isApplicator) {
+  categoryBadge = titleLower.includes("silver") ? "🐍 925 Sterling Silver Masterpiece" : "🪵 Handcrafted Sacred Applicator";
+  subBadge = "⚡ Ergonomic Ceremonial Airflow";
+} else if (isAromatic) {
+  categoryBadge = "💧 Authentic Peru Import";
+  subBadge = "🧹 Space & Aura Purification";
+} else if (isBundle) {
+  categoryBadge = "🎁 Curated Sacred Set";
+  subBadge = "⚡ Special Bundle Value";
+} else if (isOrnament) {
+  categoryBadge = "🎨 Handwoven Altar Artistry";
+  subBadge = "🛡️ Sacred Protection & Energy";
+}
+
+// Category-Tailored USPs
+const getUsps = () => {
+  if (isApplicator) {
+    return [
+      { icon: "⚡", title: "Ergonomic Airflow Precision", text: "Specifically angled barrels ensure smooth, airtight contact for effortless self or partner facilitation." },
+      { icon: "🪵", title: "Sacred Materials & Silver", text: "Crafted from heavy Amazonian hardwood, 925 sterling silver, or natural stone for pure vibrational resonance." },
+      { icon: "🐍", title: "Ancestral Totem Carvings", text: "Hand-carved jaguar, serpent, eagle, or Shipibo patterns representing spiritual protection and strength." },
+      { icon: "🛡️", title: "Lifetime Quality Guarantee", text: "Built to last a lifetime of ceremonial work. Natural, durable, and easy to clean." }
+    ];
+  } else if (isAromatic) {
+    return [
+      { icon: "💧", title: "100% Authentic Peru Import", text: "Genuine Peruvian Agua de Florida and wild-harvested Palo Santo wood resin, direct from origin." },
+      { icon: "🧹", title: "Instant Space Clearing", text: "Clears heavy emotional and energetic residue from rooms, altars, and human aura within seconds." },
+      { icon: "🌸", title: "Pure Botanical Essence", text: "Rich natural blend of citrus, blossom, and resin oils creating a grounded, sacred atmosphere." },
+      { icon: "🧘", title: "Essential Ceremony Partner", text: "The ideal ritual companion for purifying space before Rapé, meditation, or sound healing sessions." }
+    ];
+  } else if (isBundle) {
+    return [
+      { icon: "🎁", title: "Complete Sacred Synergy", text: "Curated combinations of Rapé blends, applicators, and aromatics designed to work in perfect harmony." },
+      { icon: "⚡", title: "Exceptional Value Savings", text: "Save significantly compared to purchasing individual items separately." },
+      { icon: "🌱", title: "Full Spectrum Experience", text: "Explore varying intensities and varieties to discover what best serves your spiritual practice." },
+      { icon: "📦", title: "Sacred Gift Box", text: "Beautifully presented in eco-friendly protective packaging, ready for gifting or ceremonial use." }
+    ];
+  } else if (isOrnament) {
+    return [
+      { icon: "🎨", title: "Handwoven Ancestral Craft", text: "Intricately woven by native Amazonian and Andean artisans using traditional loom techniques." },
+      { icon: "🛡️", title: "Sacred Symbol Protection", text: "Featuring snake, hummingbird, and sacred plant geometry that anchors protective light in your space." },
+      { icon: "✨", title: "Premium Natural Fibers", text: "Durable, eco-friendly materials designed for shamanic altars, meditation corners, or personal adornment." },
+      { icon: "🤝", title: "Direct Fair Trade Support", text: "Every purchase directly supports artisan families and helps preserve ancient craftsmanship." }
+    ];
+  } else {
+    // Default Rapé Blends
+    return [
+      { icon: "🌿", title: "Authentic Tribal Sourcing", text: "Ethically harvested and prepared by Amazonian indigenous elders (Huni Kuin, Yawanawa, Nukini, Katukina)." },
+      { icon: "🧠", title: "Deep Grounding & Clarity", text: "Instantly quiets overthinking, clears mental fog, and centers awareness in the present moment." },
+      { icon: "🔥", title: "Sacred Ash & Botanical Blend", text: "Made with Tsunu, Paricá, or Emburana ash blended with wild organic mapacho and medicinal herbs." },
+      { icon: "🤝", title: "Ethical Fair Trade", text: "Purchases directly support tribal communities, rainforest conservation, and indigenous heritage." }
+    ];
+  }
+};
+
+// Category-Tailored Problem vs Solution
+const getComparison = () => {
+  if (isApplicator) {
+    return {
+      title: "Mass-Produced Pipes vs. Sacred Hand-Carved Applicator",
+      standardTitle: "Generic / Mass-Produced Pipes",
+      standardList: [
+        "Rough interior barrels that obstruct smooth airflow.",
+        "Cheaper synthetic glue or plastic materials that degrade.",
+        "Uncomfortable fit causing air leaks during blow."
+      ],
+      premiumTitle: `${title} Applicator`,
+      premiumList: [
+        "Hand-sanded interior channels for flawless, effortless airflow.",
+        "100% natural Amazonian hardwood, 925 silver & organic resin.",
+        "Ergonomically contoured tips for comfortable, airtight fit."
+      ]
+    };
+  } else if (isAromatic) {
+    return {
+      title: "Synthetic Sprays vs. Authentic Sacred Aromatics",
+      standardTitle: "Artificial / Synthetic Fragrances",
+      standardList: [
+        "Chemical solvents and artificial perfumes that irritate nose.",
+        "No energetic purification properties or sacred intent.",
+        "Commercially mass-manufactured with cheap additives."
+      ],
+      premiumTitle: `${title} Sacred Aromatic`,
+      premiumList: [
+        "100% authentic Peruvian formula & wild-harvested botanicals.",
+        "Used for generations by shamans for aura & space clearing.",
+        "Pure, refreshing, and deeply grounding natural fragrance."
+      ]
+    };
+  } else {
+    return {
+      title: "Industrial Commercial Products vs. Sacred Amazonian Rapé",
+      standardTitle: "Commercial / Industrial Products",
+      standardList: [
+        "Contains chemical additives, artificial flavors, or heavy preservatives.",
+        "Unblessed mass production lacking ceremonial intention.",
+        "Exploitative supply chains with no benefit to origin tribes."
+      ],
+      premiumTitle: `${title} Sacred Blend`,
+      premiumList: [
+        "100% pure organic Amazonian leaf & sacred tree ashes.",
+        "Crafted with traditional prayers, singing, and sacred focus.",
+        "Direct fair trade empowering Amazonian indigenous families."
+      ]
+    };
+  }
+};
+
+// Category-Tailored Ritual Steps
+const getRitualSteps = () => {
+  if (isApplicator) {
+    return [
+      { step: "01", title: "Purify Your Tool", text: "Wipe your applicator with Agua de Florida or smudge with Palo Santo to clear residual energy." },
+      { step: "02", title: "Measure Medicine", text: "Carefully place a pea-sized amount of sacred Rapé powder into the applicator barrel." },
+      { step: "03", title: "Align Position", text: "Place the long end to your mouth and gently insert tip into nostril with comfortable contact." },
+      { step: "04", title: "Mindful Blow", text: "Deliver a calm, continuous blow. Close eyes and integrate the grounding energy." }
+    ];
+  } else if (isAromatic) {
+    return [
+      { step: "01", title: "Set Intention", text: "Take a deep breath and clarify what energy you wish to clear or invite into your space." },
+      { step: "02", title: "Apply / Light", text: "Splash or spray Agua de Florida on hands, or ignite Palo Santo stick until glowing." },
+      { step: "03", title: "Cleanse Aura", text: "Pass hands or fragrant smoke around your head, chest, and ceremonial altar." },
+      { step: "04", title: "Settle into Stillness", text: "Enjoy the refreshed, pure atmosphere as you enter meditation or ritual." }
+    ];
+  } else {
+    return [
+      { step: "01", title: "Cleanse Space", text: "Smudge your surroundings with Palo Santo or spray Agua de Florida to quiet the environment." },
+      { step: "02", title: "Set Intention", text: "Hold the medicine close to your heart, stating your intention for clarity, healing, or grounding." },
+      { step: "03", title: "Receive Medicine", text: "Use your Kuripe or Tepi to deliver the sacred blow into each nostril." },
+      { step: "04", title: "Integrate & Rest", text: "Sit softly with eyes closed for 5-15 minutes as the medicine grounds your energy." }
+    ];
+  }
+};
+
+// Reviews Data for Social Proof
+const reviews = [
+  {
+    author: "Elena M.",
+    location: "Munich, Germany",
+    role: "Verified Facilitator",
+    rating: 5,
+    date: "July 18, 2026",
+    title: "Exceptional quality and fast delivery",
+    content: `The ${title} exceeded my expectations. You can feel the care and sacred intention in the craftsmanship. Arrived in 2 days in Munich with eco discreet packaging.`
+  },
+  {
+    author: "Dr. Julian V.",
+    location: "Zurich, Switzerland",
+    role: "Holistic Practitioner",
+    rating: 5,
+    date: "June 29, 2026",
+    title: "Pure, authentic & powerful",
+    content: `I use ${title} regularly in my practice. The energy is pure, grounded, and very high quality. I recommend Ayni Rapé to all my clients.`
+  },
+  {
+    author: "Sophie K.",
+    location: "Vienna, Austria",
+    role: "Meditation Guide",
+    rating: 5,
+    date: "June 14, 2026",
+    title: "Best ceremonial shop in Europe",
+    content: `Fantastic customer service and genuine items directly from South America. ${title} is now a cornerstone of my daily ritual.`
+  },
+  {
+    author: "Marcus B.",
+    location: "Berlin, Germany",
+    role: "Ceremonial Organizer",
+    rating: 5,
+    date: "May 22, 2026",
+    title: "Top tier craftsmanship",
+    content: `Solid packaging, fast shipping, and 100% authentic quality. Will definitely be ordering more for our upcoming retreats.`
+  }
+];
+
+// FAQs Data for Objection Handling
+const getFaqs = () => {
+  if (isApplicator) {
+    return [
+      { q: "How do I choose between a Kuripe (self) and Tepi (partner)?", a: "A Kuripe is V-shaped for applying Rapé to yourself. A Tepi is longer for a facilitator to blow Rapé into another person's nostrils during ceremony." },
+      { q: "How do I clean and sanitize wooden or silver applicators?", a: "Wipe the exterior with a soft cloth and a drop of Agua de Florida. For inner barrels, use a thin dry pipe cleaner. Avoid submerging wooden items in water." },
+      { q: "What materials are used?", a: "We only use ethically sourced Amazonian hardwoods (such as Sawo, Tamarind, Teak), certified 925 sterling silver, and natural stones." },
+      { q: "Is shipping discreet and insured worldwide?", a: "Yes! All packages are sent in plain eco-friendly boxes with no external mention of sacred items, fully insured with tracking." },
+      { q: "What is your return policy?", a: "We offer a 30-day return & exchange guarantee on unused items in original packaging." }
+    ];
+  } else if (isAromatic) {
+    return [
+      { q: "Is this genuine Peruvian import?", a: "Yes, our Agua de Florida is bottled by Murray & Lanman in Peru, and our Palo Santo is sustainably harvested in Peru from naturally fallen trees." },
+      { q: "How do I use this for energy clearing?", a: "Splash a few drops of Agua de Florida onto your palms, rub them together, and sweep over your head and shoulders, or burn a Palo Santo stick and waft smoke over your altar." },
+      { q: "Is Palo Santo ethically harvested?", a: "100% yes. We only work with licensed Peruvian suppliers who harvest exclusively from naturally fallen branches that have aged on the forest floor." },
+      { q: "How fast is shipping to Europe?", a: "Standard EU delivery takes 2-4 business days, and express shipping delivers within 24-48 hours." }
+    ];
+  } else {
+    return [
+      { q: "How do I choose the right Rapé blend for me?", a: "If you are new, start with balanced blends like Nukini Sansara or Huni Kuin. For strong grounding and clearing, try Yawanawa Tsunu or Caboclo Paricá." },
+      { q: "How should I store Rapé to keep it fresh?", a: "Keep Rapé in an airtight glass or metal container away from direct sunlight, moisture, and extreme heat. Stored properly, it remains fresh for years." },
+      { q: "Is shipping discreet and legal in my country?", a: "We ship discreetly in plain unbranded packaging across all EU countries, Switzerland, UK, and worldwide with express tracking." },
+      { q: "What is your satisfaction guarantee?", a: "We stand behind the quality of all our sacred tools. If you have any issue with your order, contact us for a hassle-free replacement or return within 30 days." }
+    ];
+  }
+};
+
+const usps = getUsps();
+const comparison = getComparison();
+const ritualSteps = getRitualSteps();
+const faqs = getFaqs();
+---
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 space-y-16 text-[var(--color-text-primary)] font-sans-body">
+
+  <!-- Breadcrumbs Nav -->
+  <Breadcrumbs
+    items={[
+      { label: String(t("nav.home")), href: `/${countryCode}` },
+      { label: String(t("nav.shop")), href: `/${countryCode}/store` },
+      ...(product.categories?.[0] ? [{ label: product.categories[0].name, href: `/${countryCode}/store/category/${product.categories[0].handle}` }] : []),
+      { label: title ?? String(t("nav.product")) }
+    ]}
+  />
+
+  <!-- HERO & MAIN BUY BOX SECTION -->
+  <section class="bg-[var(--color-bg-surface-elevated)] p-6 sm:p-10 lg:p-12 rounded-3xl border border-[var(--color-border-subtle)] shadow-xl relative overflow-hidden">
+    <!-- Ambient Background Glow -->
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-[var(--color-accent-gold)]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start relative z-10">
+      
+      <!-- Gallery Column (7 Cols on LG) -->
+      <div class="lg:col-span-7 lg:sticky lg:top-24">
+        <div class="relative">
+          <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
+            <span class="bg-[var(--color-accent-gold)] text-slate-950 font-extrabold text-xs tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-lg">
+              {categoryBadge}
+            </span>
+            <span class="bg-emerald-950/90 backdrop-blur-md text-emerald-300 border border-emerald-500/40 text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full shadow-md">
+              {subBadge}
+            </span>
+          </div>
+
+          <ImageCarouselWrapper
+            images={displayImages}
+            alt={title ?? "Product image"}
+          />
+        </div>
+      </div>
+
+      <!-- Compact High-Converting Selling Box (5 Cols on LG) -->
+      <div class="lg:col-span-5 flex flex-col gap-6">
+        
+        <!-- Header & Title -->
+        <div>
+          <!-- Star Ratings Header -->
+          <div class="flex items-center gap-2 mb-2">
+            <div class="flex text-[var(--color-accent-gold)] text-lg">
+              ★★★★★
+            </div>
+            <span class="text-sm font-bold text-[var(--color-text-primary)]">4.96</span>
+            <span class="text-xs text-[var(--color-text-muted)]">(38 Verified Reviews)</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-4xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight tracking-tight">
+            {title}
+          </h1>
+        </div>
+
+        <!-- Price Display -->
+        <div class="flex items-baseline justify-between border-y border-[var(--color-border-subtle)] py-4">
+          <div>
+            <span id="product-price" class="text-3xl sm:text-4xl font-extrabold text-[var(--color-accent-gold)]">
+              {cheapestPrice?.calculated_price}
+            </span>
+            <span class="text-xs text-[var(--color-text-muted)] ml-2">{t("store.product.includes_vat")}</span>
+          </div>
+          <span class="text-xs font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+            ✓ In Stock & Ready to Ship
+          </span>
+        </div>
+
+        <!-- Short Selling Excerpt -->
+        <div class="bg-[var(--color-bg-surface)] p-5 rounded-2xl border border-[var(--color-border-subtle)] space-y-3 shadow-inner">
+          <p class="font-medium text-xs sm:text-sm text-[var(--color-text-primary)] leading-relaxed">
+            {shortSellingDescription}
+          </p>
+          {detailedStoryParagraphs.length > 0 && (
+            <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border-subtle)] pt-2">
+              {detailedStoryParagraphs[0]}
+            </p>
+          )}
+        </div>
+
+        <!-- Add to Cart & Favorites -->
+        <div class="space-y-4 pt-2">
+          <div class="flex gap-3 items-center">
+            <div class="flex-1">
+              <ProductActions
+                options={options ?? []}
+                variants={variants ?? []}
+                productId={product.id}
+                regionId={region.id}
+                labels={{
+                  add_to_cart: "🛒 ADD TO CART — EXPRESS DELIVERY",
+                  adding: "ADDING TO CART..."
+                }}
+                client:visible
+              />
+            </div>
+            <button
+              id="btn-add-favorite"
+              data-id={product.id}
+              data-title={title}
+              data-thumbnail={thumbnail}
+              data-handle={product.handle}
+              class="p-4 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] rounded-full transition-all duration-300 flex items-center justify-center cursor-pointer shadow-sm min-h-[50px] shrink-0"
+              aria-label="Add to Favorites"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-[var(--color-text-muted)]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Fast Shipping Banner -->
+          <div class="bg-[var(--color-accent-emerald)]/10 border border-[var(--color-accent-emerald)]/30 rounded-2xl p-3.5 flex items-center justify-between text-xs text-[var(--color-text-primary)]">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🚀</span>
+              <div>
+                <p class="font-bold">Fast Insured Express Shipping Across EU & Worldwide</p>
+                <p class="text-[var(--color-text-muted)] text-[11px]">Discreet plain package • Ships within 24h</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Badges Grid -->
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
+            <span class="text-lg">📦</span>
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">Discreet Package</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">Plain eco box</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
+            <span class="text-lg">🌿</span>
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">100% Organic</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">Authentic origin</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
+            <span class="text-lg">🛡️</span>
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">Lifetime Quality</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">Guaranteed authentic</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
+            <span class="text-lg">🤝</span>
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">Fair Trade</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">Empowering artisans</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- USP HIGHLIGHTS GRID -->
+  <section class="space-y-8">
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Sacred Quality & Heritage</span>
+      <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">Why Choose {title}</h2>
+      <p class="text-sm text-[var(--color-text-secondary)]">
+        Handpicked and ethically prepared to support your meditation, ritual, and spiritual alignment.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {usps.map((u) => (
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-4 hover:border-[var(--color-accent-gold)] transition-all duration-300 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-2xl font-bold">
+            {u.icon}
+          </div>
+          <h3 class="text-lg font-serif-heading font-bold">{u.title}</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            {u.text}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- PROBLEM VS SOLUTION COMPARISON -->
+  <section class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-12 rounded-3xl border border-[var(--color-border-subtle)] space-y-8">
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Quality Difference</span>
+      <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">{comparison.title}</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- Standard / Industrial -->
+      <div class="bg-[var(--color-bg-surface)] p-6 sm:p-8 rounded-3xl border border-[var(--color-border-subtle)] space-y-4 opacity-90">
+        <div class="flex items-center justify-between border-b border-[var(--color-border-subtle)] pb-4">
+          <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-muted)]">{comparison.standardTitle}</h3>
+          <span class="text-xs font-bold uppercase bg-slate-500/10 text-slate-400 px-3 py-1 rounded-full">Mass Market</span>
+        </div>
+        <ul class="space-y-3 text-xs sm:text-sm text-[var(--color-text-secondary)]">
+          {comparison.standardList.map((item) => (
+            <li class="flex items-start gap-3">
+              <span class="text-red-400 font-bold">✕</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Ayni Rapé Sacred Quality -->
+      <div class="bg-[var(--color-bg-surface)] p-6 sm:p-8 rounded-3xl border-2 border-[var(--color-accent-gold)] space-y-4 shadow-lg relative">
+        <span class="absolute -top-3.5 right-6 bg-[var(--color-accent-gold)] text-slate-950 font-bold text-[10px] tracking-widest uppercase px-3 py-1 rounded-full">
+          AYNI RAPÉ GUARANTEED
+        </span>
+
+        <div class="flex items-center justify-between border-b border-[var(--color-border-subtle)] pb-4">
+          <h3 class="text-xl font-serif-heading font-bold text-[var(--color-accent-gold)]">{comparison.premiumTitle}</h3>
+          <span class="text-xs font-bold uppercase bg-[var(--color-accent-gold)]/20 text-[var(--color-accent-gold)] px-3 py-1 rounded-full">Authentic</span>
+        </div>
+        <ul class="space-y-3 text-xs sm:text-sm text-[var(--color-text-primary)]">
+          {comparison.premiumList.map((item) => (
+            <li class="flex items-start gap-3">
+              <span class="text-emerald-500 font-bold">✓</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STEP BY STEP RITUAL GUIDE -->
+  <section class="space-y-8">
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Sacred Practice</span>
+      <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">Suggested Ritual & Preparation</h2>
+      <p class="text-sm text-[var(--color-text-secondary)]">
+        Simple guidelines to honor your intention and maximize your practice.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {ritualSteps.map((s) => (
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-3 relative">
+          <span class="text-4xl font-extrabold text-[var(--color-accent-gold)]/30 font-serif-heading">{s.step}</span>
+          <h3 class="text-base font-serif-heading font-bold">{s.title}</h3>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            {s.text}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CUSTOMER REVIEWS & SOCIAL PROOF -->
+  <section class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-12 rounded-3xl border border-[var(--color-border-subtle)] space-y-10">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--color-border-subtle)] pb-8">
+      <div class="space-y-2">
+        <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Verified Community Feedback</span>
+        <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">Loved by Practitioners Across Europe</h2>
+        <p class="text-sm text-[var(--color-text-secondary)]">Read real experiences from community members and facilitators.</p>
+      </div>
+
+      <!-- Rating Summary Pill -->
+      <div class="bg-[var(--color-bg-surface)] p-4 rounded-2xl border border-[var(--color-border-subtle)] flex items-center gap-4 shrink-0">
+        <div class="text-center">
+          <p class="text-3xl font-extrabold text-[var(--color-accent-gold)] leading-none">4.96</p>
+          <p class="text-[10px] text-[var(--color-text-muted)] font-bold uppercase mt-1">out of 5.0</p>
+        </div>
+        <div class="border-l border-[var(--color-border-subtle)] pl-4 text-xs text-[var(--color-text-secondary)] space-y-1">
+          <div class="flex text-[var(--color-accent-gold)]">★★★★★</div>
+          <p class="font-bold text-[var(--color-text-primary)]">38 Verified Reviews</p>
+          <p class="text-[10px] text-emerald-500">✓ 99% Satisfaction Rate</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {reviews.map((rev) => (
+        <div class="bg-[var(--color-bg-surface)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex text-[var(--color-accent-gold)] text-sm">
+                {"★".repeat(rev.rating)}
+              </div>
+              <span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                ✓ Verified Purchaser
+              </span>
+            </div>
+            <h3 class="font-serif-heading font-bold text-base text-[var(--color-text-primary)]">{rev.title}</h3>
+            <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed italic">"{rev.content}"</p>
+          </div>
+
+          <div class="pt-3 border-t border-[var(--color-border-subtle)] flex items-center justify-between text-xs text-[var(--color-text-muted)]">
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">{rev.author}</p>
+              <p class="text-[10px]">{rev.role} • {rev.location}</p>
+            </div>
+            <span class="text-[10px]">{rev.date}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- OBJECTION HANDLING & FAQ ACCORDION -->
+  <section class="space-y-8 max-w-4xl mx-auto">
+    <div class="text-center space-y-3">
+      <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Got Questions?</span>
+      <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">Frequently Asked Questions</h2>
+      <p class="text-sm text-[var(--color-text-secondary)]">
+        Everything you need to know about ordering, authenticity, and shipping.
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      {faqs.map((faq) => (
+        <details class="group bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] [&_summary::-webkit-details-marker]:none cursor-pointer transition-all duration-200">
+          <summary class="flex items-center justify-between font-serif-heading font-bold text-base sm:text-lg text-[var(--color-text-primary)] select-none">
+            <span>{faq.q}</span>
+            <span class="transition group-open:rotate-180 text-[var(--color-accent-gold)] text-xl font-bold ml-4">
+              ↓
+            </span>
+          </summary>
+          <div class="mt-4 pt-4 border-t border-[var(--color-border-subtle)] text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
+            <p>{faq.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- RECOMMENDED PAIRINGS GRID -->
+  {relatedProducts && relatedProducts.length > 0 && (
+    <section class="space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Complete Your Ceremony</span>
+          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold mt-1">Recommended Pairings</h2>
+        </div>
+        <a href={`/${countryCode}/store`} class="text-xs font-bold text-[var(--color-accent-gold)] hover:underline">
+          Explore All Products →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {relatedProducts.slice(0, 4).map((p) => (
+          <ProductPreview product={p} countryCode={countryCode} />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- STICKY BOTTOM ADD TO CART BAR -->
+  <div id="sticky-cart-bar" class="fixed bottom-0 left-0 right-0 z-50 glass-panel border-t border-[var(--color-border-subtle)] py-3 px-4 sm:px-8 transform translate-y-full transition-transform duration-300 shadow-2xl">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        {thumbnail && (
+          <img src={thumbnail} alt={title} class="w-12 h-12 object-cover rounded-xl border border-[var(--color-border-subtle)] shrink-0" />
+        )}
+        <div class="hidden sm:block">
+          <p class="font-serif-heading font-bold text-sm text-[var(--color-text-primary)] truncate max-w-[200px] md:max-w-xs">{title}</p>
+          <p class="text-xs text-[var(--color-accent-gold)] font-bold">{cheapestPrice?.calculated_price}</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-bold text-[var(--color-accent-gold)] sm:hidden">{cheapestPrice?.calculated_price}</span>
+        <button
+          onclick="document.querySelector('.lg\\:col-span-5 button')?.click()"
+          class="bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-slate-950 font-extrabold px-6 py-3 rounded-full text-xs uppercase tracking-wider transition-all duration-300 shadow-lg cursor-pointer"
+        >
+          🛒 Add To Cart Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Show sticky bottom bar when user scrolls past main hero buy box
+  const stickyBar = document.getElementById('sticky-cart-bar');
+  if (stickyBar) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 600) {
+        stickyBar.classList.remove('translate-y-full');
+      } else {
+        stickyBar.classList.add('translate-y-full');
+      }
+    });
+  }
+</script>
