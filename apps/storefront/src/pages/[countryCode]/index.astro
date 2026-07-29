@@ -299,7 +299,7 @@ const schemaData = {
         </div>
       </div>
 
-      <div id="cat-slider" class="flex gap-4 overflow-x-auto scrollbar-none pb-8 pt-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scroll-smooth snap-x snap-mandatory">
+      <div id="cat-slider" class="flex gap-4 overflow-x-auto scrollbar-none pb-8 pt-4 px-1 scroll-smooth snap-x snap-mandatory">
         {featuredCategories.map((cat) => (
           <div class="w-[240px] sm:w-[260px] md:w-[280px] snap-start shrink-0">
             <a
@@ -357,7 +357,7 @@ const schemaData = {
           </div>
         </div>
 
-        <div id="bestsellers-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-8 pt-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scroll-smooth snap-x snap-mandatory">
+        <div id="bestsellers-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-8 pt-4 px-1 scroll-smooth snap-x snap-mandatory">
           {bestsellersList.map((product) => (
             <div class="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start">
               <ProductPreview
@@ -501,7 +501,7 @@ const schemaData = {
     }
 
     // Categories slider logic
-    const catSlider = document.getElementById('categories-slider');
+    const catSlider = document.getElementById('cat-slider');
     const catNextBtn = document.getElementById('cat-slider-next');
     const catPrevBtn = document.getElementById('cat-slider-prev');
     if (catSlider) {
