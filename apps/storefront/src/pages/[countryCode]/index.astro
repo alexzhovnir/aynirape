@@ -300,7 +300,7 @@ const schemaData = {
       </div>
     </div>
 
-    <div id="cat-slider" class="flex gap-4 overflow-x-auto scrollbar-none pb-8 pt-4 scroll-smooth snap-x snap-mandatory px-4 sm:px-6 lg:px-8 xl:px-[calc((100vw-80rem)/2+2rem)]">
+    <div id="cat-slider" class="flex gap-4 overflow-x-auto scrollbar-none pb-8 pt-4 scroll-smooth snap-x snap-mandatory full-bleed-slider">
       {featuredCategories.map((cat) => (
         <div class="w-[240px] sm:w-[260px] md:w-[280px] snap-start shrink-0">
           <a
@@ -361,7 +361,7 @@ const schemaData = {
         </div>
       </div>
 
-      <div id="bestsellers-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-8 pt-4 scroll-smooth snap-x snap-mandatory px-4 sm:px-6 lg:px-8 xl:px-[calc((100vw-80rem)/2+2rem)]">
+      <div id="bestsellers-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-8 pt-4 scroll-smooth snap-x snap-mandatory full-bleed-slider">
         {bestsellersList.map((product) => (
           <div class="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start">
             <ProductPreview
