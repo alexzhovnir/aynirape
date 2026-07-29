@@ -359,50 +359,50 @@ const schemaData = {
           </div>
 
           <!-- Sacred Ceremony Guide Section -->
-          <div class="py-6 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl">
+          <div class="py-6 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl my-8">
             <CeremonyGuide />
           </div>
+
+          <!-- Related Products Carousel Slider -->
+          {
+            product && relatedProducts.length > 0 && (
+              <section class="py-12 overflow-hidden border-t border-[var(--color-border-subtle)] mt-12">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
+                  <div>
+                    <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("store.product.recommended_for_you")}</span>
+                    <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] sm:text-4xl mt-2">
+                      {t("store.product.people_also_viewed")}
+                    </h2>
+                  </div>
+                  
+                  <div class="flex items-center gap-2">
+                    <button id="rel-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous related products">&larr;</button>
+                    <button id="rel-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next related products">&rarr;</button>
+                  </div>
+                </div>
+
+                <div id="related-products-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-8 pt-4 px-1 scroll-smooth snap-x snap-mandatory">
+                  {relatedProducts.map((p) => (
+                    <div class="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start">
+                      <ProductPreview
+                        id={p.id}
+                        handle={p.handle}
+                        variants={p.variants ?? []}
+                        thumbnailUrl={p.thumbnail ?? undefined}
+                        imageUrl={p.images?.[0]?.url}
+                        title={p.title}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )
+          }
 
         </div>
       )
     }
   </div>
-
-  <!-- Related Products Carousel Slider -->
-  {
-    product && relatedProducts.length > 0 && (
-      <div class="w-full pt-8 pb-12 border-t border-[var(--color-border-subtle)] mt-8">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
-          <div>
-            <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("store.product.recommended_for_you")}</span>
-            <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] sm:text-4xl mt-2">
-              {t("store.product.people_also_viewed")}
-            </h2>
-          </div>
-          
-          <div class="flex items-center gap-2">
-            <button id="rel-slider-prev" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Previous related products">&larr;</button>
-            <button id="rel-slider-next" class="w-10 h-10 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] flex items-center justify-center cursor-pointer transition-colors shadow-sm" aria-label="Next related products">&rarr;</button>
-          </div>
-        </div>
-
-        <div id="related-products-slider" class="flex gap-6 overflow-x-auto scrollbar-none pb-8 pt-4 px-1 scroll-smooth snap-x snap-mandatory">
-          {relatedProducts.map((p) => (
-            <div class="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start">
-              <ProductPreview
-                id={p.id}
-                handle={p.handle}
-                variants={p.variants ?? []}
-                thumbnailUrl={p.thumbnail ?? undefined}
-                imageUrl={p.images?.[0]?.url}
-                title={p.title}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
 </Layout>
 
 <script is:inline>
