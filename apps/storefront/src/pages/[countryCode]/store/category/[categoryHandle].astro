@@ -263,8 +263,8 @@ function getCategoryIcon(name: string, handle: string) {
           </div>
         </div>
 
-        <!-- Mobile Categories Horizontal Scroll -->
-        <div class="lg:hidden -mx-4 px-4 overflow-x-auto scrollbar-none flex gap-2 pb-4">
+        <!-- Mobile Categories Wrapped List (No horizontal scroll) -->
+        <div class="lg:hidden flex flex-wrap gap-2.5 pb-6 pt-2">
           <a
             href={`/${countryCode}/store`}
             class="flex items-center gap-1.5 whitespace-nowrap px-4 py-2.5 rounded-full text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface-elevated)] hover:text-[var(--color-text-primary)] border border-[var(--color-border-subtle)] transition-all duration-200 cursor-pointer font-medium"
