@@ -406,6 +406,10 @@ const displayOrigin = origin_country || "Sacred Valley, Peru / Amazonian Rainfor
 const displayType = type?.value || (isApplicator ? "Sacred Applicator Pipe" : (isAromatic ? "Cleansing Essence" : "Ceremonial Botanical Blend"));
 const displayWeight = weight ? `${weight} g` : "Approx. 35 g - 60 g";
 const displayDimensions = (length && width && height) ? `${length} × ${width} × ${height} cm` : "Ergonomic Handheld Fit";
+
+const rawSku = variants?.[0]?.sku || metadata?.sku;
+const generatedSku = `AYNI-${handleLower.slice(0, 12).toUpperCase().replace(/[^A-Z0-9]/g, "")}-01`;
+const displaySku = rawSku || generatedSku;
 ---
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 space-y-16 text-[var(--color-text-primary)] font-sans-body">
@@ -460,6 +464,9 @@ const displayDimensions = (length && width && height) ? `${length} × ${width} �
           <h1 class="text-3xl sm:text-4xl lg:text-4xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight tracking-tight">
             {title}
           </h1>
+          <div class="text-[11px] font-mono text-[var(--color-text-muted)] tracking-wider mt-1.5 uppercase">
+            SKU: <span class="text-[var(--color-accent-gold)] font-bold">{displaySku}</span>
+          </div>
         </div>
 
         <!-- Price Display -->
@@ -729,6 +736,11 @@ const displayDimensions = (length && width && height) ? `${length} × ${width} �
           <div class="bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)] space-y-1">
             <span class="text-[var(--color-text-muted)] font-medium">Dimensions</span>
             <p class="font-bold text-[var(--color-text-primary)] text-sm">{displayDimensions}</p>
+          </div>
+
+          <div class="bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)] space-y-1">
+            <span class="text-[var(--color-text-muted)] font-medium">SKU / Item Code</span>
+            <p class="font-bold text-[var(--color-accent-gold)] text-sm font-mono">{displaySku}</p>
           </div>
 
           <div class="bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)] space-y-1">

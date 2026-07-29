@@ -26,6 +26,7 @@ const {
 } = product;
 
 const displayImages = images && images.length > 0 ? images : (thumbnail ? [{ url: thumbnail }] : []);
+const displaySku = variants?.[0]?.sku || metadata?.sku || "AYNI-SILVER-TEPI-01";
 
 // Reviews Data for Social Proof
 const reviews = [
@@ -150,6 +151,9 @@ const faqs = [
           <p class="text-xs font-medium uppercase tracking-widest text-[var(--color-accent-gold)] mt-1">
             Handcrafted Sacred Dual Serpent Tepi Applicator
           </p>
+          <div class="text-[11px] font-mono text-[var(--color-text-muted)] tracking-wider mt-1.5 uppercase">
+            SKU: <span class="text-[var(--color-accent-gold)] font-bold">{displaySku}</span>
+          </div>
         </div>
 
         <!-- Price Display -->
