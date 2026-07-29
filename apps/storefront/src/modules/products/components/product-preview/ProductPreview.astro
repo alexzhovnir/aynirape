@@ -6,16 +6,24 @@ import Thumbnail from "../thumbnail/Thumbnail.astro";
 import Price from "./Price.astro";
 
 interface Props {
-  id: string;
+  id?: string;
   handle?: string;
-  variants: ProductVariant[];
+  variants?: ProductVariant[];
   thumbnailUrl?: string;
   imageUrl?: string;
-  title: string;
+  title?: string;
   priority?: boolean;
+  product?: any;
 }
 
-const { id, handle, variants, thumbnailUrl, imageUrl, title, priority } = Astro.props;
+const { product, priority } = Astro.props;
+const id = Astro.props.id || product?.id;
+const handle = Astro.props.handle || product?.handle;
+const variants = Astro.props.variants || product?.variants || [];
+const thumbnailUrl = Astro.props.thumbnailUrl || product?.thumbnail || product?.images?.[0]?.url;
+const imageUrl = Astro.props.imageUrl || product?.images?.[0]?.url;
+const title = Astro.props.title || product?.title || "Sacred Item";
+
 const countryCode = Astro.params.countryCode;
 const t = useTranslations(countryCode);
 const productSlug = handle || id;
@@ -25,7 +33,7 @@ const { cheapestPrice } = getProductPrice({
 });
 
 // Calculate sizes (simplified logic for the UI)
-const sizes = variants?.map(v => v.title).filter(t => t.includes('g') || t.includes('ml')).join(', ') || "5g, 10g, 20g";
+const sizes = variants?.map((v: any) => v.title).filter((t: any) => t.includes('g') || t.includes('ml')).join(', ') || "5g, 10g, 20g";
 
 const defaultVariantId = variants?.[0]?.id;
 ---

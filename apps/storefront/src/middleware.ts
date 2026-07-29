@@ -45,9 +45,7 @@ function isStaticOrInternalPath(pathname: string) {
  */
 function isNonCommercePath(pathname: string) {
   const seg = pathname.split("/").filter(Boolean);
-  if (seg[0] === "blog" || seg[0] === "keystatic" || seg[0] === "api") return true;
-  // localized blog: /<lang>/blog/...
-  if (seg[1] === "blog" && ["fr", "it", "es"].includes(seg[0] ?? "")) return true;
+  if (seg[0] === "keystatic" || seg[0] === "api") return true;
   if (pathname === "/rss.xml" || pathname.startsWith("/sitemap")) return true;
   return false;
 }
