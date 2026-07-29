@@ -42,16 +42,17 @@ const t = useTranslations(countryCode);
       <!-- Left Column: Image Gallery & Stats Badge -->
       <div class="relative flex justify-center">
         <div class="absolute inset-0 bg-[var(--color-accent-gold)]/10 rounded-3xl blur-3xl scale-95 -z-10"></div>
-        <div class="relative rounded-3xl overflow-hidden border border-[var(--color-border-subtle)] shadow-2xl bg-[var(--color-bg-surface-elevated)] group max-w-lg lg:max-w-none w-full">
-          <img
-            src="/images/blog/rape/nukini-1504.23abece79ac5bad050fdc8779f1c5b53.webp"
-            alt="Sacred Rapé Preparation & Ancestral Traditions"
-            class="w-full h-[480px] lg:h-[580px] object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent"></div>
-          
-          <!-- Floating Stats Grid -->
-          <div class="absolute bottom-6 left-6 right-6 p-6 rounded-2xl bg-[var(--color-bg-surface-elevated)]/95 backdrop-blur-md border border-[var(--color-border-subtle)] shadow-lg grid grid-cols-3 gap-4 text-center">
+        <div class="flex flex-col gap-4 max-w-lg lg:max-w-none w-full">
+          <div class="relative rounded-3xl overflow-hidden border border-[var(--color-border-subtle)] shadow-2xl bg-[var(--color-bg-surface-elevated)] group">
+            <img
+              src="/images/about-story.jpg"
+              alt="Sacred Rapé Preparation & Ancestral Traditions"
+              class="w-full h-[480px] lg:h-[580px] object-cover object-bottom group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+          </div>
+
+          <!-- Stats Grid Below Image -->
+          <div class="p-6 rounded-2xl bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] shadow-lg grid grid-cols-3 gap-4 text-center">
             <div>
               <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">5</span>
               <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about.stats.tribes")}</span>

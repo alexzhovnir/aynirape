@@ -11,6 +11,7 @@ import ProductPreview from "@modules/products/components/product-preview/Product
 import CeremonyGuide from "@components/CeremonyGuide.astro";
 import { useTranslations } from "@lib/i18n/utils";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import SilverTepiLanding from "@modules/products/components/SilverTepiLanding.astro";
 
 export const getStaticPaths = getProductParams;
 
@@ -112,6 +113,8 @@ const schemaData = {
     "url": Astro.url.href,
   },
 };
+
+const isSilverTepiDoubleCobra = product?.handle === "silver-tepi-double-cobra" || productId === "silver-tepi-double-cobra";
 ---
 
 <Layout
@@ -123,11 +126,22 @@ const schemaData = {
   <!-- SEO JSON-LD Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
-    {error && <p class="text-red-500 mb-6">{error.message}</p>}
-    {
-      product && (
-        <div class="space-y-12">
+  {
+    isSilverTepiDoubleCobra && product ? (
+      <SilverTepiLanding
+        product={product}
+        region={region}
+        cheapestPrice={cheapestPrice}
+        t={t}
+        countryCode={countryCode!}
+        relatedProducts={relatedProducts}
+      />
+    ) : (
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 text-[var(--color-text-primary)]">
+        {error && <p class="text-red-500 mb-6">{error.message}</p>}
+        {
+          product && (
+            <div class="space-y-12">
           <!-- Breadcrumbs Nav -->
           <Breadcrumbs
             items={[
@@ -403,6 +417,8 @@ const schemaData = {
       )
     }
   </div>
+    )
+  }
 </Layout>
 
 <script is:inline>

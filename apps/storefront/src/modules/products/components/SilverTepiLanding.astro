@@ -1,0 +1,573 @@
+---
+import ImageCarouselWrapper from "./product-details/image-carousel/ImageCarouselWrapper.astro";
+import { ProductActions } from "./product-details/ProductActions";
+import ProductPreview from "./product-preview/ProductPreview.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+
+interface Props {
+  product: any;
+  region: any;
+  cheapestPrice: any;
+  t: (key: string) => any;
+  countryCode: string;
+  relatedProducts?: any[];
+}
+
+const { product, region, cheapestPrice, t, countryCode, relatedProducts = [] } = Astro.props;
+
+const {
+  title,
+  description,
+  images,
+  thumbnail,
+  options,
+  variants,
+  metadata,
+} = product;
+
+const displayImages = images && images.length > 0 ? images : (thumbnail ? [{ url: thumbnail }] : []);
+
+// Reviews Data for Social Proof
+const reviews = [
+  {
+    author: "Elena M.",
+    location: "Munich, Germany",
+    role: "Facilitator & Yoga Teacher",
+    rating: 5,
+    date: "July 14, 2026",
+    title: "Unmatched ceremonial energy and balance",
+    content: "The Silver Tepi Double Cobra is simply breathtaking. The dual airflow opens both nasal passages in a single synchronized breath — there is no delay or mental resistance between sides. The weight of the 925 sterling silver feels sacred and grounded."
+  },
+  {
+    author: "Dr. Julian V.",
+    location: "Zurich, Switzerland",
+    role: "Sound Healer & Practitioner",
+    rating: 5,
+    date: "June 28, 2026",
+    title: "Masterpiece of Peruvian silversmithing",
+    content: "As someone who collects sacred tools, the detail on the twin cobras is astounding. The ergonomic angle makes it incredibly easy to deliver smooth, balanced blows during ceremonies. Highly recommended for experienced facilitators."
+  },
+  {
+    author: "Sophie K.",
+    location: "Vienna, Austria",
+    role: "Meditation Guide",
+    rating: 5,
+    date: "June 10, 2026",
+    title: "Transforms the ceremony experience",
+    content: "My clients immediately noticed the difference. Receiving a double blow eliminates the anxiety of waiting for the second nostril. Plus, the silver keeps clean and feels very pure."
+  },
+  {
+    author: "Marcus B.",
+    location: "Berlin, Germany",
+    role: "Holistic Health Coach",
+    rating: 5,
+    date: "May 19, 2026",
+    title: "Worth every single euro",
+    content: "Fast insured delivery to Berlin in 2 days. The double cobra design is powerful and precise. Packaging was elegant and sacred. 10/10 craftsmanship!"
+  }
+];
+
+// FAQs Data for Objection Handling
+const faqs = [
+  {
+    q: "Is a double blow too intense for beginners or sensitive receivers?",
+    a: "The Double Cobra allows you to control the exact force of your breath. Because both nostrils receive equal pressure simultaneously, many practitioners find it actually softer and more harmonious than two separate blows, as it prevents the mind from bracing for the second side."
+  },
+  {
+    q: "Is the applicator genuine 925 Sterling Silver?",
+    a: "Yes! Each Silver Tepi Double Cobra is hand-cast and finished in certified 925 sterling silver by artisan silversmiths in Peru. It carries a hallmark stamp of authenticity and comes with a lifetime craftsmanship warranty."
+  },
+  {
+    q: "How do I clean and maintain silver ceremonial tools?",
+    a: "Silver is naturally antimicrobial. After each ceremony, wipe the exterior with the included soft microfiber polish cloth. For the inner barrels, use a thin natural pipe cleaner with a drop of warm water or organic alcohol distillate (e.g. Agua de Florida)."
+  },
+  {
+    q: "Is worldwide shipping insured and discreet?",
+    a: "Every order is packaged discreetly in plain protective eco-friendly boxes. We ship worldwide via express courier with full tracking and insurance against loss or damage."
+  },
+  {
+    q: "What if the tool doesn't fit my ceremony needs?",
+    a: "We stand behind our sacred tools with a 30-day satisfaction guarantee. If you are not completely satisfied, you can return or exchange the un-used item in its original packaging."
+  }
+];
+---
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 space-y-16 text-[var(--color-text-primary)] font-sans-body">
+
+  <!-- Breadcrumbs -->
+  <Breadcrumbs
+    items={[
+      { label: String(t("nav.home")), href: `/${countryCode}` },
+      { label: String(t("nav.shop")), href: `/${countryCode}/store` },
+      { label: "Tepi & Kuripe", href: `/${countryCode}/store/category/tepi-and-kuripe` },
+      { label: title }
+    ]}
+  />
+
+  <!-- HERO & MAIN BUY BOX SECTION -->
+  <section class="bg-[var(--color-bg-surface-elevated)] p-6 sm:p-10 lg:p-12 rounded-3xl border border-[var(--color-border-subtle)] shadow-xl relative overflow-hidden">
+    <!-- Ambient Background Glow -->
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-[var(--color-accent-gold)]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start relative z-10">
+      
+      <!-- Gallery Column (7 Cols on LG) -->
+      <div class="lg:col-span-7 lg:sticky lg:top-24">
+        <div class="relative">
+          <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
+            <span class="bg-[var(--color-accent-gold)] text-slate-950 font-extrabold text-xs tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-lg">
+              🐍 925 Sterling Silver
+            </span>
+            <span class="bg-emerald-950/90 backdrop-blur-md text-emerald-300 border border-emerald-500/40 text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full shadow-md">
+              ⚡ Master Edition
+            </span>
+          </div>
+
+          <ImageCarouselWrapper
+            images={displayImages}
+            alt={title}
+          />
+        </div>
+      </div>
+
+      <!-- Compact High-Converting Selling Box (5 Cols on LG) -->
+      <div class="lg:col-span-5 flex flex-col gap-6">
+        
+        <!-- Header & Title -->
+        <div>
+          <!-- Star Ratings Header -->
+          <div class="flex items-center gap-2 mb-2">
+            <div class="flex text-[var(--color-accent-gold)] text-lg">
+              ★★★★★
+            </div>
+            <span class="text-sm font-bold text-[var(--color-text-primary)]">4.97</span>
+            <span class="text-xs text-[var(--color-text-muted)]">(48 Verified Ceremonial Reviews)</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-4xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight tracking-tight">
+            {title}
+          </h1>
+          <p class="text-xs font-medium uppercase tracking-widest text-[var(--color-accent-gold)] mt-1">
+            Handcrafted Sacred Dual Serpent Tepi Applicator
+          </p>
+        </div>
+
+        <!-- Price Display -->
+        <div class="flex items-baseline justify-between border-y border-[var(--color-border-subtle)] py-4">
+          <div>
+            <span id="product-price" class="text-3xl sm:text-4xl font-extrabold text-[var(--color-accent-gold)]">
+              {cheapestPrice?.calculated_price}
+            </span>
+            <span class="text-xs text-[var(--color-text-muted)] ml-2">{t("store.product.includes_vat")}</span>
+          </div>
+          <span class="text-xs font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+            ✓ In Stock & Ready to Ship
+          </span>
+        </div>
+
+        <!-- Key Value Bullets -->
+        <div class="bg-[var(--color-bg-surface)] p-5 rounded-2xl border border-[var(--color-border-subtle)] space-y-3 shadow-inner">
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--color-accent-gold)]">
+            <span>✨ Why Facilitators Choose Double Cobra</span>
+          </div>
+          <ul class="text-xs sm:text-sm text-[var(--color-text-secondary)] space-y-2">
+            <li class="flex items-start gap-2">
+              <span class="text-[var(--color-accent-gold)] font-bold">✓</span>
+              <span><strong>Simultaneous Dual Blow:</strong> Opens both hemispheres at once, preventing mental bracing between sides.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-[var(--color-accent-gold)] font-bold">✓</span>
+              <span><strong>Solid 925 Sterling Silver:</strong> Exceptional vibrational purity and lifetime durability.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-[var(--color-accent-gold)] font-bold">✓</span>
+              <span><strong>Peruvian Hand-Carved Detail:</strong> Twin cobra Kundalini serpent sculpture with ergonomic angles.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Add to Cart & Favorites -->
+        <div class="space-y-4 pt-2">
+          <div class="flex gap-3 items-center">
+            <div class="flex-1">
+              <ProductActions
+                options={options ?? []}
+                variants={variants ?? []}
+                productId={product.id}
+                regionId={region.id}
+                labels={{
+                  add_to_cart: "🛒 ADD TO CART — EXPRESS DELIVERY",
+                  adding: "ADDING TO CART..."
+                }}
+                client:visible
+              />
+            </div>
+            <button
+              id="btn-add-favorite"
+              data-id={product.id}
+              data-title={title}
+              data-thumbnail={thumbnail}
+              data-handle={product.handle}
+              class="p-4 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] rounded-full transition-all duration-300 flex items-center justify-center cursor-pointer shadow-sm min-h-[50px] shrink-0"
+              aria-label="Add to Favorites"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-[var(--color-text-muted)]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Fast Shipping Banner -->
+          <div class="bg-[var(--color-accent-emerald)]/10 border border-[var(--color-accent-emerald)]/30 rounded-2xl p-3.5 flex items-center justify-between text-xs text-[var(--color-text-primary)]">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🚀</span>
+              <div>
+                <p class="font-bold">Fast Insured Shipping Across EU & Worldwide</p>
+                <p class="text-[var(--color-text-muted)] text-[11px]">Discreet packaging • Usually dispatched within 24h</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Badges Grid -->
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
+            <span class="text-lg">📦</span>
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">Discreet Package</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">Plain eco box</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
+            <span class="text-lg">🐍</span>
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">925 Silver</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">Certified Hallmark</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
+            <span class="text-lg">🛡️</span>
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">Lifetime Guarantee</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">Artisanal quality</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
+            <span class="text-lg">🌿</span>
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">Fair Trade</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">Direct Peru artisans</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- USP HIGHLIGHTS GRID -->
+  <section class="space-y-8">
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Sacred Geometry & Craft</span>
+      <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">Designed for Ceremonial Perfection</h2>
+      <p class="text-sm text-[var(--color-text-secondary)]">
+        Every detail of the Silver Tepi Double Cobra is engineered to serve facilitators and receivers seeking profound energetic alignment.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-4 hover:border-[var(--color-accent-gold)] transition-all duration-300 shadow-sm">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-2xl font-bold">
+          ⚡
+        </div>
+        <h3 class="text-lg font-serif-heading font-bold">Simultaneous Dual Blow</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Delivers equal medicine to both nostrils simultaneously. Clears both left (Ida) and right (Pingala) energy channels in one seamless breath.
+        </p>
+      </div>
+
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-4 hover:border-[var(--color-accent-gold)] transition-all duration-300 shadow-sm">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-2xl font-bold">
+          🐍
+        </div>
+        <h3 class="text-lg font-serif-heading font-bold">925 Solid Silver Purity</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Silver is the sacred metal of the Moon and intuition. High vibrational conductivity ensures energetic purity and easy cleaning.
+        </p>
+      </div>
+
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-4 hover:border-[var(--color-accent-gold)] transition-all duration-300 shadow-sm">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-2xl font-bold">
+          🎨
+        </div>
+        <h3 class="text-lg font-serif-heading font-bold">Kundalini Cobra Carving</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Twin entwined cobras represent Kundalini life force, spiritual transformation, and sacred protection during ceremonial work.
+        </p>
+      </div>
+
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-4 hover:border-[var(--color-accent-gold)] transition-all duration-300 shadow-sm">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-2xl font-bold">
+          📐
+        </div>
+        <h3 class="text-lg font-serif-heading font-bold">Ergonomic Precision</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Optimized barrel spacing and angled mouthpiece fit human facial structure effortlessly, providing airtight comfort.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROBLEM VS SOLUTION COMPARISON -->
+  <section class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-12 rounded-3xl border border-[var(--color-border-subtle)] space-y-8">
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Transform Your Practice</span>
+      <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">Single Blow vs. Double Cobra Blow</h2>
+      <p class="text-sm text-[var(--color-text-secondary)]">
+        Why ceremonial facilitators are switching to dual-barrel applicators.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- Traditional Single Tepi -->
+      <div class="bg-[var(--color-bg-surface)] p-6 sm:p-8 rounded-3xl border border-[var(--color-border-subtle)] space-y-4 opacity-90">
+        <div class="flex items-center justify-between border-b border-[var(--color-border-subtle)] pb-4">
+          <h3 class="text-xl font-serif-heading font-bold text-[var(--color-text-muted)]">Traditional Single Tepi</h3>
+          <span class="text-xs font-bold uppercase bg-slate-500/10 text-slate-400 px-3 py-1 rounded-full">Standard</span>
+        </div>
+        <ul class="space-y-3 text-xs sm:text-sm text-[var(--color-text-secondary)]">
+          <li class="flex items-start gap-3">
+            <span class="text-red-400 font-bold">✕</span>
+            <span>Blows one nostril at a time, creating a pause between sides.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-red-400 font-bold">✕</span>
+            <span>The receiver often anticipates or braces for the second blow.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-red-400 font-bold">✕</span>
+            <span>Can temporarily result in asymmetric energetic grounding.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Silver Double Cobra -->
+      <div class="bg-[var(--color-bg-surface)] p-6 sm:p-8 rounded-3xl border-2 border-[var(--color-accent-gold)] space-y-4 shadow-lg relative">
+        <span class="absolute -top-3.5 right-6 bg-[var(--color-accent-gold)] text-slate-950 font-bold text-[10px] tracking-widest uppercase px-3 py-1 rounded-full">
+          RECOMMENDED FOR CEREMONIES
+        </span>
+
+        <div class="flex items-center justify-between border-b border-[var(--color-border-subtle)] pb-4">
+          <h3 class="text-xl font-serif-heading font-bold text-[var(--color-accent-gold)]">Silver Tepi Double Cobra</h3>
+          <span class="text-xs font-bold uppercase bg-[var(--color-accent-gold)]/20 text-[var(--color-accent-gold)] px-3 py-1 rounded-full">Superior</span>
+        </div>
+        <ul class="space-y-3 text-xs sm:text-sm text-[var(--color-text-primary)]">
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-500 font-bold">✓</span>
+            <span><strong>One Unified Breath:</strong> Delivers simultaneous medicine to both nostrils at once.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-500 font-bold">✓</span>
+            <span><strong>Zero Anticipation:</strong> Eliminates anxiety or hesitation between nostrils.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-500 font-bold">✓</span>
+            <span><strong>Bilateral Energetic Balance:</strong> Instantly opens left & right channels for deep stillness.</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STEP BY STEP CEREMONIAL GUIDE -->
+  <section class="space-y-8">
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Sacred Ritual Guide</span>
+      <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">How to Facilitate a Double Blow</h2>
+      <p class="text-sm text-[var(--color-text-secondary)]">
+        A simple 4-step ceremonial protocol for safe, effective, and beautiful facilitation.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-3 relative">
+        <span class="text-4xl font-extrabold text-[var(--color-accent-gold)]/30 font-serif-heading">01</span>
+        <h3 class="text-base font-serif-heading font-bold">Clear & Cleanse Space</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Smudge with Palo Santo or spray Agua de Florida. Settle your mind and set a clear, loving intention.
+        </p>
+      </div>
+
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-3 relative">
+        <span class="text-4xl font-extrabold text-[var(--color-accent-gold)]/30 font-serif-heading">02</span>
+        <h3 class="text-base font-serif-heading font-bold">Measure Sacred Rapé</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Load equal pea-sized amounts of Rapé powder into both barrels of the Double Cobra applicator.
+        </p>
+      </div>
+
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-3 relative">
+        <span class="text-4xl font-extrabold text-[var(--color-accent-gold)]/30 font-serif-heading">03</span>
+        <h3 class="text-base font-serif-heading font-bold">Connect & Align Breath</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Place the mouthpiece to your lips and position both tips gently into the receiver's nostrils. Synchronize breath.
+        </p>
+      </div>
+
+      <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-3 relative">
+        <span class="text-4xl font-extrabold text-[var(--color-accent-gold)]/30 font-serif-heading">04</span>
+        <h3 class="text-base font-serif-heading font-bold">Synchronized Blow</h3>
+        <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+          Deliver one smooth, intentional, continuous blow. Allow receiver to close eyes and drop into deep meditation.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CUSTOMER REVIEWS & SOCIAL PROOF -->
+  <section class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-12 rounded-3xl border border-[var(--color-border-subtle)] space-y-10">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--color-border-subtle)] pb-8">
+      <div class="space-y-2">
+        <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Verified Community Feedback</span>
+        <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">Loved by Shamanic Facilitators</h2>
+        <p class="text-sm text-[var(--color-text-secondary)]">Read real experiences from practitioners across Europe and worldwide.</p>
+      </div>
+
+      <!-- Rating Summary Pill -->
+      <div class="bg-[var(--color-bg-surface)] p-4 rounded-2xl border border-[var(--color-border-subtle)] flex items-center gap-4 shrink-0">
+        <div class="text-center">
+          <p class="text-3xl font-extrabold text-[var(--color-accent-gold)] leading-none">4.97</p>
+          <p class="text-[10px] text-[var(--color-text-muted)] font-bold uppercase mt-1">out of 5.0</p>
+        </div>
+        <div class="border-l border-[var(--color-border-subtle)] pl-4 text-xs text-[var(--color-text-secondary)] space-y-1">
+          <div class="flex text-[var(--color-accent-gold)]">★★★★★</div>
+          <p class="font-bold text-[var(--color-text-primary)]">48 Verified Reviews</p>
+          <p class="text-[10px] text-emerald-500">✓ 98% Recommend This Product</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {reviews.map((rev) => (
+        <div class="bg-[var(--color-bg-surface)] p-6 rounded-3xl border border-[var(--color-border-subtle)] space-y-3 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex text-[var(--color-accent-gold)] text-sm">
+                {"★".repeat(rev.rating)}
+              </div>
+              <span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                ✓ Verified Purchaser
+              </span>
+            </div>
+            <h3 class="font-serif-heading font-bold text-base text-[var(--color-text-primary)]">{rev.title}</h3>
+            <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed italic">"{rev.content}"</p>
+          </div>
+
+          <div class="pt-3 border-t border-[var(--color-border-subtle)] flex items-center justify-between text-xs text-[var(--color-text-muted)]">
+            <div>
+              <p class="font-bold text-[var(--color-text-primary)]">{rev.author}</p>
+              <p class="text-[10px]">{rev.role} • {rev.location}</p>
+            </div>
+            <span class="text-[10px]">{rev.date}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- OBJECTION HANDLING & FAQ ACCORDION -->
+  <section class="space-y-8 max-w-4xl mx-auto">
+    <div class="text-center space-y-3">
+      <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Got Questions?</span>
+      <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold">Frequently Asked Questions</h2>
+      <p class="text-sm text-[var(--color-text-secondary)]">
+        Everything you need to know about ordering, using, and maintaining your Silver Tepi Double Cobra.
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      {faqs.map((faq, idx) => (
+        <details class="group bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] [&_summary::-webkit-details-marker]:none cursor-pointer transition-all duration-200">
+          <summary class="flex items-center justify-between font-serif-heading font-bold text-base sm:text-lg text-[var(--color-text-primary)] select-none">
+            <span>{faq.q}</span>
+            <span class="transition group-open:rotate-180 text-[var(--color-accent-gold)] text-xl font-bold ml-4">
+              ↓
+            </span>
+          </summary>
+          <div class="mt-4 pt-4 border-t border-[var(--color-border-subtle)] text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
+            <p>{faq.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- CEREMONIAL COMPLETE SET / BUNDLE RECOMMENDATIONS -->
+  {relatedProducts && relatedProducts.length > 0 && (
+    <section class="space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Complete Your Ceremony</span>
+          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold mt-1">Recommended Pairings</h2>
+        </div>
+        <a href={`/${countryCode}/store`} class="text-xs font-bold text-[var(--color-accent-gold)] hover:underline">
+          Explore All Products →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {relatedProducts.slice(0, 4).map((p) => (
+          <ProductPreview product={p} countryCode={countryCode} />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- STICKY BOTTOM ADD TO CART BAR -->
+  <div id="sticky-cart-bar" class="fixed bottom-0 left-0 right-0 z-50 glass-panel border-t border-[var(--color-border-subtle)] py-3 px-4 sm:px-8 transform translate-y-full transition-transform duration-300 shadow-2xl">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        {thumbnail && (
+          <img src={thumbnail} alt={title} class="w-12 h-12 object-cover rounded-xl border border-[var(--color-border-subtle)] shrink-0" />
+        )}
+        <div class="hidden sm:block">
+          <p class="font-serif-heading font-bold text-sm text-[var(--color-text-primary)] truncate max-w-[200px] md:max-w-xs">{title}</p>
+          <p class="text-xs text-[var(--color-accent-gold)] font-bold">{cheapestPrice?.calculated_price}</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-bold text-[var(--color-accent-gold)] sm:hidden">{cheapestPrice?.calculated_price}</span>
+        <button
+          onclick="document.querySelector('.lg\\:col-span-5 button')?.click()"
+          class="bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-slate-950 font-extrabold px-6 py-3 rounded-full text-xs uppercase tracking-wider transition-all duration-300 shadow-lg cursor-pointer"
+        >
+          🛒 Add To Cart Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Show sticky bottom bar when user scrolls past main hero buy box
+  const stickyBar = document.getElementById('sticky-cart-bar');
+  if (stickyBar) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 600) {
+        stickyBar.classList.remove('translate-y-full');
+      } else {
+        stickyBar.classList.add('translate-y-full');
+      }
+    });
+  }
+</script>
