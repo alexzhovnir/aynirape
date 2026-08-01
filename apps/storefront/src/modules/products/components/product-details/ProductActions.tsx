@@ -188,6 +188,7 @@ export const ProductActions = ({
       ))}
 
       <button
+        id="main-add-to-cart-btn"
         className={clsx(
           "bg-[var(--color-text-primary)] hover:bg-[var(--color-accent-gold)] text-[var(--color-bg-primary)] hover:text-[var(--color-text-primary)] font-bold py-4 px-8 rounded-full cursor-pointer hover:shadow-md transition-all duration-300 uppercase tracking-wider text-xs shadow-md",
           {

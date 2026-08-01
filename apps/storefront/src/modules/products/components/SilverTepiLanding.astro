@@ -111,19 +111,20 @@ const faqs = [
     <!-- Ambient Background Glow -->
     <div class="absolute -top-32 -right-32 w-96 h-96 bg-[var(--color-accent-gold)]/10 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start relative z-10">
+    <!-- Top Left Corner Badges -->
+    <div class="absolute top-5 left-6 sm:top-6 sm:left-8 z-30 flex flex-row flex-wrap items-center gap-2">
+      <span class="bg-[var(--color-accent-gold)] text-slate-950 font-extrabold text-xs tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-md">
+        🐍 925 Sterling Silver
+      </span>
+      <span class="bg-emerald-950/90 backdrop-blur-md text-emerald-300 border border-emerald-500/40 text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full shadow-md">
+        ⚡ Master Edition
+      </span>
+    </div>
+
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start relative z-10 pt-6 sm:pt-4">
       
       <!-- Gallery Column (7 Cols on LG) -->
-      <div class="lg:col-span-7 lg:sticky lg:top-24 flex flex-col gap-4">
-        <div class="flex flex-row flex-wrap items-center gap-2">
-          <span class="bg-[var(--color-accent-gold)] text-slate-950 font-extrabold text-xs tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-md">
-            🐍 925 Sterling Silver
-          </span>
-          <span class="bg-emerald-950/90 backdrop-blur-md text-emerald-300 border border-emerald-500/40 text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full shadow-md">
-            ⚡ Master Edition
-          </span>
-        </div>
-
+      <div class="lg:col-span-7 lg:sticky lg:top-24">
         <ImageCarouselWrapper
           images={displayImages}
           alt={title}
@@ -555,10 +556,10 @@ const faqs = [
       <div class="flex items-center gap-3">
         <span class="text-xs font-bold text-[var(--color-accent-gold)] sm:hidden">{cheapestPrice?.calculated_price}</span>
         <button
-          onclick="document.querySelector('.lg\\:col-span-5 button')?.click()"
+          id="sticky-add-to-cart-btn-tepi"
           class="bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-slate-950 font-extrabold px-6 py-3 rounded-full text-xs uppercase tracking-wider transition-all duration-300 shadow-lg cursor-pointer"
         >
-          🛒 Add To Cart Now
+          🛒 {t("product_ui.add_to_cart_now") || "ADD TO CART NOW"}
         </button>
       </div>
     </div>
@@ -567,8 +568,19 @@ const faqs = [
 </div>
 
 <script>
-  // Show sticky bottom bar when user scrolls past main hero buy box
+  // Show sticky bottom bar when user scrolls past main hero buy box & connect click handler
   const stickyBar = document.getElementById('sticky-cart-bar');
+  const stickyBtn = document.getElementById('sticky-add-to-cart-btn-tepi');
+
+  if (stickyBtn) {
+    stickyBtn.addEventListener('click', () => {
+      const mainBtn = document.getElementById('main-add-to-cart-btn');
+      if (mainBtn) {
+        mainBtn.click();
+      }
+    });
+  }
+
   if (stickyBar) {
     window.addEventListener('scroll', () => {
       if (window.scrollY > 600) {
