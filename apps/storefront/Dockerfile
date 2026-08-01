@@ -25,12 +25,13 @@ ENV PUBLIC_MEDUSA_BACKEND_URL=$PUBLIC_MEDUSA_BACKEND_URL \
 WORKDIR /repo/apps/storefront
 RUN pnpm build
 
+# Deploy isolated production bundle with standalone node_modules
+RUN pnpm --filter storefront deploy --prod /prod/storefront
+
 FROM node:22-slim AS runner
 ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=build /repo/apps/storefront/dist ./dist
-COPY --from=build /repo/node_modules ./node_modules
-COPY --from=build /repo/apps/storefront/node_modules ./apps/storefront/node_modules
+COPY --from=build /prod/storefront ./
 EXPOSE 8100
 ENV HOST=0.0.0.0
 ENV PORT=8100
