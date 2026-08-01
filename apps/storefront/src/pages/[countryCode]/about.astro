@@ -19,21 +19,21 @@ const t = useTranslations(countryCode);
     <!-- Breadcrumbs Nav -->
     <Breadcrumbs
       items={[
-        { label: "Home", href: `/${countryCode}` },
-        { label: "About Us" }
+        { label: t("common.home") || "Home", href: `/${countryCode}` },
+        { label: t("common.about_us") || "About Us" }
       ]}
     />
 
     <!-- Top Hero Banner -->
     <div class="text-center max-w-3xl mx-auto mb-16">
       <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
-        {t("about.hero.subtitle")}
+        {t("about_page.subtitle")}
       </span>
       <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
-        {t("about.hero.title")} <span class="italic font-normal text-[var(--color-accent-gold)]">{t("about.hero.title_italic")}</span>
+        {t("about_page.title")} <span class="italic font-normal text-[var(--color-accent-gold)]">{t("about_page.title_italic")}</span>
       </h1>
       <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
-        {t("about.hero.desc")}
+        {t("about_page.desc")}
       </p>
     </div>
 
@@ -55,15 +55,15 @@ const t = useTranslations(countryCode);
           <div class="p-6 rounded-2xl bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] shadow-lg grid grid-cols-3 gap-4 text-center">
             <div>
               <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">5</span>
-              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about.stats.tribes")}</span>
+              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about_page.stats.tribes")}</span>
             </div>
             <div>
               <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">100%</span>
-              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about.stats.trade")}</span>
+              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about_page.stats.trade")}</span>
             </div>
             <div>
               <span class="block text-xl font-bold font-serif-heading text-[var(--color-accent-gold)]">1% CO₂</span>
-              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about.stats.pledge")}</span>
+              <span class="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-semibold">{t("about_page.stats.pledge")}</span>
             </div>
           </div>
         </div>
@@ -72,28 +72,17 @@ const t = useTranslations(countryCode);
       <!-- Right Column: Rich Expanded Text -->
       <div class="flex flex-col gap-6">
         <div>
-          <span class="text-xs font-bold uppercase tracking-[0.28em] text-[var(--color-accent-gold)] block mb-1">{t("about.story.subtitle")}</span>
+          <span class="text-xs font-bold uppercase tracking-[0.28em] text-[var(--color-accent-gold)] block mb-1">{t("about_page.story.subtitle")}</span>
           <h2 class="text-3xl sm:text-4xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
-            {t("about.story.title")}
+            {t("about_page.story.title")}
           </h2>
         </div>
 
         <div class="space-y-4 text-sm md:text-base leading-relaxed text-[var(--color-text-secondary)]">
-          <p>
-            The word <strong class="text-[var(--color-text-primary)] font-bold">Ayni</strong> finds its deepest origins in Andean and Amazonian traditions, reflecting the timeless cosmic law of ongoing reciprocity: <em class="text-[var(--color-accent-gold)] font-medium">“Hoy por ti, mañana por mí”</em> — today for you, tomorrow for me. It embodies the sacred understanding that all living beings, spirits, plants, and elements are intrinsically interconnected.
-          </p>
-
-          <p>
-            Our journey began in 2020 when we were first introduced to the profound healing power of <a href={`/${countryCode}/store/category/rape`} class="text-[var(--color-accent-gold)] hover:underline font-semibold" title="Amazonian Rapé">Râpé</a> in the heart of South America. Experiencing its grounding clarity, emotional release, and spiritual alignment firsthand transformed our path. Over years of immersive practice, fasting, and studying beside revered Amazonian healers and receiving the formal blessing of a renowned Maestro Curandero, we were entrusted with the honor of sharing these sacred herbs across Europe.
-          </p>
-
-          <p>
-            Each blend in our catalogue is directly sourced from indigenous tribes across Peru and Brazil, including the <strong class="text-[var(--color-text-primary)]">Huni Kuin, Yawanawá, Nukini, Katukina, and Shanenawa</strong> nations in Acre. Prepared under strict ceremonial conditions, master tabaqueiros combine organic Mapacho (Nicotiana rustica) with sacred tree ashes such as Tsunu, Cacao, Canelheiro, and Paricá, along with medicinal seeds, flowers, and barks.
-          </p>
-
-          <p>
-            Beyond the powders themselves, we partner with master artisans who hand-craft our <a href={`/${countryCode}/store/category/kuripes-tepis`} class="text-[var(--color-accent-gold)] hover:underline font-semibold" title="Handcrafted Tepi and Kuripe Applicators">Tepi and Kuripe applicators</a> from sustainably harvested Sawo wood, Teak, and Bamboo, as well as energy-conducting Sterling Silver. Every purchase directly feeds back into tribal welfare, supporting community autonomy, land preservation, and economic self-determination for Amazonian families.
-          </p>
+          <p>{t("about_page.story.p1")}</p>
+          <p>{t("about_page.story.p2")}</p>
+          <p>{t("about_page.story.p3")}</p>
+          <p>{t("about_page.story.p4")}</p>
         </div>
       </div>
     </div>
@@ -101,9 +90,9 @@ const t = useTranslations(countryCode);
     <!-- Section 2: Indigenous Tribes We Partner With -->
     <div class="mt-24 pt-16 border-t border-[var(--color-border-subtle)]">
       <div class="text-center max-w-2xl mx-auto mb-14">
-        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">GUARDIANS OF THE FOREST</span>
-        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">The 5 Indigenous Nations We Support</h2>
-        <p class="text-xs text-[var(--color-text-secondary)] mt-2">We work directly with master tabaqueiros in Acre and Peru, ensuring fair trade compensation and cultural preservation.</p>
+        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("about_page.tribes.subtitle")}</span>
+        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">{t("about_page.tribes.title")}</h2>
+        <p class="text-xs text-[var(--color-text-secondary)] mt-2">{t("about_page.tribes.desc")}</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -112,7 +101,7 @@ const t = useTranslations(countryCode);
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Huni Kuin (Kaxinawá)</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Acre, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Famous for their deep connection to the spirit world, the Huni Kuin formulate potent blends with Cacao ash, Murici, and sacred jungle vines for grounding vision work.
+            {t("about_page.tribes.huni_kuin")}
           </p>
         </div>
 
@@ -121,7 +110,7 @@ const t = useTranslations(countryCode);
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Yawanawá</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Gregório River, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            The "People of the Wild Boar" are world-renowned for their Tsunu tree ash formulations, celebrated for intense physical cleansing and spiritual purification.
+            {t("about_page.tribes.yawanawa")}
           </p>
         </div>
 
@@ -130,7 +119,7 @@ const t = useTranslations(countryCode);
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Nukini</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Juruá Valley, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Known as the "Butterfly People", the Nukini create gentle, sweet, and heart-opening blends infused with the rare Sansara medicinal leaf.
+            {t("about_page.tribes.nukini")}
           </p>
         </div>
 
@@ -139,7 +128,7 @@ const t = useTranslations(countryCode);
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Katukina</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Panoan Nation, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Master herbalists of the Amazon, the Katukina specialize in high-potency Canelheiro and Paricá formulas designed to clear mental noise and center focus.
+            {t("about_page.tribes.katukina")}
           </p>
         </div>
 
@@ -148,15 +137,15 @@ const t = useTranslations(countryCode);
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Shanenawa</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Feijó, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Guardians of floral and aromatic herbs, crafting balanced blends that harmoniously combine Mapacho with fragrant botanical resins.
+            {t("about_page.tribes.shanenawa")}
           </p>
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300 flex flex-col justify-center text-center">
           <span class="text-3xl mb-2">🤝</span>
-          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">100% Fair Trade Direct</h3>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">{t("about_page.tribes.fair_trade_title")}</h3>
           <p class="text-xs text-[var(--color-text-muted)]">
-            Proceeds support tribal schools, healthcare, and territorial protection.
+            {t("about_page.tribes.fair_trade_desc")}
           </p>
         </div>
       </div>
@@ -165,40 +154,40 @@ const t = useTranslations(countryCode);
     <!-- Section 3: Our History Timeline -->
     <div class="mt-24 pt-16 border-t border-[var(--color-border-subtle)]">
       <div class="text-center max-w-2xl mx-auto mb-14">
-        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">MILESTONES & GROWTH</span>
-        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">Our Journey Since 2020</h2>
+        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("about_page.timeline.subtitle")}</span>
+        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">{t("about_page.timeline.title")}</h2>
       </div>
 
       <div class="grid md:grid-cols-4 gap-6 relative">
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm relative">
-          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">2020 &bull; THE CALLING</span>
-          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">First Jungle Dieta</h3>
+          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">{t("about_page.timeline.t1_tag")}</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">{t("about_page.timeline.t1_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            First introduction to Rapé in South America, undergoing personal fasting dietas beside native Amazonian healers.
+            {t("about_page.timeline.t1_desc")}
           </p>
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm relative">
-          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">2021 &bull; BLESSINGS</span>
-          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">Maestro Blessing</h3>
+          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">{t("about_page.timeline.t2_tag")}</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">{t("about_page.timeline.t2_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Receiving the formal blessing of a Maestro Curandero to legally and respectfully share sacred herbs in Europe.
+            {t("about_page.timeline.t2_desc")}
           </p>
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm relative">
-          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">2023 &bull; EXPANSION</span>
-          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">Artisanal Studio</h3>
+          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">{t("about_page.timeline.t3_tag")}</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">{t("about_page.timeline.t3_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Partnering with master carvers for Sawo wood, Teak, and Sterling Silver Tepi and Kuripe applicators.
+            {t("about_page.timeline.t3_desc")}
           </p>
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm relative">
-          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">PRESENT &bull; IMPACT</span>
-          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">1% CO₂ & Community</h3>
+          <span class="text-xs font-mono font-bold text-[var(--color-accent-gold)] block mb-2">{t("about_page.timeline.t4_tag")}</span>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-2">{t("about_page.timeline.t4_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Serving 10,000+ practitioners across Europe with 100% legal botanical specimens and 1% carbon donation.
+            {t("about_page.timeline.t4_desc")}
           </p>
         </div>
       </div>
@@ -207,40 +196,40 @@ const t = useTranslations(countryCode);
     <!-- Section 4: 4 Key Core Principles Cards -->
     <div class="mt-24 pt-16 border-t border-[var(--color-border-subtle)]">
       <div class="text-center mb-12">
-        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">OUR GUIDING LIGHT</span>
-        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">The Pillars of Ayni</h2>
+        <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.2em] text-xs uppercase">{t("about_page.pillars.subtitle")}</span>
+        <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mt-2">{t("about_page.pillars.title")}</h2>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
           <span class="text-3xl mb-3 block">🤝</span>
-          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">Sacred Reciprocity</h3>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">{t("about_page.pillars.p1_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Honoring the law of Ayni by giving back to the tribes and ecosystems that nurture these sacred plant medicines.
+            {t("about_page.pillars.p1_desc")}
           </p>
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
           <span class="text-3xl mb-3 block">🏹</span>
-          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">Tribal Heritage</h3>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">{t("about_page.pillars.p2_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Working exclusively with authentic indigenous families, ensuring heritage formulas remain pure and unaltered.
+            {t("about_page.pillars.p2_desc")}
           </p>
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
           <span class="text-3xl mb-3 block">🪶</span>
-          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">Artisanal Integrity</h3>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">{t("about_page.pillars.p3_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Every Tepi and Kuripe applicator is carved by hand with reverence, intention, and anatomical precision.
+            {t("about_page.pillars.p3_desc")}
           </p>
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
           <span class="text-3xl mb-3 block">🌱</span>
-          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">Mindful Integration</h3>
+          <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">{t("about_page.pillars.p4_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-            Providing comprehensive ceremonial guides and safety disclaimers to encourage respectful, conscious practice.
+            {t("about_page.pillars.p4_desc")}
           </p>
         </div>
       </div>
@@ -249,23 +238,23 @@ const t = useTranslations(countryCode);
     <!-- Call to Action Banner -->
     <div class="mt-20 bg-gradient-to-r from-[var(--color-bg-surface-elevated)] via-[var(--color-bg-surface)] to-[var(--color-bg-surface-elevated)] p-10 rounded-3xl border border-[var(--color-border-subtle)] text-center shadow-md">
       <h2 class="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-3">
-        Ready to Begin Your Sacred Journey?
+        {t("about_page.cta.title")}
       </h2>
       <p class="text-xs text-[var(--color-text-secondary)] max-w-xl mx-auto mb-6 leading-relaxed">
-        Explore our curated selection of authentic Amazonian blends, handcrafted applicators, and Peruvian aromatics.
+        {t("about_page.cta.desc")}
       </p>
       <div class="flex flex-wrap justify-center gap-4">
         <a
           href={`/${countryCode}/store`}
           class="px-8 py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold text-xs uppercase tracking-wider rounded-full transition-all duration-300 shadow-md cursor-pointer"
         >
-          View Catalogue &rarr;
+          {t("about_page.cta.view_catalogue")}
         </a>
         <a
-          href="/blog"
+          href={`/${countryCode}/blog`}
           class="px-8 py-4 border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)] font-bold text-xs uppercase tracking-wider rounded-full transition-all duration-300 cursor-pointer bg-[var(--color-bg-surface)]"
         >
-          Read Journal
+          {t("about_page.cta.read_journal")}
         </a>
       </div>
     </div>

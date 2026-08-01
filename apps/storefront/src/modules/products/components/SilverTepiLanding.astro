@@ -114,22 +114,20 @@ const faqs = [
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start relative z-10">
       
       <!-- Gallery Column (7 Cols on LG) -->
-      <div class="lg:col-span-7 lg:sticky lg:top-24">
-        <div class="relative">
-          <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
-            <span class="bg-[var(--color-accent-gold)] text-slate-950 font-extrabold text-xs tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-lg">
-              🐍 925 Sterling Silver
-            </span>
-            <span class="bg-emerald-950/90 backdrop-blur-md text-emerald-300 border border-emerald-500/40 text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full shadow-md">
-              ⚡ Master Edition
-            </span>
-          </div>
-
-          <ImageCarouselWrapper
-            images={displayImages}
-            alt={title}
-          />
+      <div class="lg:col-span-7 lg:sticky lg:top-24 flex flex-col gap-4">
+        <div class="flex flex-row flex-wrap items-center gap-2">
+          <span class="bg-[var(--color-accent-gold)] text-slate-950 font-extrabold text-xs tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-md">
+            🐍 925 Sterling Silver
+          </span>
+          <span class="bg-emerald-950/90 backdrop-blur-md text-emerald-300 border border-emerald-500/40 text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full shadow-md">
+            ⚡ Master Edition
+          </span>
         </div>
+
+        <ImageCarouselWrapper
+          images={displayImages}
+          alt={title}
+        />
       </div>
 
       <!-- Compact High-Converting Selling Box (5 Cols on LG) -->
@@ -158,15 +156,17 @@ const faqs = [
         </div>
 
         <!-- Price Display -->
-        <div class="flex items-baseline justify-between border-y border-[var(--color-border-subtle)] py-4">
-          <div>
-            <span id="product-price" class="text-3xl sm:text-4xl font-extrabold text-[var(--color-accent-gold)]">
+        <div class="flex items-center justify-between border-y border-[var(--color-border-subtle)] py-4">
+          <div class="flex flex-col gap-1">
+            <span id="product-price" class="text-3xl sm:text-4xl font-extrabold text-[var(--color-accent-gold)] leading-none">
               {cheapestPrice?.calculated_price}
             </span>
-            <span class="text-xs text-[var(--color-text-muted)] ml-2">{t("store.product.includes_vat")}</span>
+            <span class="text-xs text-[var(--color-text-muted)] font-medium">
+              {t("store.product.includes_vat")}
+            </span>
           </div>
-          <span class="text-xs font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-            ✓ In Stock & Ready to Ship
+          <span class="text-xs font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20 shrink-0">
+            ✓ {t("store.preview.in_stock") || "In Stock & Ready to Ship"}
           </span>
         </div>
 
@@ -201,8 +201,8 @@ const faqs = [
                 productId={product.id}
                 regionId={region.id}
                 labels={{
-                  add_to_cart: "🛒 ADD TO CART — EXPRESS DELIVERY",
-                  adding: "ADDING TO CART..."
+                  add_to_cart: `🛒 ${t("product_ui.add_to_cart_express") || "ADD TO CART — EXPRESS DELIVERY"}`,
+                  adding: t("actions.adding") || "ADDING..."
                 }}
                 client:visible
               />
@@ -227,8 +227,8 @@ const faqs = [
             <div class="flex items-center gap-2">
               <span class="text-base">🚀</span>
               <div>
-                <p class="font-bold">Fast Insured Shipping Across EU & Worldwide</p>
-                <p class="text-[var(--color-text-muted)] text-[11px]">Discreet packaging • Usually dispatched within 24h</p>
+                <p class="font-bold">{t("product_ui.fast_shipping") || "Fast Insured Express Shipping Across EU & Worldwide"}</p>
+                <p class="text-[var(--color-text-muted)] text-[11px]">{t("product_ui.ships_24h") || "Discreet plain package • Ships within 24h"}</p>
               </div>
             </div>
           </div>
@@ -242,8 +242,8 @@ const faqs = [
           <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
             <span class="text-lg">📦</span>
             <div>
-              <p class="font-bold text-[var(--color-text-primary)]">Discreet Package</p>
-              <p class="text-[10px] text-[var(--color-text-muted)]">Plain eco box</p>
+              <p class="font-bold text-[var(--color-text-primary)]">{t("product_ui.discreet_package") || "Discreet Package"}</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">{t("product_ui.discreet_sub") || "Plain eco box"}</p>
             </div>
           </div>
           <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
@@ -256,15 +256,15 @@ const faqs = [
           <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
             <span class="text-lg">🛡️</span>
             <div>
-              <p class="font-bold text-[var(--color-text-primary)]">Lifetime Guarantee</p>
-              <p class="text-[10px] text-[var(--color-text-muted)]">Artisanal quality</p>
+              <p class="font-bold text-[var(--color-text-primary)]">{t("product_ui.lifetime_quality") || "Lifetime Quality"}</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">{t("product_ui.lifetime_sub") || "Guaranteed authentic"}</p>
             </div>
           </div>
           <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
             <span class="text-lg">🌿</span>
             <div>
-              <p class="font-bold text-[var(--color-text-primary)]">Fair Trade</p>
-              <p class="text-[10px] text-[var(--color-text-muted)]">Direct Peru artisans</p>
+              <p class="font-bold text-[var(--color-text-primary)]">{t("product_ui.fair_trade") || "Fair Trade"}</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">{t("product_ui.fair_trade_sub") || "Empowering artisans"}</p>
             </div>
           </div>
         </div>

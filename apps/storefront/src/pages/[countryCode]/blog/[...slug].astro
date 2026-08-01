@@ -8,6 +8,7 @@ import ShareButtons from "@components/ShareButtons.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import { getRegion } from "@lib/data/regions";
 import { listProducts } from "@lib/data/products";
+import { getLangFromRegion } from "@lib/i18n/config";
 
 export async function getStaticPaths() {
   const toSlug = (id: string) => id.replace(/\/index$/, "");
@@ -34,7 +35,21 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { post, countryCode } = Astro.props;
+const { post: rawPost, countryCode } = Astro.props;
+const targetLang = getLangFromRegion(countryCode);
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+const post =
+  (rawPost.data.translationKey
+    ? allPosts.find(
+        (p) =>
+          p.data.translationKey === rawPost.data.translationKey &&
+          p.data.language === targetLang,
+      )
+    : null) ||
+  (rawPost.data.language === targetLang ? rawPost : null) ||
+  rawPost;
+
 const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth === 2);
 const toSlug = (id: string) => id.replace(/\/index$/, "");
@@ -123,7 +138,6 @@ if (region) {
   }
 }
 
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const matchingVariants = post.data.translationKey
   ? allPosts.filter((p) => p.data.translationKey === post.data.translationKey)
   : [post];

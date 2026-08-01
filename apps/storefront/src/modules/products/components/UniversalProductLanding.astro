@@ -4,6 +4,7 @@ import { ProductActions } from "./product-details/ProductActions";
 import ProductPreview from "./product-preview/ProductPreview.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import ShareButtons from "@components/ShareButtons.astro";
+import { getLangFromRegion } from "@lib/i18n/config";
 
 interface Props {
   product: any;
@@ -52,7 +53,7 @@ const showPairings = metadata.show_pairings !== false;
 const getFallbackDescription = (tName: string, hName: string, cCode: string) => {
   const tLower = (tName || "").toLowerCase();
   const hLower = (hName || "").toLowerCase();
-  const lang = (cCode || "gb").toLowerCase();
+  const lang = getLangFromRegion(cCode);
 
   const isDE = lang === "de";
   const isFR = lang === "fr";
@@ -432,22 +433,20 @@ const displaySku = rawSku || generatedSku;
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start relative z-10">
       
       <!-- Gallery Column -->
-      <div class="lg:col-span-7 lg:sticky lg:top-24">
-        <div class="relative">
-          <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
-            <span class="bg-[var(--color-accent-gold)] text-slate-950 font-extrabold text-xs tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-lg">
-              {categoryBadge}
-            </span>
-            <span class="bg-emerald-950/90 backdrop-blur-md text-emerald-300 border border-emerald-500/40 text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full shadow-md">
-              {subBadge}
-            </span>
-          </div>
-
-          <ImageCarouselWrapper
-            images={displayImages}
-            alt={title ?? "Product image"}
-          />
+      <div class="lg:col-span-7 lg:sticky lg:top-24 flex flex-col gap-4">
+        <div class="flex flex-row flex-wrap items-center gap-2">
+          <span class="bg-[var(--color-accent-gold)] text-slate-950 font-extrabold text-xs tracking-wider uppercase px-3.5 py-1.5 rounded-full shadow-md">
+            {categoryBadge}
+          </span>
+          <span class="bg-emerald-950/90 backdrop-blur-md text-emerald-300 border border-emerald-500/40 text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full shadow-md">
+            {subBadge}
+          </span>
         </div>
+
+        <ImageCarouselWrapper
+          images={displayImages}
+          alt={title ?? "Product image"}
+        />
       </div>
 
       <!-- Compact High-Converting Selling Box -->
@@ -471,15 +470,17 @@ const displaySku = rawSku || generatedSku;
         </div>
 
         <!-- Price Display -->
-        <div class="flex items-baseline justify-between border-y border-[var(--color-border-subtle)] py-4">
-          <div>
-            <span id="product-price" class="text-3xl sm:text-4xl font-extrabold text-[var(--color-accent-gold)]">
+        <div class="flex items-center justify-between border-y border-[var(--color-border-subtle)] py-4">
+          <div class="flex flex-col gap-1">
+            <span id="product-price" class="text-3xl sm:text-4xl font-extrabold text-[var(--color-accent-gold)] leading-none">
               {cheapestPrice?.calculated_price}
             </span>
-            <span class="text-xs text-[var(--color-text-muted)] ml-2">{t("store.product.includes_vat")}</span>
+            <span class="text-xs text-[var(--color-text-muted)] font-medium">
+              {t("store.product.includes_vat")}
+            </span>
           </div>
-          <span class="text-xs font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-            ✓ In Stock & Ready to Ship
+          <span class="inline-flex items-center gap-1.5 bg-emerald-950/80 text-emerald-300 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-full shadow-xs shrink-0">
+            ✓ {t("store.preview.in_stock") || "In Stock & Ready to Ship"}
           </span>
         </div>
 
@@ -505,8 +506,8 @@ const displaySku = rawSku || generatedSku;
                 productId={product.id}
                 regionId={region.id}
                 labels={{
-                  add_to_cart: "🛒 ADD TO CART — EXPRESS DELIVERY",
-                  adding: "ADDING TO CART..."
+                  add_to_cart: `🛒 ${t("product_ui.add_to_cart_express") || "ADD TO CART — EXPRESS DELIVERY"}`,
+                  adding: t("actions.adding") || "ADDING..."
                 }}
                 client:visible
               />
@@ -531,8 +532,8 @@ const displaySku = rawSku || generatedSku;
             <div class="flex items-center gap-2">
               <span class="text-base">🚀</span>
               <div>
-                <p class="font-bold">Fast Insured Express Shipping Across EU & Worldwide</p>
-                <p class="text-[var(--color-text-muted)] text-[11px]">Discreet plain package • Ships within 24h</p>
+                <p class="font-bold">{t("product_ui.fast_shipping") || "Fast Insured Express Shipping Across EU & Worldwide"}</p>
+                <p class="text-[var(--color-text-muted)] text-[11px]">{t("product_ui.ships_24h") || "Discreet plain package • Ships within 24h"}</p>
               </div>
             </div>
           </div>
@@ -546,29 +547,29 @@ const displaySku = rawSku || generatedSku;
           <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
             <span class="text-lg">📦</span>
             <div>
-              <p class="font-bold text-[var(--color-text-primary)]">Discreet Package</p>
-              <p class="text-[10px] text-[var(--color-text-muted)]">Plain eco box</p>
+              <p class="font-bold text-[var(--color-text-primary)]">{t("product_ui.discreet_package") || "Discreet Package"}</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">{t("product_ui.discreet_sub") || "Plain eco box"}</p>
             </div>
           </div>
           <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
             <span class="text-lg">🌿</span>
             <div>
-              <p class="font-bold text-[var(--color-text-primary)]">100% Organic</p>
-              <p class="text-[10px] text-[var(--color-text-muted)]">Authentic origin</p>
+              <p class="font-bold text-[var(--color-text-primary)]">{t("product_ui.organic") || "100% Organic"}</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">{t("product_ui.organic_sub") || "Authentic origin"}</p>
             </div>
           </div>
           <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
             <span class="text-lg">🛡️</span>
             <div>
-              <p class="font-bold text-[var(--color-text-primary)]">Lifetime Quality</p>
-              <p class="text-[10px] text-[var(--color-text-muted)]">Guaranteed authentic</p>
+              <p class="font-bold text-[var(--color-text-primary)]">{t("product_ui.lifetime_quality") || "Lifetime Quality"}</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">{t("product_ui.lifetime_sub") || "Guaranteed authentic"}</p>
             </div>
           </div>
           <div class="flex items-center gap-2.5 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] p-3 rounded-2xl border border-[var(--color-border-subtle)]">
             <span class="text-lg">🤝</span>
             <div>
-              <p class="font-bold text-[var(--color-text-primary)]">Fair Trade</p>
-              <p class="text-[10px] text-[var(--color-text-muted)]">Empowering artisans</p>
+              <p class="font-bold text-[var(--color-text-primary)]">{t("product_ui.fair_trade") || "Fair Trade"}</p>
+              <p class="text-[10px] text-[var(--color-text-muted)]">{t("product_ui.fair_trade_sub") || "Empowering artisans"}</p>
             </div>
           </div>
         </div>
@@ -583,8 +584,8 @@ const displaySku = rawSku || generatedSku;
     <section class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--color-border-subtle)] pb-6">
         <div>
-          <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Potency & Experience</span>
-          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold mt-1">Intensity & Dosage Level</h2>
+          <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">{t("product_ui.potency_title") || "Potency & Experience"}</span>
+          <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold mt-1">{t("product_ui.intensity_level") || "Intensity & Dosage Level"}</h2>
         </div>
         <span class="bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] border border-[var(--color-accent-gold)]/30 text-xs font-bold px-4 py-2 rounded-full uppercase tracking-wider">
           {intensityLabel}
@@ -595,7 +596,7 @@ const displaySku = rawSku || generatedSku;
         <!-- Visual Gauge Bar -->
         <div class="bg-[var(--color-bg-surface)] p-6 rounded-2xl border border-[var(--color-border-subtle)] space-y-4">
           <div class="flex justify-between items-center text-xs font-bold">
-            <span class="text-[var(--color-text-muted)]">Intensity Level</span>
+            <span class="text-[var(--color-text-muted)]">{t("product_ui.intensity_level") || "Intensity Level"}</span>
             <span class="text-[var(--color-accent-gold)]">{intensityScore} / 5</span>
           </div>
 
@@ -612,19 +613,19 @@ const displaySku = rawSku || generatedSku;
           </div>
 
           <div class="flex justify-between text-[10px] text-[var(--color-text-muted)] font-semibold uppercase tracking-wider pt-1">
-            <span>Mild & Smooth</span>
-            <span>Balanced</span>
-            <span>Intense Grounding</span>
+            <span>{t("product_ui.mild_smooth") || "Mild & Smooth"}</span>
+            <span>{t("product_ui.balanced") || "Balanced"}</span>
+            <span>{t("product_ui.intense_grounding") || "Intense Grounding"}</span>
           </div>
         </div>
 
         <!-- Dosage & Usage Guidance -->
         <div class="space-y-3 text-xs sm:text-sm text-[var(--color-text-secondary)]">
-          <p class="font-bold text-[var(--color-text-primary)] text-sm">💡 Recommended Facilitation Guide:</p>
+          <p class="font-bold text-[var(--color-text-primary)] text-sm">💡 {t("product_ui.guide_title") || "Recommended Facilitation Guide:"}</p>
           <p class="leading-relaxed">
             {isApplicator ? "Designed with a calibrated 45-degree angle to provide effortless, airtight airflow for both beginner and experienced practitioners." :
              isAromatic ? "Apply 3-4 drops onto hands or smudge your altar prior to ceremony for instant energetic clarification." :
-             "Start with a small pea-sized amount per nostril. Take a deep breath, ground your body, and observe the immediate clearing sensation."}
+             (t("product_ui.guide_desc") || "Start with a small pea-sized amount per nostril. Take a deep breath, ground your body, and observe the immediate clearing sensation.")}
           </p>
         </div>
       </div>
@@ -638,10 +639,10 @@ const displaySku = rawSku || generatedSku;
         <div class="md:col-span-8 space-y-4">
           <div class="flex items-center gap-2">
             <span class="text-2xl">🌎</span>
-            <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">Indigenous Ancestral Heritage</span>
+            <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">{t("product_ui.heritage_title") || "Indigenous Ancestral Heritage"}</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold text-[var(--color-text-primary)]">
-            Crafted in Alignment with {tribalName}
+            {(t("product_ui.crafted_tribe") || "Crafted in Alignment with {0} Tribe").replace("{0}", tribalName)}
           </h2>
           <p class="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
             Every item in our collection is prepared or hand-carved in strict respect of sacred Amazonian tradition. Proceeds directly support indigenous artisan families, forest stewardship, and the preservation of ancestral shamanic knowledge.
@@ -1030,7 +1031,7 @@ const displaySku = rawSku || generatedSku;
           onclick="document.querySelector('.lg\\:col-span-5 button')?.click()"
           class="bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-slate-950 font-extrabold px-6 py-3 rounded-full text-xs uppercase tracking-wider transition-all duration-300 shadow-lg cursor-pointer"
         >
-          🛒 Add To Cart Now
+          🛒 {t("product_ui.add_to_cart_now") || "ADD TO CART NOW"}
         </button>
       </div>
     </div>
