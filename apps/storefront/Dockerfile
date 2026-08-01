@@ -25,16 +25,17 @@ ENV PUBLIC_MEDUSA_BACKEND_URL=$PUBLIC_MEDUSA_BACKEND_URL \
 WORKDIR /repo/apps/storefront
 RUN pnpm build
 
-FROM node:22-slim AS prod-deps
-WORKDIR /app
-COPY apps/storefront/package.json ./package.json
-RUN npm install --omit=dev --legacy-peer-deps --no-audit --no-fund
+FROM base AS prod-deps
+WORKDIR /repo
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/storefront/package.json apps/storefront/package.json
+RUN pnpm install --prod --frozen-lockfile --filter storefront...
 
 FROM node:22-slim AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=build /repo/apps/storefront/dist ./dist
-COPY --from=prod-deps /app/node_modules ./node_modules
+COPY --from=prod-deps /repo/node_modules ./node_modules
 EXPOSE 8100
 ENV HOST=0.0.0.0
 CMD ["node", "./dist/server/entry.mjs"]

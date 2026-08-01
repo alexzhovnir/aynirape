@@ -19,28 +19,38 @@ const t = useTranslations(countryCode);
     <!-- Breadcrumbs Nav -->
     <Breadcrumbs
       items={[
-        { label: "Home", href: `/${countryCode}` },
-        { label: "Terms & Conditions" }
+        { label: t("common.home") || "Home", href: `/${countryCode}` },
+        { label: t("common.terms_and_conditions") || "Terms & Conditions" }
       ]}
     />
 
     <div class="max-w-3xl">
       <p class="text-xs font-bold uppercase tracking-[0.28em] text-[var(--color-accent-gold)]">
-        Terms
+        {t("terms_page.subtitle")}
       </p>
       <h1 class="mt-4 text-4xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)]">
-        Terms & Conditions
+        {t("terms_page.title")}
       </h1>
+      <p class="mt-2 text-sm text-[var(--color-text-secondary)]">
+        {t("terms_page.desc")}
+      </p>
+
       <div class="mt-8 space-y-6 text-base leading-8 text-[var(--color-text-secondary)]">
+        <p>{t("terms_page.p1")}</p>
+        <p>{t("terms_page.p2")}</p>
         <p>
-          This storefront provides authentic shamanic supplies and sacred botanical remedies from Amazonian indigenous communities. Product, pricing, and checkout behavior depend on the connected Medusa backend configuration.
+          {t("terms_page.p3")} <a href={`/${countryCode}/contact`} class="text-[var(--color-accent-gold)] hover:underline font-medium">{t("common.contact_us")}</a>.
         </p>
-        <p>
-          Orders placed on our platform are processed securely. Please ensure that shipping information provided during checkout is accurate for timely European delivery.
-        </p>
-        <p>
-          For inquiries regarding custom orders or initiation ceremonies, please reach out via our <a href={`/${countryCode}/contact`} class="text-[var(--color-accent-gold)] hover:underline font-medium">Contact page</a>.
-        </p>
+
+        <!-- Botanical Specimen Disclaimer Box -->
+        <div class="p-6 rounded-2xl bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] mt-8">
+          <strong class="block text-sm font-bold text-[var(--color-accent-gold)] mb-2 font-serif-heading">
+            {t("terms_page.botanical_notice_title")}
+          </strong>
+          <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
+            {t("terms_page.botanical_notice_desc")}
+          </p>
+        </div>
       </div>
     </div>
   </div>

@@ -19,21 +19,21 @@ const t = useTranslations(countryCode);
     <!-- Breadcrumbs Nav -->
     <Breadcrumbs
       items={[
-        { label: "Home", href: `/${countryCode}` },
-        { label: "Privacy Policy" }
+        { label: t("common.home") || "Home", href: `/${countryCode}` },
+        { label: t("common.privacy_policy") || "Privacy Policy" }
       ]}
     />
 
     <!-- Hero Header Banner -->
     <div class="text-center max-w-3xl mx-auto mb-16">
       <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
-        PRIVACY & DATA PROTECTION
+        {t("privacy_page.subtitle")}
       </span>
       <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
-        Privacy Policy & <span class="italic font-normal text-[var(--color-accent-gold)]">GDPR Commitment</span>
+        {t("privacy_page.title")}
       </h1>
       <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
-        Your privacy is sacred to us. We adhere to strict European data security standards to protect your personal details at every step.
+        {t("privacy_page.desc")}
       </p>
     </div>
 
@@ -43,9 +43,9 @@ const t = useTranslations(countryCode);
         <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
           🔒
         </div>
-        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">256-Bit SSL Encryption</h3>
+        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">{t("privacy_page.card1_title")}</h3>
         <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-          All order and payment traffic is secured with military-grade SSL data encryption.
+          {t("privacy_page.card1_desc")}
         </p>
       </div>
 
@@ -53,9 +53,9 @@ const t = useTranslations(countryCode);
         <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
           🚫
         </div>
-        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">Zero Data Selling</h3>
+        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">{t("privacy_page.card2_title")}</h3>
         <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-          We never sell, rent, or trade your contact or order details to third parties.
+          {t("privacy_page.card2_desc")}
         </p>
       </div>
 
@@ -63,9 +63,9 @@ const t = useTranslations(countryCode);
         <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
           🇪🇺
         </div>
-        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">EU GDPR Compliant</h3>
+        <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">{t("privacy_page.card3_title")}</h3>
         <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-          Full adherence to the General Data Protection Regulation (EU 2016/679).
+          {t("privacy_page.card3_desc")}
         </p>
       </div>
 

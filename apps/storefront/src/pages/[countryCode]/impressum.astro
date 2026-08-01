@@ -19,21 +19,21 @@ const t = useTranslations(countryCode);
     <!-- Breadcrumbs Nav -->
     <Breadcrumbs
       items={[
-        { label: "Home", href: `/${countryCode}` },
-        { label: "Impressum" }
+        { label: t("common.home") || "Home", href: `/${countryCode}` },
+        { label: t("common.impressum") || "Impressum" }
       ]}
     />
 
     <!-- Hero Header Banner -->
     <div class="text-center max-w-3xl mx-auto mb-16">
       <span class="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-xs uppercase">
-        TRANSPARENCY & LEGAL DISCLOSURE
+        {t("impressum_page.subtitle")}
       </span>
       <h1 class="mt-3 text-4xl sm:text-5xl font-serif-heading font-bold tracking-tight text-[var(--color-text-primary)] leading-tight">
-        Impressum & <span class="italic font-normal text-[var(--color-accent-gold)]">Legal Information</span>
+        {t("impressum_page.title")}
       </h1>
       <p class="mt-4 text-base md:text-lg text-[var(--color-text-secondary)] leading-relaxed">
-        Required corporate details, regulatory compliance, and dispute resolution information for Ayni Rapé in the European Union.
+        {t("impressum_page.desc")}
       </p>
     </div>
 
@@ -44,8 +44,8 @@ const t = useTranslations(countryCode);
           🏛️
         </div>
         <div>
-          <strong class="block text-sm font-bold text-[var(--color-text-primary)]">Registered Business</strong>
-          <span class="text-xs text-[var(--color-text-muted)]">European Union</span>
+          <strong class="block text-sm font-bold text-[var(--color-text-primary)]">{t("impressum_page.card_registered")}</strong>
+          <span class="text-xs text-[var(--color-text-muted)]">{t("impressum_page.card_registered_sub")}</span>
         </div>
       </div>
 
@@ -54,7 +54,7 @@ const t = useTranslations(countryCode);
           ✉️
         </div>
         <div>
-          <strong class="block text-sm font-bold text-[var(--color-text-primary)]">Direct Inquiry</strong>
+          <strong class="block text-sm font-bold text-[var(--color-text-primary)]">{t("impressum_page.card_inquiry")}</strong>
           <span class="text-xs text-[var(--color-text-muted)]">info@aynirape.com</span>
         </div>
       </div>
@@ -64,8 +64,8 @@ const t = useTranslations(countryCode);
           ⚖️
         </div>
         <div>
-          <strong class="block text-sm font-bold text-[var(--color-text-primary)]">ODR Compliant</strong>
-          <span class="text-xs text-[var(--color-text-muted)]">EU Consumer Protection</span>
+          <strong class="block text-sm font-bold text-[var(--color-text-primary)]">{t("impressum_page.card_odr")}</strong>
+          <span class="text-xs text-[var(--color-text-muted)]">{t("impressum_page.card_odr_sub")}</span>
         </div>
       </div>
     </div>

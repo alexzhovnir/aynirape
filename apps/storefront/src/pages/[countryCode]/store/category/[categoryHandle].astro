@@ -120,16 +120,16 @@ const isCategoryMatch = (catHandle?: string, catName?: string) => {
 
 const currentCategory = categories.find((c) => isCategoryMatch(c.handle, c.name));
 
-const fallbackNameMap: Record<string, string> = {
-  "rapé": "Rapé",
-  "rape": "Rapé",
-  "tepi-and-kuripe": "Tepi and Kuripe",
-  "aromatics": "Aromatics",
-  "supplements": "Supplements",
-  "ornaments-and-decoration": "Ornaments and decoration",
+const getLocalizedCategoryName = (norm: string) => {
+  if (norm.includes("tepi") || norm.includes("kuripe")) return t("categories.tepi_kuripe");
+  if (norm.includes("rape")) return t("categories.rape");
+  if (norm.includes("aromat")) return t("categories.aromatics");
+  if (norm.includes("suppl")) return t("categories.supplements");
+  if (norm.includes("ornament") || norm.includes("decor")) return t("categories.ornaments");
+  return currentCategory?.name || (categoryHandle ? categoryHandle.charAt(0).toUpperCase() + categoryHandle.slice(1) : "Category");
 };
 
-const displayCategoryName = currentCategory?.name || fallbackNameMap[targetAscii] || fallbackNameMap[targetHandle] || (categoryHandle ? categoryHandle.charAt(0).toUpperCase() + categoryHandle.slice(1) : "Category");
+const displayCategoryName = getLocalizedCategoryName(targetAscii || targetHandle);
 
 const categoryProducts = products.filter((p) => {
   if (!p.categories || p.categories.length === 0) return false;
