@@ -34,6 +34,7 @@ export default config({
           label: "Language",
           options: [
             { label: "English", value: "en" },
+            { label: "Deutsch", value: "de" },
             { label: "Français", value: "fr" },
             { label: "Italiano", value: "it" },
             { label: "Español", value: "es" },

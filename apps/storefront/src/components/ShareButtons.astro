@@ -1,0 +1,101 @@
+---
+interface Props {
+  title: string;
+  url?: string;
+  class?: string;
+}
+
+const { title, url, class: className = "" } = Astro.props;
+
+const currentUrl = url || Astro.url.href;
+const encodedUrl = encodeURIComponent(currentUrl);
+const encodedTitle = encodeURIComponent(title);
+---
+
+<div class={`flex items-center gap-4 py-3 border-t border-[var(--color-border-subtle)] mt-4 ${className}`}>
+  <span class="text-sm font-semibold text-[var(--color-text-secondary)] tracking-wide">Share</span>
+  
+  <div class="flex items-center gap-2.5">
+    <!-- WhatsApp -->
+    <a
+      href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Share on WhatsApp"
+      class="w-10 h-10 rounded-full bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] hover:border-[#25D366] hover:bg-[#25D366]/10 text-[var(--color-text-primary)] hover:text-[#25D366] flex items-center justify-center transition-all duration-300 shadow-sm hover:scale-105"
+      title="Share on WhatsApp"
+    >
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.118-2.91-6.999-1.88-1.882-4.36-2.914-6.999-2.915-5.44 0-9.866 4.424-9.87 9.87-.001 1.778.475 3.51 1.378 5.028l-.987 3.606 3.698-.97z"/>
+      </svg>
+    </a>
+
+    <!-- Telegram -->
+    <a
+      href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Share on Telegram"
+      class="w-10 h-10 rounded-full bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] hover:border-[#229ED9] hover:bg-[#229ED9]/10 text-[var(--color-text-primary)] hover:text-[#229ED9] flex items-center justify-center transition-all duration-300 shadow-sm hover:scale-105"
+      title="Share on Telegram"
+    >
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.37.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
+      </svg>
+    </a>
+
+    <!-- Twitter / X -->
+    <a
+      href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Share on X"
+      class="w-10 h-10 rounded-full bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)]/10 text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] flex items-center justify-center transition-all duration-300 shadow-sm hover:scale-105"
+      title="Share on X"
+    >
+      <svg class="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      </svg>
+    </a>
+
+    <!-- Copy Link -->
+    <button
+      type="button"
+      class="share-copy-btn w-10 h-10 rounded-full bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)]/10 text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] flex items-center justify-center transition-all duration-300 shadow-sm hover:scale-105 cursor-pointer relative group"
+      data-url={currentUrl}
+      aria-label="Copy Link"
+      title="Copy Link"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+      </svg>
+      <span class="share-toast absolute -top-8 left-1/2 -translate-x-1/2 bg-stone-900 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow opacity-0 pointer-events-none transition-opacity duration-200">Copied!</span>
+    </button>
+  </div>
+</div>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.share-copy-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const url = btn.getAttribute('data-url');
+        if (url) {
+          try {
+            await navigator.clipboard.writeText(url);
+            const toast = btn.querySelector('.share-toast');
+            if (toast) {
+              toast.classList.remove('opacity-0');
+              toast.classList.add('opacity-100');
+              setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+              }, 2000);
+            }
+          } catch (err) {
+            console.error('Failed to copy: ', err);
+          }
+        }
+      });
+    });
+  });
+</script>

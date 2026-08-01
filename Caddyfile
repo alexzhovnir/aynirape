@@ -1,0 +1,26 @@
+aynirape.com {
+    # 1. Normalize Rapé encoded blog URLs
+    @blog_rape_encoded path_regexp blog_enc ^/blog/.*(rap%c3%a9|rapé).*$
+    redir @blog_rape_encoded /blog/rape-ritual-preparation-how-to-set-intention-before-ceremony 301
+
+    # 2. Redirect Products: /shop/{category}/{product-handle} -> /us/store/{product-handle}
+    @legacy_product path_regexp prod ^/shop/[^/]+/(.+)$
+    redir @legacy_product /us/store/{re.prod.1} 301
+
+    # 3. Redirect Categories: /shop/{category-handle} -> /us/store/category/{category-handle}
+    # Special category mapping for rap-e
+    redir /shop/rape /us/store/category/rap-e 301
+    @legacy_category path_regexp cat ^/shop/([^/]+)/?$
+    redir @legacy_category /us/store/category/{re.cat.1} 301
+
+    # 4. Redirect Legacy Static Pages to Default Country Scope (/us)
+    redir /about /us/about 301
+    redir /contact /us/contact 301
+    redir /delivery-and-payment /us/delivery-and-payment 301
+    redir /impressum /us/impressum 301
+    redir /privacy-policy /us/privacy-policy 301
+    redir /terms /us/terms 301
+
+    # Main reverse proxy to Astro Storefront
+    reverse_proxy localhost:4321
+}

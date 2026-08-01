@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Ayni Rapé AI Manifest
+Site: https://aynirape.com
+Title: Ayni Rapé — Shamanic Supplies & Sacred Botanicals
+Description: Ethically sourced Amazonian shamanic supplies, Rapé blends, Tepi & Kuripe applicators, and sacred aromatics.
+Contact: info@aynirape.com
+Sitemap: https://aynirape.com/sitemap.xml
+LLMS: https://aynirape.com/llms.txt

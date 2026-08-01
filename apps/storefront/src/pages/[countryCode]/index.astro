@@ -8,6 +8,7 @@ import CeremonyGuide from "@components/CeremonyGuide.astro";
 import { FaqAccordion } from "@components/FaqAccordion";
 import { getCollection } from "astro:content";
 import { useTranslations } from "@lib/i18n/utils";
+import { getLangFromRegion } from "@lib/i18n/config";
 
 export const getStaticPaths = getRegionParams;
 
@@ -127,14 +128,26 @@ const fmtReviewDate = (dateStr: string) => {
 };
 
 // Blog Posts setup
-const blogPosts = (
+const targetBlogLang = getLangFromRegion(countryCode);
+let blogPosts = (
   await getCollection(
     "blog",
-    ({ data }) => data.language === "en" && !data.draft,
+    ({ data }) => data.language === targetBlogLang && !data.draft,
   )
 ).sort(
   (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
 ).slice(0, 3);
+
+if (blogPosts.length === 0) {
+  blogPosts = (
+    await getCollection(
+      "blog",
+      ({ data }) => data.language === "en" && !data.draft,
+    )
+  ).sort(
+    (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
+  ).slice(0, 3);
+}
 
 const fmtBlogDate = (d: Date) =>
   d.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" });
@@ -180,6 +193,68 @@ const schemaData = {
       "publisher": {
         "@id": `${Astro.site ?? Astro.url.origin}#organization`
       }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${Astro.site ?? Astro.url.origin}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Râpé?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Râpé is a natural medicine and sacred traditional herbal blend prepared by the indigenous tribal peoples of the Amazon rainforest (Peru and Brazil). Its main component is Mapacho (Nicotiana rustica), blended with seeds, bark, flowers, and sacred tree ashes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between a Tepi and a Kuripe pipe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A Kuripe is a V-shaped tube designed for individual self-blowing of mixtures. A Tepi is a longer tube used by a practitioner or shaman to blow the mixture into another person's nostrils."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is a Râpé ceremony traditionally conducted?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The ceremony requires a calm environment, straight posture, and clear intention. A small pea-sized dose is loaded into the pipe. The user brings the pipe to their forehead and heart to express gratitude before blowing into each nostril."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How often should Râpé be used?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Traditionally, we recommend using Râpé no more than 1-2 times per week to maintain a harmonious rhythm and deep energetic impact."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I care for and clean my Tepi and Kuripe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Keep your pipes in a protective box or pouch to prevent damage. Clean them using a dry cotton swab or small brush. Never wet wooden or bamboo pipes with water."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What ceremonial aromatics enhance the practice?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Palo Santo wood is burned before ceremony to clear unwanted energies and purify the space. Agua de Florida is a Peruvian shamanic cologne sprayed shortly after the blow to deepen relaxation and meditation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Râpé legal in the European Union?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. All recipes presented in our store do not contain any narcotic or prohibited substances. They are fully legal across the European Union and are supplied as raw botanical specimens."
+          }
+        }
+      ]
     }
   ]
 };

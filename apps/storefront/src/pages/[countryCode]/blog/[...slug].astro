@@ -4,6 +4,7 @@ export const prerender = true;
 import { getCollection, render } from "astro:content";
 import BlogLayout from "@layouts/BlogLayout.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import ShareButtons from "@components/ShareButtons.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import { getRegion } from "@lib/data/regions";
 import { listProducts } from "@lib/data/products";
@@ -41,16 +42,68 @@ const toSlug = (id: string) => id.replace(/\/index$/, "");
 const site = Astro.site ?? new URL(Astro.url.origin);
 const url = new URL(`/${countryCode}/blog/${toSlug(post.id)}`, site).href;
 
+const isHowTo = /how|guide|preparation|clean/i.test(post.data.title);
+
+const jsonLdGraph: any[] = [
+  {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": `${site.origin}/${countryCode}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Journal",
+        "item": `${site.origin}/${countryCode}/blog`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": post.data.title,
+        "item": url
+      }
+    ]
+  },
+  {
+    "@type": "BlogPosting",
+    "headline": post.data.title,
+    "description": post.data.excerpt,
+    "datePublished": post.data.publishedDate.toISOString(),
+    "image": post.data.coverImage ? new URL(post.data.coverImage, site).href : undefined,
+    "mainEntityOfPage": url,
+    "publisher": { "@type": "Organization", "name": "Ayni Rapé" },
+    "author": { "@type": "Person", "name": post.data.author || "Ayni Rapé" }
+  }
+];
+
+if (isHowTo) {
+  jsonLdGraph.push({
+    "@type": "HowTo",
+    "name": post.data.title,
+    "description": post.data.excerpt,
+    "image": post.data.coverImage ? new URL(post.data.coverImage, site).href : undefined,
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Preparation & Intention",
+        "text": "Create a calm sacred space, sit upright with a clear intention before starting the ritual."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Application & Integration",
+        "text": "Load a pea-sized amount into your Tepi or Kuripe pipe, express gratitude, and gently apply into each nostril."
+      }
+    ]
+  });
+}
+
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Article",
-  headline: post.data.title,
-  description: post.data.excerpt,
-  datePublished: post.data.publishedDate.toISOString(),
-  image: post.data.coverImage ? new URL(post.data.coverImage, site).href : undefined,
-  mainEntityOfPage: url,
-  publisher: { "@type": "Organization", name: "AyniRape" },
-  author: { "@type": "Person", name: post.data.author || "Ayni Rapé" },
+  "@graph": jsonLdGraph
 };
 
 const fmtDate = (d: Date) =>
@@ -69,6 +122,20 @@ if (region) {
     console.error(e);
   }
 }
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const matchingVariants = post.data.translationKey
+  ? allPosts.filter((p) => p.data.translationKey === post.data.translationKey)
+  : [post];
+
+const alternates = matchingVariants.map((p) => {
+  const lang = p.data.language || "en";
+  const regionForLang = lang === "de" ? "de" : lang === "fr" ? "fr" : lang === "es" ? "es" : lang === "it" ? "it" : "gb";
+  return {
+    lang,
+    href: `/${regionForLang}/blog/${toSlug(p.id)}`,
+  };
+});
 ---
 
 <BlogLayout
@@ -80,6 +147,7 @@ if (region) {
   image={post.data.coverImage}
   type="article"
   publishedTime={post.data.publishedDate.toISOString()}
+  alternates={alternates}
   jsonLd={jsonLd}
 >
   <!-- Breadcrumbs -->
@@ -150,6 +218,7 @@ if (region) {
       </div>
       
       <Content />
+      <ShareButtons title={post.data.title} url={url} class="mt-8" />
     </article>
 
     <!-- Right Sidebar: Share & Featured Products -->

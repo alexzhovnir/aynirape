@@ -1,2 +1,8 @@
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /checkout
+Disallow: /cart
+Disallow: /keystatic
+Disallow: /api/
+
+Sitemap: https://aynirape.com/sitemap.xml

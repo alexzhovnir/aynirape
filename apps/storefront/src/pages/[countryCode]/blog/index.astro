@@ -8,16 +8,19 @@ import { getRegionParams } from "@lib/params/region-params";
 import { getRegion } from "@lib/data/regions";
 import { listProducts } from "@lib/data/products";
 
+import { getLangFromRegion } from "@lib/i18n/config";
+
 export const getStaticPaths = getRegionParams;
 
 const { countryCode = "gb" } = Astro.params;
+const targetLang = getLangFromRegion(countryCode);
 
 const slugOf = (id: string) => id.replace(/\/index$/, "");
 
 let allPosts = (
   await getCollection(
     "blog",
-    ({ data }) => data.language === countryCode && !data.draft,
+    ({ data }) => data.language === targetLang && !data.draft,
   )
 ).sort((a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime());
 

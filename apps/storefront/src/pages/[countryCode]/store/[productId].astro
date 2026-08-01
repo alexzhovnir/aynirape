@@ -53,28 +53,64 @@ const { cheapestPrice } = getProductPrice({
 const descriptionParagraphs = (description ?? "").split(/\r?\n\n/).filter(Boolean);
 const shortSellingDescription = descriptionParagraphs[0] || description || "";
 
+const categoryName = product?.categories?.[0]?.name || "Store";
+const categorySlug = product?.categories?.[0]?.handle || "category";
+
 const schemaData = {
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": title,
-  "image": images && images.length > 0 ? images.map((img) => img.url) : (thumbnail ? [thumbnail] : []),
-  "description": description,
-  "sku": variants?.[0]?.sku || productId,
-  "brand": {
-    "@type": "Brand",
-    "name": "Ayni Rapé"
-  },
-  "offers": {
-    "@type": "AggregateOffer",
-    "priceCurrency": cheapestPrice?.currency_code?.toUpperCase() || "EUR",
-    "lowPrice": cheapestPrice?.calculated_amount,
-    "highPrice": cheapestPrice?.original_amount || cheapestPrice?.calculated_amount,
-    "offerCount": variants?.length || 1,
-    "availability": variants?.some((v) => (v.inventory_quantity ?? 1) > 0)
-      ? "https://schema.org/InStock"
-      : "https://schema.org/OutOfStock",
-    "url": Astro.url.href,
-  },
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": `${Astro.site ?? Astro.url.origin}/${countryCode}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Store",
+          "item": `${Astro.site ?? Astro.url.origin}/${countryCode}/store`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": categoryName,
+          "item": `${Astro.site ?? Astro.url.origin}/${countryCode}/store/category/${categorySlug}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": title,
+          "item": Astro.url.href
+        }
+      ]
+    },
+    {
+      "@type": "Product",
+      "name": title,
+      "image": images && images.length > 0 ? images.map((img) => img.url) : (thumbnail ? [thumbnail] : []),
+      "description": description,
+      "sku": variants?.[0]?.sku || productId,
+      "brand": {
+        "@type": "Brand",
+        "name": "Ayni Rapé"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": cheapestPrice?.currency_code?.toUpperCase() || "EUR",
+        "lowPrice": cheapestPrice?.calculated_amount,
+        "highPrice": cheapestPrice?.original_amount || cheapestPrice?.calculated_amount,
+        "offerCount": variants?.length || 1,
+        "availability": variants?.some((v) => (v.inventory_quantity ?? 1) > 0)
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        "url": Astro.url.href,
+      }
+    }
+  ]
 };
 
 const isSilverTepiDoubleCobra = product?.handle === "silver-tepi-double-cobra" || productId === "silver-tepi-double-cobra";

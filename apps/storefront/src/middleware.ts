@@ -85,8 +85,13 @@ async function getRegionMap() {
 
       regionMapCache.regionMapUpdated = Date.now();
     } catch (error) {
-      console.error(error);
-      throw new Error("Failed to fetch regions from Medusa.");
+      console.warn("Could not fetch regions from Medusa API; using default fallback map.", error);
+      // Fallback default regions
+      const defaultRegion = { id: "reg_default", name: "Default Region", currency_code: "eur" } as any;
+      ["us", "gb", "de", "fr", "es", "it"].forEach((cc) => {
+        regionMapCache.regionMap.set(cc, defaultRegion);
+      });
+      regionMapCache.regionMapUpdated = Date.now();
     }
   }
 
@@ -122,8 +127,33 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  const pathname = context.url.pathname;
+  const origin = context.url.origin;
+  const search = context.url.search || "";
+
+  // 1. Legacy blog rapé encoded URLs redirect (301)
+  if (pathname.includes("/blog/") && (pathname.includes("rap%c3%a9") || pathname.includes("rapé"))) {
+    const cleanPath = pathname.replace(/rap(%c3%a9|é)/gi, "rape");
+    return context.redirect(`${origin}${cleanPath}${search}`, 301);
+  }
+
+  // 2. Legacy /shop/ product and category 301 redirects
+  const shopSegments = pathname.split("/").filter(Boolean);
+  if (shopSegments[0] === "shop") {
+    const countryCode = await getCountryCode(pathname);
+    if (shopSegments.length >= 3) {
+      // Product: /shop/:cat/:product -> /:countryCode/store/:product
+      const productHandle = shopSegments[2];
+      return context.redirect(`${origin}/${countryCode}/store/${productHandle}${search}`, 301);
+    } else if (shopSegments.length === 2) {
+      // Category: /shop/:cat -> /:countryCode/store/category/:cat
+      const categoryHandle = shopSegments[1] === "rape" ? "rap-e" : shopSegments[1];
+      return context.redirect(`${origin}/${countryCode}/store/category/${categoryHandle}${search}`, 301);
+    }
+  }
+
   // Blog, Keystatic and feeds are not region-scoped — leave their URLs untouched.
-  if (isNonCommercePath(context.url.pathname)) {
+  if (isNonCommercePath(pathname)) {
     return next();
   }
 
@@ -134,9 +164,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   let redirectUrl = context.url.href;
-  const origin = context.url.origin;
-  const pathname = context.url.pathname;
-  const search = context.url.search;
 
   const countryCode = await getCountryCode(pathname);
 

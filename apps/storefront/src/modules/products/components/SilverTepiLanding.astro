@@ -3,6 +3,7 @@ import ImageCarouselWrapper from "./product-details/image-carousel/ImageCarousel
 import { ProductActions } from "./product-details/ProductActions";
 import ProductPreview from "./product-preview/ProductPreview.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import ShareButtons from "@components/ShareButtons.astro";
 
 interface Props {
   product: any;
@@ -231,6 +232,9 @@ const faqs = [
               </div>
             </div>
           </div>
+
+          <!-- Share Buttons Block -->
+          <ShareButtons title={title} />
         </div>
 
         <!-- Trust Badges Grid -->
