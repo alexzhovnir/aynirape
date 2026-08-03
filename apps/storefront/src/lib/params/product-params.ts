@@ -1,4 +1,5 @@
 import { sdk } from "../sdk";
+import fallbackProductsData from "../data/products.json";
 
 interface ProductParams {
   params: {
@@ -21,23 +22,16 @@ const DEFAULT_COUNTRIES = [
   "ch",
   "cz",
   "pl",
+  "be",
+  "no",
+  "fi",
+  "ie",
+  "pt",
+  "ca",
+  "au",
 ];
 
-const DEFAULT_PRODUCT_HANDLES = [
-  "emburana",
-  "nukini-sansara",
-  "huni-kuin",
-  "silver-tepi-applicator",
-  "kuripe",
-  "sananga",
-  "canela-de-velho",
-  "tsunu",
-  "muleta",
-  "nukini-jagube",
-  "yawanawa-forza",
-  "kuntanawa-jarina",
-  "tepi",
-];
+const DEFAULT_PRODUCT_HANDLES = (fallbackProductsData as any[]).map((p) => p.handle);
 
 export const getProductParams = async (): Promise<ProductParams[]> => {
   let paths: ProductParams[] = [];
@@ -58,7 +52,7 @@ export const getProductParams = async (): Promise<ProductParams[]> => {
     }
   };
 
-  // Pre-seed default routes for builds when Medusa API is unreachable
+  // Pre-seed all 44 products across all 20 countries for SSG static builds
   DEFAULT_COUNTRIES.forEach((c) => {
     DEFAULT_PRODUCT_HANDLES.forEach((h) => {
       addPath(c, h);
@@ -90,4 +84,3 @@ export const getProductParams = async (): Promise<ProductParams[]> => {
 
   return paths;
 };
-
