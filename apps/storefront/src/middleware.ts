@@ -3,7 +3,7 @@ import { defineMiddleware } from "astro:middleware";
 import { sdk } from "./lib/sdk";
 
 const MEDUSA_BACKEND_URL = import.meta.env.PUBLIC_MEDUSA_BACKEND_URL;
-const DEFAULT_REGION = import.meta.env.DEFAULT_REGION;
+const DEFAULT_REGION = import.meta.env.DEFAULT_REGION || "us";
 
 const regionMapCache = {
   regionMap: new Map<string, HttpTypes.StoreRegion>(),

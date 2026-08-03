@@ -24,6 +24,6 @@ const t = useTranslations(countryCode);
         { label: String(t("seo.cart.title")) }
       ]}
     />
-    <CartPage client:load countryCode={countryCode} />
+    <CartPage client:only="react" countryCode={countryCode} />
   </div>
 </Layout>

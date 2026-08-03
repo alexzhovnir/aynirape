@@ -20,6 +20,9 @@ const medusaBackendDomain = PUBLIC_MEDUSA_BACKEND_URL
 
 // https://astro.build/config
 export default defineConfig({
+  devToolbar: {
+    enabled: false,
+  },
   // Absolute URLs for canonical tags, sitemap and RSS. Override per environment.
   site: process.env.PUBLIC_SITE_URL ?? "https://aynirape.com",
   // Node adapter (was Cloudflare): Keystatic's admin/API need a Node runtime, which

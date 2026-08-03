@@ -104,12 +104,12 @@ const regionId = region?.id || null;
   </head>
   <body class="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
     <div class="flex min-h-screen w-full flex-col">
-      <Nav client:load countryCode={activeCountryCode} regionId={regionId} />
+      <Nav client:only="react" countryCode={activeCountryCode} regionId={regionId} />
       <main class="flex-1 min-h-[calc(100vh-72px)] max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         <slot />
       </main>
       <Footer countryCode={activeCountryCode} />
-      <CartSidebar client:load countryCode={activeCountryCode} />
+      <CartSidebar client:only="react" countryCode={activeCountryCode} />
     </div>
   </body>
 </html>

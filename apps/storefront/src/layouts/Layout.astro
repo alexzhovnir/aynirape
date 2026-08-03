@@ -5,6 +5,7 @@ import Footer from "@modules/layout/components/Footer.astro";
 import { Nav } from "@modules/layout/components/Nav";
 import "@styles/global.css";
 import { ClientRouter } from "astro:transitions";
+import { getLangFromRegion } from "@lib/i18n/config";
 
 interface Props {
   title?: string;
@@ -40,10 +41,43 @@ if (!countryCode) {
 
 const region = await getRegion(countryCode);
 const regionId = region?.id || null;
+
+const lang = getLangFromRegion(countryCode);
+
+const siteOrigin = Astro.site ? Astro.site.origin : Astro.url.origin;
+const pathSuffix = Astro.url.pathname.replace(new RegExp(`^/${countryCode}(/|$)`), "/");
+const cleanSuffix = pathSuffix.endsWith("/") && pathSuffix !== "/" ? pathSuffix.slice(0, -1) : pathSuffix;
+const relativeSuffix = cleanSuffix === "/" ? "" : cleanSuffix;
+
+const hreflangs = [
+  { lang: "x-default", href: `${siteOrigin}/us${relativeSuffix}` },
+  { lang: "en", href: `${siteOrigin}/us${relativeSuffix}` },
+  { lang: "en-US", href: `${siteOrigin}/us${relativeSuffix}` },
+  { lang: "en-GB", href: `${siteOrigin}/gb${relativeSuffix}` },
+  { lang: "de", href: `${siteOrigin}/de${relativeSuffix}` },
+  { lang: "de-DE", href: `${siteOrigin}/de${relativeSuffix}` },
+  { lang: "de-AT", href: `${siteOrigin}/at${relativeSuffix}` },
+  { lang: "de-CH", href: `${siteOrigin}/ch${relativeSuffix}` },
+  { lang: "fr", href: `${siteOrigin}/fr${relativeSuffix}` },
+  { lang: "fr-FR", href: `${siteOrigin}/fr${relativeSuffix}` },
+  { lang: "es", href: `${siteOrigin}/es${relativeSuffix}` },
+  { lang: "es-ES", href: `${siteOrigin}/es${relativeSuffix}` },
+  { lang: "it", href: `${siteOrigin}/it${relativeSuffix}` },
+  { lang: "it-IT", href: `${siteOrigin}/it${relativeSuffix}` },
+];
+
+const ogLocales: Record<string, string> = {
+  en: "en_US",
+  de: "de_DE",
+  fr: "fr_FR",
+  es: "es_ES",
+  it: "it_IT",
+};
+const ogLocale = ogLocales[lang] || "en_US";
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark" class="dark">
+<html lang={lang} data-theme="dark" class="dark">
   <head>
     <ClientRouter />
     <meta charset="UTF-8" />
@@ -89,6 +123,10 @@ const regionId = region?.id || null;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl.href} />
 
+    {hreflangs.map((item) => (
+      <link rel="alternate" hreflang={item.lang} href={item.href} />
+    ))}
+
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Open Graph -->
@@ -97,6 +135,7 @@ const regionId = region?.id || null;
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalUrl.href} />
     <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content={ogLocale} />
     {image && <meta property="og:image" content={image} />}
 
     <!-- Twitter Card -->
@@ -110,12 +149,12 @@ const regionId = region?.id || null;
   </head>
   <body class="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
     <div class="flex min-h-screen w-full flex-col">
-      <Nav client:load countryCode={countryCode} regionId={regionId} />
+      <Nav client:only="react" countryCode={countryCode} regionId={regionId} />
       <main class="flex-1 min-h-[calc(100vh-80px)]">
         <slot />
       </main>
       <Footer countryCode={countryCode} />
-      <CartSidebar client:load countryCode={countryCode} />
+      <CartSidebar client:only="react" countryCode={countryCode} />
     </div>
   </body>
 </html>

@@ -1,4 +1,4 @@
-import { sdk } from "@lib/sdk";
+import { sdk, getBackendUrl } from "@lib/sdk";
 import type { StoreCart } from "@medusajs/types";
 import { atom, computed } from "nanostores";
 

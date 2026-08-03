@@ -7,46 +7,87 @@ interface ProductParams {
   };
 }
 
+const DEFAULT_COUNTRIES = [
+  "de",
+  "dk",
+  "fr",
+  "it",
+  "es",
+  "se",
+  "gb",
+  "us",
+  "nl",
+  "at",
+  "ch",
+  "cz",
+  "pl",
+];
+
+const DEFAULT_PRODUCT_HANDLES = [
+  "emburana",
+  "nukini-sansara",
+  "huni-kuin",
+  "silver-tepi-applicator",
+  "kuripe",
+  "sananga",
+  "canela-de-velho",
+  "tsunu",
+  "muleta",
+  "nukini-jagube",
+  "yawanawa-forza",
+  "kuntanawa-jarina",
+  "tepi",
+];
+
 export const getProductParams = async (): Promise<ProductParams[]> => {
+  let paths: ProductParams[] = [];
+  const addedKeys = new Set<string>();
+
+  const addPath = (countryCode: string, productId: string) => {
+    if (!countryCode || !productId) return;
+    const normCountry = countryCode.toLowerCase();
+    const key = `${normCountry}:${productId}`;
+    if (!addedKeys.has(key)) {
+      addedKeys.add(key);
+      paths.push({
+        params: {
+          countryCode: normCountry,
+          productId,
+        },
+      });
+    }
+  };
+
+  // Pre-seed default routes for builds when Medusa API is unreachable
+  DEFAULT_COUNTRIES.forEach((c) => {
+    DEFAULT_PRODUCT_HANDLES.forEach((h) => {
+      addPath(c, h);
+    });
+  });
+
   try {
     const { regions } = await sdk.store.region.list();
     const { products } = await sdk.store.product.list();
 
-    let paths: ProductParams[] = [];
-
-    regions.forEach((region) => {
+    regions?.forEach((region) => {
       region.countries?.forEach((country) => {
-        products.forEach((product) => {
-          if (!country.iso_2) {
-            return;
-          }
+        if (!country.iso_2) return;
+        const countryCode = country.iso_2.toLowerCase();
 
-          const countryCode = country.iso_2.toLowerCase();
-
-          // 1. Push SEO-friendly human-readable handle URL (e.g. /de/store/huni-kuin)
+        products?.forEach((product) => {
           if (product.handle) {
-            paths.push({
-              params: {
-                countryCode,
-                productId: product.handle,
-              },
-            });
+            addPath(countryCode, product.handle);
           }
-
-          // 2. Push raw Medusa product ID as fallback (e.g. /de/store/prod_01KX...)
-          paths.push({
-            params: {
-              countryCode,
-              productId: product.id,
-            },
-          });
+          if (product.id) {
+            addPath(countryCode, product.id);
+          }
         });
       });
     });
-
-    return paths;
   } catch (error) {
-    console.error(error);
-    return [];
+    console.error("getProductParams fetch error:", error);
   }
+
+  return paths;
 };
+

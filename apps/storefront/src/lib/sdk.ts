@@ -1,14 +1,19 @@
 import Medusa from "@medusajs/js-sdk";
 
-const MEDUSA_BACKEND_URL = import.meta.env.PUBLIC_MEDUSA_BACKEND_URL;
+export const getBackendUrl = () => {
+  const envUrl = import.meta.env.PUBLIC_MEDUSA_BACKEND_URL || "http://localhost:9009";
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host && host !== "localhost" && host !== "127.0.0.1") {
+      return envUrl.replace("localhost", host).replace("127.0.0.1", host);
+    }
+  }
+  return envUrl;
+};
 
+const MEDUSA_BACKEND_URL = getBackendUrl();
 const MEDUSA_PUBLISHABLE_KEY = import.meta.env.PUBLIC_MEDUSA_PUBLISHABLE_KEY;
-
 const isDevEnvironment = import.meta.env.DEV;
-
-if (!MEDUSA_BACKEND_URL) {
-  console.warn("PUBLIC_MEDUSA_BACKEND_URL environment variable is not set.");
-}
 
 export const sdk = new Medusa({
   baseUrl: MEDUSA_BACKEND_URL,

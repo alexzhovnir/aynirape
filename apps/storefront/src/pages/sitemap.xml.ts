@@ -5,24 +5,25 @@ export const prerender = false;
 
 const SITE_URL = "https://aynirape.com";
 
-const staticPages = [
-  "/us",
-  "/us/about",
-  "/us/contact",
-  "/us/delivery-and-payment",
-  "/us/impressum",
-  "/us/privacy-policy",
-  "/us/privacy",
-  "/us/terms",
-  "/blog"
+const REGIONS = ["us", "de", "fr", "es", "it", "gb"];
+
+const staticPathSuffixes = [
+  "",
+  "/about",
+  "/contact",
+  "/delivery-and-payment",
+  "/impressum",
+  "/privacy-policy",
+  "/terms",
+  "/store",
 ];
 
 const categories = [
-  "/us/store/category/rap-e",
-  "/us/store/category/tepi-and-kuripe",
-  "/us/store/category/ornaments-and-decoration",
-  "/us/store/category/aromatics",
-  "/us/store/category/supplements"
+  "rap-e",
+  "tepi-and-kuripe",
+  "ornaments-and-decoration",
+  "aromatics",
+  "supplements",
 ];
 
 const productHandles = [
@@ -42,42 +43,67 @@ const productHandles = [
 
 const slugOf = (id: string) => id.replace(/\/index$/, "").replace(/\.(mdoc|md)$/, "");
 
+function buildHreflangLinks(pathSuffix: string): string {
+  return `
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/us${pathSuffix}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}/us${pathSuffix}"/>
+    <xhtml:link rel="alternate" hreflang="de" href="${SITE_URL}/de${pathSuffix}"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="${SITE_URL}/fr${pathSuffix}"/>
+    <xhtml:link rel="alternate" hreflang="es" href="${SITE_URL}/es${pathSuffix}"/>
+    <xhtml:link rel="alternate" hreflang="it" href="${SITE_URL}/it${pathSuffix}"/>`;
+}
+
 export async function GET(context: APIContext) {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
 
   const urls: string[] = [];
 
-  // Static pages
-  for (const path of staticPages) {
-    urls.push(`
+  // 1. Static pages for all regions
+  for (const suffix of staticPathSuffixes) {
+    for (const region of REGIONS) {
+      urls.push(`
   <url>
-    <loc>${SITE_URL}${path}</loc>
+    <loc>${SITE_URL}/${region}${suffix}</loc>${buildHreflangLinks(suffix)}
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>${suffix === "" ? "1.0" : "0.8"}</priority>
   </url>`);
+    }
   }
 
-  // Categories
-  for (const path of categories) {
-    urls.push(`
+  // 2. Categories for all regions
+  for (const catHandle of categories) {
+    const suffix = `/store/category/${catHandle}`;
+    for (const region of REGIONS) {
+      urls.push(`
   <url>
-    <loc>${SITE_URL}${path}</loc>
+    <loc>${SITE_URL}/${region}${suffix}</loc>${buildHreflangLinks(suffix)}
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>`);
+    }
   }
 
-  // Products
+  // 3. Products for all regions
   for (const handle of productHandles) {
-    urls.push(`
+    const suffix = `/store/${handle}`;
+    for (const region of REGIONS) {
+      urls.push(`
   <url>
-    <loc>${SITE_URL}/us/store/${handle}</loc>
+    <loc>${SITE_URL}/${region}${suffix}</loc>${buildHreflangLinks(suffix)}
     <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <priority>0.9</priority>
   </url>`);
+    }
   }
 
-  // Blog posts
+  // 4. Standalone Blog index & posts
+  urls.push(`
+  <url>
+    <loc>${SITE_URL}/blog</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>`);
+
   for (const post of posts) {
     const rawSlug = slugOf(post.id);
     const lang = post.data.language || "en";
@@ -109,3 +135,4 @@ ${urls.join("")}
     },
   });
 }
+

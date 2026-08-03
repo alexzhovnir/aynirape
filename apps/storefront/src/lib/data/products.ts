@@ -7,20 +7,20 @@ export const listProducts = async (regionId: string, categoryId?: string) => {
       fields: "*variants.calculated_price,*categories,*images",
       ...(categoryId ? { category_id: [categoryId] } : {}),
     });
-    return products;
+    return products || [];
   } catch (error) {
-    console.error(error);
-    throw new Error("Failed to fetch products");
+    console.error("listProducts fetch error:", error);
+    return [];
   }
 };
 
 export const listCategories = async () => {
   try {
     const { product_categories } = await sdk.store.category.list();
-    return product_categories;
+    return product_categories || [];
   } catch (error) {
-    console.error(error);
-    throw new Error("Failed to fetch categories");
+    console.error("listCategories fetch error:", error);
+    return [];
   }
 };
 
@@ -49,7 +49,8 @@ export const retrieveProduct = async (
     });
     return product;
   } catch (error) {
-    console.error(error);
-    throw new Error("Failed to fetch product");
+    console.error("retrieveProduct fetch error:", error);
+    return undefined;
   }
 };
+
