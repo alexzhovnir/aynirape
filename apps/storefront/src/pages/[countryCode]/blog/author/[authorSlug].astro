@@ -1,0 +1,236 @@
+---
+import { getCollection } from "astro:content";
+import BlogLayout from "@layouts/BlogLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import { getRegion } from "@lib/data/regions";
+import { listProducts } from "@lib/data/products";
+import { getRegionParams } from "@lib/params/region-params";
+import { useTranslations } from "@lib/i18n/utils";
+import { getLangFromRegion } from "@lib/i18n/config";
+
+const slugOf = (id: string) => id.replace(/\/index$/, "");
+
+export async function getStaticPaths() {
+  const regions = await getRegionParams();
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  const authorSet = new Set<string>();
+  posts.forEach((p) => {
+    authorSet.add((p.data.authorSlug || "ayni-team").toLowerCase());
+  });
+
+  const paths: any[] = [];
+
+  regions.forEach(({ params: { countryCode } }) => {
+    authorSet.forEach((slug) => {
+      paths.push({
+        params: {
+          countryCode,
+          authorSlug: slug,
+        },
+      });
+    });
+  });
+
+  return paths;
+}
+
+const { countryCode, authorSlug } = Astro.params;
+const targetLang = getLangFromRegion(countryCode);
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+const postsForAuthor = allPosts.filter(
+  (p) => (p.data.authorSlug || "ayni-team").toLowerCase() === authorSlug
+);
+
+const posts = postsForAuthor.filter((p) => (p.data.language || "en") === targetLang);
+const displayPosts = posts.length > 0 ? posts : postsForAuthor.filter((p) => (p.data.language || "en") === "en");
+
+const authorName = displayPosts[0]?.data.author || "Ayni Team";
+
+const categoriesMap = new Map<string, number>();
+const authorsMap = new Map<string, { slug: string; count: number }>();
+
+allPosts.forEach((post) => {
+  const cat = post.data.category || "Rituals";
+  const author = post.data.author || "Ayni Team";
+  const authorSlugVal = post.data.authorSlug || "ayni-team";
+
+  categoriesMap.set(cat, (categoriesMap.get(cat) || 0) + 1);
+  authorsMap.set(author, {
+    slug: authorSlugVal,
+    count: (authorsMap.get(author)?.count || 0) + 1,
+  });
+});
+
+const sidebarCategories = Array.from(categoriesMap.entries()).map(([name, count]) => ({
+  name,
+  slug: name.toLowerCase(),
+  count,
+}));
+
+const sidebarAuthors = Array.from(authorsMap.entries()).map(([name, info]) => ({
+  name,
+  slug: info.slug,
+  count: info.count,
+}));
+
+const region = await getRegion(countryCode);
+let featuredProducts: any[] = [];
+if (region) {
+  try {
+    const productsList = await listProducts(region.id);
+    featuredProducts = productsList.filter((p) => ['nukini-sansara', 'agua-de-florida'].includes(p.handle)).slice(0, 2);
+    if (featuredProducts.length === 0) {
+      featuredProducts = productsList.slice(0, 2);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString(targetLang === "de" ? "de-DE" : "en-GB", { day: "2-digit", month: "short", year: "numeric" });
+
+function getBlogCategoryIcon(name: string) {
+  const norm = name.toLowerCase();
+  if (norm.includes("clean")) {
+    return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-[var(--color-accent-gold)] shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 21l8.982-1.173L17 15l-7.187.904zM21 9.813L15.904 9 15 17.982 21 17l-.904-7.187z" /></svg>`;
+  }
+  if (norm.includes("ritual")) {
+    return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-[var(--color-accent-gold)] shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" /></svg>`;
+  }
+  if (norm.includes("guide")) {
+    return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-[var(--color-accent-gold)] shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.987 8.987 0 0 0-6 2.292m0-14.25v14.25" /></svg>`;
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-[var(--color-accent-gold)] shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925-3.546 5.974 5.974 0 0 0-2.133-1A3.75 3.75 0 0 0 4.5 12a3.75 3.75 0 0 0 3.75 3.75h3.75Z" /></svg>`;
+}
+
+function getAuthorIcon() {
+  return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-[var(--color-accent-gold)] shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>`;
+}
+---
+
+<BlogLayout
+  title={`Articles by ${authorName}`}
+  description={`Read articles, ceremonial wisdom, and research written by ${authorName} in the Ayni Râpé journal.`}
+  canonicalPath={`/${countryCode}/blog/author/${authorSlug}`}
+>
+  <Breadcrumbs
+    items={[
+      { label: "Home", href: `/${countryCode}` },
+      { label: "Journal", href: `/${countryCode}/blog` },
+      { label: authorName }
+    ]}
+  />
+  <h1 class="mb-2 text-4xl font-serif-heading font-bold text-[var(--color-text-primary)]">Author: {authorName}</h1>
+  <p class="mb-8 text-[var(--color-text-secondary)] text-base">
+    Articles authored by {authorName}.
+  </p>
+
+  <div class="grid gap-12 lg:grid-cols-[1fr_260px] w-full">
+    <!-- Posts list -->
+    <div>
+      <ul class="grid gap-6 grid-cols-1">
+        {displayPosts.map((post) => (
+          <li class="group">
+            <a href={`/${countryCode}/blog/${slugOf(post.id)}`} class="flex flex-col md:flex-row gap-6 no-underline items-start bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] hover:border-[var(--color-accent-gold)] p-6 rounded-3xl transition-all duration-300 shadow-sm hover:shadow-md">
+              <div class="aspect-[3/2] w-full md:w-[280px] lg:w-[320px] rounded-2xl overflow-hidden bg-[var(--color-bg-surface)] relative border border-[var(--color-border-subtle)] shrink-0">
+                <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center select-none bg-[var(--color-bg-surface)] z-0">
+                  <span class="font-serif-heading italic text-lg text-[var(--color-accent-gold)] mb-1">Ayni Râpé</span>
+                  <span class="text-xs uppercase tracking-[0.2em] text-[var(--color-text-muted)] font-semibold">Journal</span>
+                </div>
+                {post.data.coverImage && (
+                  <img
+                    src={post.data.coverImage}
+                    alt={post.data.title}
+                    class="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                    onerror="this.style.opacity='0'; this.style.pointerEvents='none';"
+                  />
+                )}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-[var(--color-text-muted)] mb-2">
+                  <time>{fmtDate(post.data.publishedDate)}</time>
+                  <span>&bull;</span>
+                  <span class="text-[var(--color-accent-gold)] font-semibold">{post.data.category}</span>
+                </div>
+                <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-gold)] transition-colors leading-snug mb-2">{post.data.title}</h2>
+                {post.data.excerpt && (
+                  <p class="text-sm text-[var(--color-text-secondary)] leading-relaxed line-clamp-3">
+                    {post.data.excerpt}
+                  </p>
+                )}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="self-start sticky top-28 space-y-10 lg:border-l lg:border-[var(--color-border-subtle)] lg:pl-8">
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-4">Categories</h3>
+        <ul class="space-y-2.5">
+          {sidebarCategories.map((c) => (
+            <li>
+              <a
+                href={`/${countryCode}/blog/category/${c.slug}`}
+                class="text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] text-sm font-medium transition-colors flex items-center justify-between"
+              >
+                <span class="flex items-center gap-2">
+                  <Fragment set:html={getBlogCategoryIcon(c.name)} />
+                  <span>{c.name}</span>
+                </span>
+                <span class="text-xs text-[var(--color-text-muted)]">({c.count})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-4">Authors</h3>
+        <ul class="space-y-2.5">
+          {sidebarAuthors.map((a) => (
+            <li>
+              <a
+                href={`/${countryCode}/blog/author/${a.slug}`}
+                class={`text-sm font-medium transition-colors flex items-center justify-between ${a.slug === authorSlug ? 'text-[var(--color-accent-gold)] font-bold' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)]'}`}
+              >
+                <span class="flex items-center gap-2">
+                  <Fragment set:html={getAuthorIcon()} />
+                  <span>{a.name}</span>
+                </span>
+                <span class="text-xs text-[var(--color-text-muted)]">({a.count})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Cross-sell block -->
+      {featuredProducts.length > 0 && (
+        <div class="border-t border-[var(--color-border-subtle)] pt-8">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-gold)] mb-4">Featured Products</h3>
+          <div class="space-y-4">
+            {featuredProducts.map((p) => (
+              <a href={`/${countryCode}/store/${p.handle || p.id}`} class="flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-full overflow-hidden border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] shrink-0">
+                  <img src={p.thumbnail} alt={p.title} class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-1 min-w-0 text-left">
+                  <h4 class="text-xs font-bold text-[var(--color-text-primary)] truncate group-hover:text-[var(--color-accent-gold)] transition-colors leading-tight">{p.title}</h4>
+                  <p class="text-[10px] text-[var(--color-accent-gold)] mt-0.5 font-medium">View details &rarr;</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </aside>
+  </div>
+</BlogLayout>
