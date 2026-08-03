@@ -1,20 +1,17 @@
 import fs from "fs";
 import path from "path";
 import { ExecArgs } from "@medusajs/framework/types";
-import { Modules } from "@medusajs/framework/utils";
+import { Modules, ProductStatus } from "@medusajs/framework/utils";
 import { createProductsWorkflow, updateProductsWorkflow } from "@medusajs/medusa/core-flows";
 
 export default async function seedProducts({ container }: ExecArgs) {
   const logger = container.resolve("logger");
   const salesChannelModuleService = container.resolve(Modules.SALES_CHANNEL);
-  const storeModuleService = container.resolve(Modules.STORE);
-  const regionModuleService = container.resolve(Modules.REGION);
   const productModuleService = container.resolve(Modules.PRODUCT);
-  
-  // Try to find default sales channel
+
   const [salesChannels] = await salesChannelModuleService.listAndCountSalesChannels({});
   const defaultSalesChannel = salesChannels[0];
-  
+
   if (!defaultSalesChannel) {
     logger.warn("No default sales channel found, skipping seeding.");
     return;
@@ -27,74 +24,66 @@ export default async function seedProducts({ container }: ExecArgs) {
   }
 
   const existingProducts = await productModuleService.listProducts({});
-  const existingByHandle = new Map(existingProducts.map(p => [p.handle, p]));
+  const existingByHandle = new Map(existingProducts.map((p) => [p.handle, p]));
 
   const productsData = JSON.parse(fs.readFileSync(productsPath, "utf-8"));
-  
+
   const toCreate: any[] = [];
   const toUpdate: any[] = [];
-  
+
   productsData.forEach((p: any) => {
-    const imageUrls = p.images && p.images.length > 0 
-      ? p.images.map((img: string) => `/images/products/${path.basename(img)}`) 
-      : ["/images/products/placeholder.jpg"];
-      
+    const imageUrls = p.images && p.images.length > 0 ? p.images : ["/images/products/placeholder.jpg"];
     const thumbnailUrl = imageUrls[0];
-    
+
+    const variants = (p.variants && p.variants.length > 0)
+      ? p.variants.map((v: any) => ({
+          title: v.title || "Default Variant",
+          manage_inventory: false,
+          allow_backorder: true,
+          options: { Size: v.size || "Standard" },
+          prices: [
+            { amount: v.price || p.price || 25, currency_code: "eur" },
+            { amount: Math.round((v.price || p.price || 25) * 1.1), currency_code: "usd" }
+          ]
+        }))
+      : [
+          {
+            title: "Standard",
+            manage_inventory: false,
+            allow_backorder: true,
+            options: { Size: "Standard" },
+            prices: [
+              { amount: p.price || 25, currency_code: "eur" },
+              { amount: Math.round((p.price || 25) * 1.1), currency_code: "usd" }
+            ]
+          }
+        ];
+
     const existing = existingByHandle.get(p.handle);
-    
+
     if (existing) {
       toUpdate.push({
         id: existing.id,
         title: p.title,
         description: p.description,
         thumbnail: thumbnailUrl,
-        images: imageUrls.map(url => ({ url })),
+        images: imageUrls.map((url: string) => ({ url })),
       });
     } else {
       toCreate.push({
         title: p.title,
         handle: p.handle,
         description: p.description,
-        status: "published",
+        status: ProductStatus.PUBLISHED,
         thumbnail: thumbnailUrl,
-        images: imageUrls.map(url => ({ url })),
+        images: imageUrls.map((url: string) => ({ url })),
         options: [
           {
             title: "Size",
-            values: ["10g", "20g", "50g"]
+            values: Array.from(new Set(variants.map((v: any) => v.options.Size)))
           }
         ],
-        variants: [
-          {
-            title: "10g",
-            manage_inventory: false,
-            allow_backorder: true,
-            options: {
-              "Size": "10g"
-            },
-            prices: [
-              {
-                amount: p.price > 0 ? p.price : 25,
-                currency_code: "eur"
-              }
-            ]
-          },
-          {
-            title: "20g",
-            manage_inventory: false,
-            allow_backorder: true,
-            options: {
-              "Size": "20g"
-            },
-            prices: [
-              {
-                amount: p.price > 0 ? p.price * 2 : 45,
-                currency_code: "eur"
-              }
-            ]
-          }
-        ],
+        variants,
         sales_channels: [
           {
             id: defaultSalesChannel.id
@@ -105,7 +94,7 @@ export default async function seedProducts({ container }: ExecArgs) {
   });
 
   if (toUpdate.length > 0) {
-    logger.info(`Updating ${toUpdate.length} existing products with new images...`);
+    logger.info(`Updating ${toUpdate.length} existing products...`);
     try {
       await updateProductsWorkflow(container).run({
         input: { products: toUpdate }
@@ -128,3 +117,4 @@ export default async function seedProducts({ container }: ExecArgs) {
     }
   }
 }
+
