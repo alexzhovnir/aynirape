@@ -2,9 +2,8 @@ import { sdk } from "@lib/sdk";
 import fallbackProductsData from "./products.json";
 
 function mapFallbackProduct(p: any) {
-  const localImage = `/images/products/${p.handle}-0.webp`;
-  const imageUrls = [localImage, ...(p.images && p.images.length > 0 ? p.images : [])];
-  const thumbnailUrl = localImage;
+  const imageUrls = p.images && p.images.length > 0 ? p.images : [`/images/products/${p.handle}-0.webp`];
+  const thumbnailUrl = imageUrls[0];
 
   const variants = (p.variants && p.variants.length > 0)
     ? p.variants.map((v: any, index: number) => {
