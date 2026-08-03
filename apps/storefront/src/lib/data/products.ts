@@ -1,5 +1,5 @@
 import { sdk } from "@lib/sdk";
-import fallbackProductsData from "../../../../../scripts/products.json";
+import fallbackProductsData from "./products.json";
 
 function mapFallbackProduct(p: any) {
   const imageUrls = p.images && p.images.length > 0 ? p.images : ["/images/products/placeholder.jpg"];
