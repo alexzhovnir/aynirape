@@ -1,4 +1,66 @@
 import { sdk } from "@lib/sdk";
+import fallbackProductsData from "../../../../../scripts/products.json";
+
+function mapFallbackProduct(p: any) {
+  const imageUrls = p.images && p.images.length > 0 ? p.images : ["/images/products/placeholder.jpg"];
+  const thumbnailUrl = imageUrls[0];
+
+  const variants = (p.variants && p.variants.length > 0)
+    ? p.variants.map((v: any, index: number) => {
+        const price = v.price || p.price || 14.95;
+        return {
+          id: `var_${p.handle}_${index}`,
+          title: v.title || v.size || "10g",
+          sku: `${p.handle}-${v.size || index}`,
+          calculated_price: {
+            calculated_amount: price,
+            original_amount: price,
+            currency_code: "eur",
+            calculated_price: { price_list_type: "default" },
+          },
+          prices: [
+            { amount: price, currency_code: "eur" }
+          ]
+        };
+      })
+    : [
+        {
+          id: `var_${p.handle}_0`,
+          title: "Standard",
+          sku: `${p.handle}-std`,
+          calculated_price: {
+            calculated_amount: p.price || 14.95,
+            original_amount: p.price || 14.95,
+            currency_code: "eur",
+            calculated_price: { price_list_type: "default" },
+          },
+          prices: [
+            { amount: p.price || 14.95, currency_code: "eur" }
+          ]
+        }
+      ];
+
+  const categoryName = p.category === "rape" ? "Sacred Rapé" : p.category === "tepi-and-kuripe" ? "Tepi & Kuripe" : p.category === "aromatics" ? "Aromatics & Resins" : "Botanical Supplements";
+
+  return {
+    id: `prod_${p.handle}`,
+    title: p.title,
+    handle: p.handle,
+    description: p.description,
+    thumbnail: thumbnailUrl,
+    images: imageUrls.map((url: string, i: number) => ({ id: `img_${i}`, url })),
+    variants,
+    categories: [
+      {
+        id: `cat_${p.category}`,
+        name: categoryName,
+        handle: p.category
+      }
+    ]
+  };
+}
+
+const fallbackProducts: any[] = (fallbackProductsData as any[]).map(mapFallbackProduct);
 
 export const listProducts = async (regionId: string, categoryId?: string) => {
   try {
@@ -7,21 +69,36 @@ export const listProducts = async (regionId: string, categoryId?: string) => {
       fields: "*variants.calculated_price,*categories,*images",
       ...(categoryId ? { category_id: [categoryId] } : {}),
     });
-    return products || [];
+    if (products && products.length > 0) {
+      return products;
+    }
   } catch (error) {
     console.error("listProducts fetch error:", error);
-    return [];
   }
+
+  // Fallback if Medusa API returns empty or fails
+  if (categoryId) {
+    return fallbackProducts.filter(p => p.categories.some((c: any) => c.id === categoryId || c.handle === categoryId));
+  }
+  return fallbackProducts;
 };
 
 export const listCategories = async () => {
   try {
     const { product_categories } = await sdk.store.category.list();
-    return product_categories || [];
+    if (product_categories && product_categories.length > 0) {
+      return product_categories;
+    }
   } catch (error) {
     console.error("listCategories fetch error:", error);
-    return [];
   }
+
+  return [
+    { id: "cat_rape", name: "Sacred Rapé", handle: "rape" },
+    { id: "cat_tepi-and-kuripe", name: "Tepi & Kuripe", handle: "tepi-and-kuripe" },
+    { id: "cat_aromatics", name: "Aromatics & Resins", handle: "aromatics" },
+    { id: "cat_supplements", name: "Botanical Supplements", handle: "supplements" },
+  ];
 };
 
 export const retrieveProduct = async (
@@ -29,7 +106,6 @@ export const retrieveProduct = async (
   regionId: string,
 ) => {
   try {
-    // First try looking up product by handle
     const { products } = await sdk.store.product.list({
       handle: idOrHandle,
       region_id: regionId,
@@ -41,16 +117,17 @@ export const retrieveProduct = async (
       return products[0];
     }
 
-    // Fallback to direct lookup by Medusa product ID
     const { product } = await sdk.store.product.retrieve(idOrHandle, {
       region_id: regionId,
       fields:
         "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,*categories,*images",
     });
-    return product;
+    if (product) return product;
   } catch (error) {
     console.error("retrieveProduct fetch error:", error);
-    return undefined;
   }
-};
 
+  // Fallback to local fallbackProducts
+  const found = fallbackProducts.find((p: any) => p.handle === idOrHandle || p.id === idOrHandle);
+  return found || fallbackProducts[0];
+};
