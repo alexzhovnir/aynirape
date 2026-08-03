@@ -40,7 +40,7 @@ function mapFallbackProduct(p: any) {
         }
       ];
 
-  const categoryName = p.category === "rape" ? "Sacred Rapé" : p.category === "tepi-and-kuripe" ? "Tepi & Kuripe" : p.category === "aromatics" ? "Aromatics & Resins" : "Botanical Supplements";
+  const categoryName = p.category === "rape" ? "Sacred Rapé" : p.category === "tepi-and-kuripe" ? "Tepi & Kuripe" : p.category === "aromatics" ? "Aromatics & Resins" : p.category === "ornaments-and-decoration" ? "Ornaments & Decoration" : "Botanical Supplements";
 
   return {
     id: `prod_${p.handle}`,
@@ -98,6 +98,7 @@ export const listCategories = async () => {
     { id: "cat_tepi-and-kuripe", name: "Tepi & Kuripe", handle: "tepi-and-kuripe" },
     { id: "cat_aromatics", name: "Aromatics & Resins", handle: "aromatics" },
     { id: "cat_supplements", name: "Botanical Supplements", handle: "supplements" },
+    { id: "cat_ornaments-and-decoration", name: "Ornaments & Decoration", handle: "ornaments-and-decoration" },
   ];
 };
 
