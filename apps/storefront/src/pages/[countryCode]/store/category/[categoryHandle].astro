@@ -8,7 +8,10 @@ import Breadcrumbs from "@components/Breadcrumbs.astro";
 import { useTranslations } from "@lib/i18n/utils";
 
 export async function getStaticPaths() {
-  const defaultCountries = ["de", "dk", "fr", "it", "es", "se", "gb"];
+  const defaultCountries = [
+    "us", "de", "gb", "fr", "es", "it", "dk", "se", "nl", "at", 
+    "ch", "cz", "pl", "be", "no", "fi", "ie", "pt", "ca", "au"
+  ];
   const defaultHandles = [
     "tepi-and-kuripe",
     "rapé",
