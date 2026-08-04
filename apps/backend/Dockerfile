@@ -18,9 +18,10 @@ RUN pnpm --filter backend deploy --prod /prod/backend
 
 FROM node:22-slim AS runner
 ENV NODE_ENV=production
+ENV PORT=8080
 WORKDIR /app
 COPY --from=build /repo/apps/backend/.medusa/server ./
 COPY --from=build /prod/backend/node_modules ./node_modules
 
-EXPOSE 9000
+EXPOSE 8080
 CMD ["npx", "medusa", "start"]
