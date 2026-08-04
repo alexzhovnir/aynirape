@@ -14,7 +14,8 @@ RUN pnpm build
 FROM base AS prod-deps
 WORKDIR /app
 COPY --from=build /repo/apps/backend/.medusa/server/package.json ./package.json
-RUN npm install --omit=dev --no-audit --no-fund
+COPY pnpm-lock.yaml ./
+RUN pnpm install --prod --no-optional
 
 FROM node:22-slim AS runner
 ENV NODE_ENV=production
