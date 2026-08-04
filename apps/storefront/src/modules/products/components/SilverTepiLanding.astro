@@ -540,8 +540,12 @@ const faqs = [
     </section>
   )}
 
-  <!-- STICKY BOTTOM ADD TO CART BAR -->
-  <div id="sticky-cart-bar" class="fixed bottom-0 left-0 right-0 z-50 glass-panel border-t border-[var(--color-border-subtle)] py-3 px-4 sm:px-8 transform translate-y-full transition-transform duration-300 shadow-2xl">
+  <!-- STICKY ADD TO CART BAR (Desktop: under header, Mobile: at bottom) -->
+  <div
+    id="sticky-cart-bar"
+    data-visible="false"
+    class="fixed left-0 right-0 z-40 glass-panel border-[var(--color-border-subtle)] py-3 px-4 sm:px-8 transition-all duration-300 shadow-2xl bottom-0 border-t translate-y-full md:top-[80px] md:bottom-auto md:border-t-0 md:border-b md:-translate-y-[200%] data-[visible=true]:translate-y-0 md:data-[visible=true]:translate-y-0"
+  >
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         {thumbnail && (
@@ -568,7 +572,7 @@ const faqs = [
 </div>
 
 <script>
-  // Show sticky bottom bar when user scrolls past main hero buy box & connect click handler
+  // Show sticky bar when user scrolls past main hero buy box & connect click handler
   const stickyBar = document.getElementById('sticky-cart-bar');
   const stickyBtn = document.getElementById('sticky-add-to-cart-btn-tepi');
 
@@ -582,12 +586,14 @@ const faqs = [
   }
 
   if (stickyBar) {
-    window.addEventListener('scroll', () => {
+    const handleScroll = () => {
       if (window.scrollY > 600) {
-        stickyBar.classList.remove('translate-y-full');
+        stickyBar.setAttribute('data-visible', 'true');
       } else {
-        stickyBar.classList.add('translate-y-full');
+        stickyBar.setAttribute('data-visible', 'false');
       }
-    });
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
   }
 </script>
