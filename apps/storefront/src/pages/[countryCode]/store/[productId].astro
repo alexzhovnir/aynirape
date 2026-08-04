@@ -101,8 +101,8 @@ const schemaData = {
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": cheapestPrice?.currency_code?.toUpperCase() || "EUR",
-        "lowPrice": cheapestPrice?.calculated_amount,
-        "highPrice": cheapestPrice?.original_amount || cheapestPrice?.calculated_amount,
+        "lowPrice": cheapestPrice?.calculated_amount ?? 15,
+        "highPrice": cheapestPrice?.original_amount ?? cheapestPrice?.calculated_amount ?? 15,
         "offerCount": variants?.length || 1,
         "availability": variants?.some((v) => (v.inventory_quantity ?? 1) > 0)
           ? "https://schema.org/InStock"

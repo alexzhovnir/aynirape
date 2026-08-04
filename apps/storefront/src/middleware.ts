@@ -57,18 +57,18 @@ function isNonCommercePath(pathname: string) {
 async function getRegionMap() {
   const { regionMap, regionMapUpdated } = regionMapCache;
 
-  if (!MEDUSA_BACKEND_URL) {
-    throw new Error(
-      "src/middleware.ts: Error fetching regions. Did you set up regions in your Medusa Admin and define a PUBLIC_MEDUSA_BACKEND_URL environment variable?",
-    );
-  }
-
   const isCacheValid =
     regionMap.keys().next().value &&
     regionMapUpdated > Date.now() - 3600 * 1000; // 1 hour
 
   if (!isCacheValid) {
     try {
+      if (!MEDUSA_BACKEND_URL) {
+        throw new Error(
+          "PUBLIC_MEDUSA_BACKEND_URL is not configured.",
+        );
+      }
+
       const { regions } = await sdk.store.region.list();
 
       if (!regions?.length) {

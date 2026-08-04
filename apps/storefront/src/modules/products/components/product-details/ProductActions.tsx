@@ -98,20 +98,24 @@ export const ProductActions = ({
   }, [productId, regionId]);
 
   const selectedVariant = useMemo(() => {
-    if (
-      !variants.length ||
-      !options.length ||
-      Object.keys(selectedOptions).length !== options.length
-    ) {
+    if (!variants || !variants.length) {
       return;
     }
 
-    return variants.find((variant) =>
-      variant.options?.every(
+    if (!options || !options.length || Object.keys(selectedOptions).length === 0) {
+      return variants[0];
+    }
+
+    const matched = variants.find((variant) =>
+      variant.options?.length &&
+      variant.options.every(
         (optionValue) =>
-        optionValue.id === selectedOptions[optionValue.option_id!],
+          optionValue.id === selectedOptions[optionValue.option_id!] ||
+          optionValue.option_id === selectedOptions[optionValue.id],
       ),
     );
+
+    return matched || variants[0];
   }, [selectedOptions, variants, options]);
 
   // Update the static price in the DOM when the selected variant changes

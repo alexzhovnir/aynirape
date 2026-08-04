@@ -1,6 +1,9 @@
 const { loadEnv } = require("@medusajs/utils");
 loadEnv("test", process.cwd());
 
+const fs = require("fs");
+const setupFile = "./integration-tests/setup.js";
+
 module.exports = {
   transform: {
     "^.+\\.[jt]s$": [
@@ -15,7 +18,7 @@ module.exports = {
   testEnvironment: "node",
   moduleFileExtensions: ["js", "ts", "json"],
   modulePathIgnorePatterns: ["dist/", "<rootDir>/.medusa/"],
-  setupFiles: ["./integration-tests/setup.js"],
+  setupFiles: fs.existsSync(setupFile) ? [setupFile] : [],
 };
 
 if (process.env.TEST_TYPE === "integration:http") {

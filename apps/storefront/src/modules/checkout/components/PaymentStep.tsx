@@ -1,5 +1,6 @@
 import { sdk } from "@lib/sdk";
 import { completeCart, initPaymentSession } from "@lib/stores/cart";
+import { convertToLocale } from "@lib/utils/money";
 import type { StoreCart, StorePaymentProvider } from "@medusajs/types";
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
@@ -255,7 +256,7 @@ export const PaymentStep = ({
               <PayPalScriptProvider
                 options={{
                   clientId: import.meta.env.PUBLIC_PAYPAL_CLIENT_ID || "test",
-                  currency: "USD",
+                  currency: (cart.currency_code || "EUR").toUpperCase(),
                   intent: "capture"
                 }}
               >
@@ -267,8 +268,8 @@ export const PaymentStep = ({
                       purchase_units: [
                         {
                           amount: {
-                            currency_code: "USD",
-                            value: ((cart.total || 0) / 100).toFixed(2),
+                            currency_code: (cart.currency_code || "EUR").toUpperCase(),
+                            value: Number(cart.total || 0).toFixed(2),
                           },
                         },
                       ],
@@ -314,7 +315,9 @@ export const PaymentStep = ({
               <span className="text-[var(--color-text-primary)] font-mono font-bold">REVOLT21</span>
 
               <span className="text-[var(--color-text-muted)] font-medium">Total Amount:</span>
-              <span className="text-[var(--color-accent-gold)] font-extrabold text-sm">€{((cart.total || 0) / 100).toFixed(2)}</span>
+              <span className="text-[var(--color-accent-gold)] font-extrabold text-sm">
+                {convertToLocale({ amount: cart.total || 0, currencyCode: cart.currency_code || "EUR" })}
+              </span>
 
               <span className="text-[var(--color-text-muted)] font-medium">Payment Reference:</span>
               <span className="text-[var(--color-text-primary)] font-mono font-bold">{cart.id?.slice(-8)?.toUpperCase() || "—"}</span>

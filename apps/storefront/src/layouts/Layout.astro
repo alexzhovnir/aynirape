@@ -71,9 +71,9 @@ const ogLocales: Record<string, string> = {
   de: "de_DE",
   fr: "fr_FR",
   es: "es_ES",
-  it: "it_IT",
 };
 const ogLocale = ogLocales[lang] || "en_US";
+const metaImage = image || `${siteOrigin}/images/home_hero_premium.jpg`;
 ---
 
 <!doctype html>
@@ -83,10 +83,7 @@ const ogLocale = ogLocales[lang] || "en_US";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     
-    {/* Zero-flicker theme initialization. Re-runs on astro:after-swap because
-        the ClientRouter's DOM morph re-applies each page's hardcoded
-        data-theme="dark" default onto <html>, and identical inline scripts
-        are not re-executed across soft navigations. */}
+    {/* Zero-flicker theme initialization */}
     <script is:inline>
       function __applyStoredTheme() {
         try {
@@ -98,7 +95,10 @@ const ogLocale = ogLocales[lang] || "en_US";
           } else {
             document.documentElement.classList.remove('dark');
           }
-        } catch (e) {}
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.classList.add('dark');
+        }
       }
       __applyStoredTheme();
       document.addEventListener('astro:after-swap', __applyStoredTheme);
@@ -106,7 +106,7 @@ const ogLocale = ogLocales[lang] || "en_US";
 
     <link
       rel="dns-prefetch"
-      href="//medusa-public-images.s3.eu-west-1.amazonaws.com"
+      href="https://medusa-public-images.s3.eu-west-1.amazonaws.com"
     />
     <link
       rel="preconnect"
@@ -136,20 +136,17 @@ const ogLocale = ogLocales[lang] || "en_US";
     <meta property="og:url" content={canonicalUrl.href} />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:locale" content={ogLocale} />
-    {image && <meta property="og:image" content={image} />}
+    <meta property="og:image" content={metaImage} />
 
     <!-- Twitter Card -->
-    <meta
-      name="twitter:card"
-      content={image ? "summary_large_image" : "summary"}
-    />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
-    {image && <meta name="twitter:image" content={image} />}
+    <meta name="twitter:image" content={metaImage} />
   </head>
   <body class="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
     <div class="flex min-h-screen w-full flex-col">
-      <Nav client:only="react" countryCode={countryCode} regionId={regionId} />
+      <Nav client:load countryCode={countryCode} regionId={regionId} />
       <main class="flex-1 min-h-[calc(100vh-80px)]">
         <slot />
       </main>

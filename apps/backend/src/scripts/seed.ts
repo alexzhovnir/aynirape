@@ -1,11 +1,11 @@
 import fs from "fs";
 import path from "path";
 import { ExecArgs } from "@medusajs/framework/types";
-import { Modules, ProductStatus } from "@medusajs/framework/utils";
+import { ContainerRegistrationKeys, Modules, ProductStatus } from "@medusajs/framework/utils";
 import { createProductsWorkflow, updateProductsWorkflow } from "@medusajs/medusa/core-flows";
 
 export default async function seedProducts({ container }: ExecArgs) {
-  const logger = container.resolve("logger");
+  const logger = container.resolve(ContainerRegistrationKeys.LOGGER);
   const salesChannelModuleService = container.resolve(Modules.SALES_CHANNEL);
   const productModuleService = container.resolve(Modules.PRODUCT);
 

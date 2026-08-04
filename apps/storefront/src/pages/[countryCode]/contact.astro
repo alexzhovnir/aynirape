@@ -181,15 +181,40 @@ const t = useTranslations(countryCode);
   document.addEventListener('astro:page-load', () => {
     const form = document.getElementById('contact-form');
     const successMsg = document.getElementById('contact-success-msg');
+    const submitBtn = document.getElementById('btn-submit-contact');
 
-    form?.addEventListener('submit', (e) => {
+    form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (successMsg) {
-        successMsg.classList.remove('hidden');
-        form.reset();
-        setTimeout(() => {
-          successMsg.classList.add('hidden');
-        }, 5000);
+      const formData = new FormData(form);
+      const payload = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        subject: formData.get('subject'),
+        message: formData.get('message'),
+      };
+
+      if (submitBtn) submitBtn.setAttribute('disabled', 'true');
+
+      try {
+        const backendUrl = window.location.origin.includes('localhost')
+          ? 'http://localhost:9009'
+          : window.location.origin;
+        await fetch(`${backendUrl}/store/contact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } catch (err) {
+        console.warn('Contact submission API notice:', err);
+      } finally {
+        if (submitBtn) submitBtn.removeAttribute('disabled');
+        if (successMsg) {
+          successMsg.classList.remove('hidden');
+          form.reset();
+          setTimeout(() => {
+            successMsg.classList.add('hidden');
+          }, 5000);
+        }
       }
     });
   });

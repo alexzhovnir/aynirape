@@ -78,7 +78,15 @@ export const listProducts = async (regionId: string, categoryId?: string) => {
 
   // Fallback if Medusa API returns empty or fails
   if (categoryId) {
-    return fallbackProducts.filter(p => p.categories.some((c: any) => c.id === categoryId || c.handle === categoryId));
+    const targetCat = categoryId === "rap-e" ? "rape" : categoryId === "rape" ? "rap-e" : categoryId;
+    return fallbackProducts.filter((p) =>
+      p.categories.some(
+        (c: any) =>
+          c.id === categoryId ||
+          c.handle === categoryId ||
+          c.handle === targetCat
+      )
+    );
   }
   return fallbackProducts;
 };

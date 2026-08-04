@@ -107,7 +107,7 @@ export const CartPage = ({ countryCode }: CartPageProps) => {
                           onClick={() =>
                             handleQuantityChange(item.id, quantity - 1)
                           }
-                          className="w-8 h-8 flex items-center justify-center border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] rounded-lg hover:border-[var(--color-accent-gold)] text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                          className="w-10 h-10 shrink-0 flex items-center justify-center border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] rounded-lg hover:border-[var(--color-accent-gold)] text-[var(--color-text-primary)] transition-colors cursor-pointer text-lg"
                           aria-label="Decrease quantity"
                         >
                           −
@@ -120,7 +120,7 @@ export const CartPage = ({ countryCode }: CartPageProps) => {
                               parseInt(e.target.value, 10),
                             )
                           }
-                          className="w-14 px-2 py-1 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-lg text-center font-medium"
+                          className="h-10 w-16 px-2 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-lg text-center font-medium cursor-pointer outline-none focus:border-[var(--color-accent-gold)]"
                           aria-label="Quantity"
                         >
                           {Array.from({ length: 10 }, (_, i) => i + 1).map(
@@ -135,7 +135,7 @@ export const CartPage = ({ countryCode }: CartPageProps) => {
                           onClick={() =>
                             handleQuantityChange(item.id, quantity + 1)
                           }
-                          className="w-8 h-8 flex items-center justify-center border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] rounded-lg hover:border-[var(--color-accent-gold)] text-[var(--color-text-primary)] transition-colors cursor-pointer"
+                          className="w-10 h-10 shrink-0 flex items-center justify-center border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] rounded-lg hover:border-[var(--color-accent-gold)] text-[var(--color-text-primary)] transition-colors cursor-pointer text-lg"
                           aria-label="Increase quantity"
                         >
                           +
