@@ -506,6 +506,8 @@ const displaySku = rawSku || generatedSku;
                 variants={variants ?? []}
                 productId={product.id}
                 regionId={region.id}
+                productTitle={title}
+                productThumbnail={thumbnail}
                 labels={{
                   add_to_cart: `🛒 ${t("product_ui.add_to_cart_express") || "ADD TO CART — EXPRESS DELIVERY"}`,
                   adding: t("actions.adding") || "ADDING..."

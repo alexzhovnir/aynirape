@@ -3,6 +3,8 @@ import { getRegion } from "@lib/data/regions";
 import { CartSidebar } from "@modules/layout/components/CartSidebar";
 import Footer from "@modules/layout/components/Footer.astro";
 import { Nav } from "@modules/layout/components/Nav";
+import { FloatingPlayer } from "@modules/music/components/FloatingPlayer";
+import { AudioEngine } from "@modules/music/components/AudioEngine";
 import "@styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import { getLangFromRegion } from "@lib/i18n/config";
@@ -152,6 +154,8 @@ const metaImage = image || `${siteOrigin}/images/home_hero_premium.jpg`;
       </main>
       <Footer countryCode={countryCode} />
       <CartSidebar client:only="react" countryCode={countryCode} />
+      <FloatingPlayer client:only="react" countryCode={countryCode} />
+      <AudioEngine client:only="react" />
     </div>
   </body>
 </html>

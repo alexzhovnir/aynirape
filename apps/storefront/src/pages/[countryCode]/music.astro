@@ -1,0 +1,41 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { getRegionParams } from "@lib/params/region-params";
+import { MusicPlaylistContent } from "@modules/music/components/MusicPlaylistContent";
+import { TRACKS } from "@lib/music/tracks";
+
+export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
+
+const title = "Sacred Amazonian Soundscapes & Ceremonial Music Playlist";
+const description = "Listen to authentic shamanic Icaros, 432Hz binaural meditation music, and Amazonian jungle soundscapes for sacred Rapé (Hapeh) ceremonies.";
+
+// SEO Schema.org JSON-LD
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "MusicPlaylist",
+  "name": "Sacred Amazonian Soundscapes - Ayni Rapé",
+  "description": description,
+  "numTracks": TRACKS.length,
+  "genre": "Shamanic Ambient, Meditative, 432Hz Soundbath",
+  "track": TRACKS.map((t, i) => ({
+    "@type": "MusicRecording",
+    "position": i + 1,
+    "name": t.title,
+    "byArtist": {
+      "@type": "MusicGroup",
+      "name": t.artist,
+    },
+    "duration": `PT${Math.floor(t.duration / 60)}M${t.duration % 60}S`,
+    "description": t.description,
+  })),
+};
+---
+
+<Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+  <main class="w-full">
+    <MusicPlaylistContent client:only="react" countryCode={countryCode ?? "us"} />
+  </main>
+</Layout>

@@ -38,6 +38,8 @@ interface Props {
     add_to_cart: string;
     adding: string;
   };
+  productTitle?: string;
+  productThumbnail?: string;
 }
 
 export const ProductActions = ({
@@ -46,13 +48,15 @@ export const ProductActions = ({
   productId,
   regionId,
   labels = { add_to_cart: "Add to Cart", adding: "Adding..." },
+  productTitle,
+  productThumbnail,
 }: Props) => {
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, string>
   >({});
   const [isAdding, setIsAdding] = useState(false);
   const [variants, setVariants] = useState<Variant[]>(initialVariants);
-  const [isLoadingVariants, setIsLoadingVariants] = useState(true);
+  const [isLoadingVariants, setIsLoadingVariants] = useState(false);
 
   // Auto-select first value for each option on mount
   useEffect(() => {
@@ -140,7 +144,11 @@ export const ProductActions = ({
 
     setIsAdding(true);
     try {
-      await addToCart(selectedVariant.id, 1);
+      await addToCart(selectedVariant.id, 1, {
+        title: productTitle || "Sacred Medicine",
+        thumbnail: productThumbnail,
+        price: selectedVariant.calculated_price?.calculated_amount,
+      });
     } catch (error) {
       console.error("Failed to add item to cart:", error);
     } finally {
