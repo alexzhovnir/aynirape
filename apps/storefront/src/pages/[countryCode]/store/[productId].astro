@@ -31,8 +31,11 @@ let error: Error | undefined;
 
 try {
   product = await retrieveProduct(productId, region.id);
+  if (productId.startsWith("prod_") && product?.handle) {
+    return Astro.redirect(`/${countryCode}/store/${product.handle}`, 301);
+  }
   allProducts = await listProducts(region.id);
-  relatedProducts = allProducts.filter((p) => p.id !== productId);
+  relatedProducts = allProducts.filter((p) => p.id !== productId && p.handle !== product?.handle);
 } catch (e) {
   error = e instanceof Error ? e : new Error("Unknown error");
   console.error(error);

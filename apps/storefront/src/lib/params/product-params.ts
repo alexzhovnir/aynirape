@@ -52,10 +52,11 @@ export const getProductParams = async (): Promise<ProductParams[]> => {
     }
   };
 
-  // Pre-seed all 44 products across all 20 countries for SSG static builds
+  // Pre-seed all 44 products across all 20 countries for SSG static builds (both handle and prod_ ID)
   DEFAULT_COUNTRIES.forEach((c) => {
     DEFAULT_PRODUCT_HANDLES.forEach((h) => {
       addPath(c, h);
+      addPath(c, `prod_${h}`);
     });
   });
 

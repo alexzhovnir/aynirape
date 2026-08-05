@@ -114,9 +114,10 @@ export const retrieveProduct = async (
   idOrHandle: string,
   regionId: string,
 ) => {
+  const cleanHandle = idOrHandle.startsWith("prod_") ? idOrHandle.replace(/^prod_/, "") : idOrHandle;
   try {
     const { products } = await sdk.store.product.list({
-      handle: idOrHandle,
+      handle: cleanHandle,
       region_id: regionId,
       fields:
         "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,*categories,*images",
@@ -137,6 +138,12 @@ export const retrieveProduct = async (
   }
 
   // Fallback to local fallbackProducts
-  const found = fallbackProducts.find((p: any) => p.handle === idOrHandle || p.id === idOrHandle);
+  const found = fallbackProducts.find(
+    (p: any) =>
+      p.handle === idOrHandle ||
+      p.id === idOrHandle ||
+      p.handle === cleanHandle ||
+      p.id === `prod_${cleanHandle}`
+  );
   return found || fallbackProducts[0];
 };
