@@ -52,7 +52,7 @@ export const FloatingPlayer: React.FC<FloatingPlayerProps> = ({ countryCode = 'u
   // 1. Minimized State (Compact Floating Orb)
   if (isWidgetMinimized) {
     return (
-      <div className="fixed bottom-6 right-6 z-50 transition-all duration-300">
+      <div className="fixed bottom-6 left-6 z-50 transition-all duration-300">
         <button
           onClick={toggleMinimizeWidget}
           onMouseEnter={() => setIsHovered(true)}
@@ -83,7 +83,7 @@ export const FloatingPlayer: React.FC<FloatingPlayerProps> = ({ countryCode = 'u
 
           {/* Tooltip on hover */}
           {isHovered && (
-            <div className="absolute right-16 bottom-2 px-3 py-1.5 rounded-lg bg-[var(--color-bg-surface)] text-xs font-semibold text-[var(--color-text-primary)] border border-[var(--color-border-subtle)] whitespace-nowrap shadow-xl">
+            <div className="absolute left-16 bottom-2 px-3 py-1.5 rounded-lg bg-[var(--color-bg-surface)] text-xs font-semibold text-[var(--color-text-primary)] border border-[var(--color-border-subtle)] whitespace-nowrap shadow-xl">
               {currentTrack.title}
             </div>
           )}
@@ -95,7 +95,7 @@ export const FloatingPlayer: React.FC<FloatingPlayerProps> = ({ countryCode = 'u
   // 2. Expanded Glass Drawer Card State
   if (isWidgetExpanded) {
     return (
-      <div className="fixed bottom-6 right-6 z-50 transition-all duration-300 max-w-[calc(100vw-32px)]">
+      <div className="fixed bottom-6 left-6 z-50 transition-all duration-300 max-w-[calc(100vw-32px)]">
         <div className="glass-panel w-full sm:w-[380px] rounded-3xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-[var(--color-border-accent)] bg-[var(--color-bg-surface)]/95 backdrop-blur-2xl flex flex-col gap-4 text-[var(--color-text-primary)] relative overflow-hidden">
           
           {/* Header Controls */}
@@ -287,7 +287,7 @@ export const FloatingPlayer: React.FC<FloatingPlayerProps> = ({ countryCode = 'u
 
   // 3. Compact Floating Pill State (Default Collapsed View)
   return (
-    <div className="fixed bottom-6 right-6 z-50 transition-all duration-300">
+    <div className="fixed bottom-6 left-6 z-50 transition-all duration-300">
       <div className="glass-panel flex items-center gap-3 p-2.5 pr-4 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.5)] border border-[var(--color-border-accent)] bg-[var(--color-bg-surface)]/90 backdrop-blur-xl text-[var(--color-text-primary)] hover:border-[var(--color-accent-gold)]/60 transition-all">
         
         {/* Thumbnail + Equalizer */}
