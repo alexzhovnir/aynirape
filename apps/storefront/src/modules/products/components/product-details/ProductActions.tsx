@@ -1,3 +1,4 @@
+import { FavoriteButton } from "@components/FavoriteButton";
 import { sdk } from "@lib/sdk";
 import { addToCart } from "@lib/stores/cart";
 import { isProductInStock } from "@lib/utils/is-product-in-stock";
@@ -172,6 +173,14 @@ export const ProductActions = ({
     return true;
   });
 
+  const favoriteItem = {
+    id: productId,
+    title: productTitle || "Sacred Medicine",
+    handle: productId,
+    thumbnail: productThumbnail,
+    price: selectedVariant?.calculated_price?.calculated_amount,
+  };
+
   return (
     <div className="flex flex-col gap-8">
       {visibleOptions.map((option) => (
@@ -199,19 +208,27 @@ export const ProductActions = ({
         </div>
       ))}
 
-      <button
-        id="main-add-to-cart-btn"
-        className={clsx(
-          "bg-[var(--color-text-primary)] hover:bg-[var(--color-accent-gold)] text-[var(--color-bg-primary)] hover:text-[var(--color-text-primary)] font-bold py-4 px-8 rounded-full cursor-pointer hover:shadow-md transition-all duration-300 uppercase tracking-wider text-xs shadow-md",
-          {
-            "opacity-50 cursor-not-allowed": isAddToCardButtonDisabled,
-          },
-        )}
-        disabled={isAddToCardButtonDisabled}
-        onClick={handleAddToCart}
-      >
-        {isAdding ? labels.adding : labels.add_to_cart}
-      </button>
+      <div className="flex gap-3 items-center">
+        <button
+          id="main-add-to-cart-btn"
+          className={clsx(
+            "flex-1 bg-[var(--color-text-primary)] hover:bg-[var(--color-accent-gold)] text-[var(--color-bg-primary)] hover:text-[var(--color-text-primary)] font-bold py-4 px-8 rounded-full cursor-pointer hover:shadow-md transition-all duration-300 uppercase tracking-wider text-xs shadow-md",
+            {
+              "opacity-50 cursor-not-allowed": isAddToCardButtonDisabled,
+            },
+          )}
+          disabled={isAddToCardButtonDisabled}
+          onClick={handleAddToCart}
+        >
+          {isAdding ? labels.adding : labels.add_to_cart}
+        </button>
+
+        <FavoriteButton
+          item={favoriteItem}
+          className="h-12 w-12 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] hover:bg-[var(--color-bg-surface)] shrink-0 flex items-center justify-center shadow-xs"
+        />
+      </div>
     </div>
   );
 };
+

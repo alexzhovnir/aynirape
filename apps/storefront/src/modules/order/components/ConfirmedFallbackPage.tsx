@@ -282,6 +282,31 @@ export const ConfirmedFallbackPage = ({
                   <p className="text-[var(--color-text-secondary)]">
                     {formatProviderName(paymentProviderId)}
                   </p>
+                  {paymentProviderId === "bank-transfer" && (
+                    <div className="mt-4 p-4 bg-[var(--color-bg-surface)] border border-[var(--color-accent-gold)]/40 rounded-2xl space-y-3">
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-xl">🏦</span>
+                        <h4 className="text-xs font-bold text-[var(--color-text-primary)] uppercase tracking-wider">
+                          Bank Transfer Details (SEPA / SWIFT)
+                        </h4>
+                      </div>
+                      <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-xs bg-[var(--color-bg-surface-elevated)] p-3.5 rounded-xl border border-[var(--color-border-subtle)] font-mono">
+                        <span className="text-[var(--color-text-muted)]">Bank Name:</span>
+                        <span className="text-[var(--color-text-primary)] font-bold">Revolut Business</span>
+                        <span className="text-[var(--color-text-muted)]">Holder:</span>
+                        <span className="text-[var(--color-text-primary)] font-bold">Ayni Rapé</span>
+                        <span className="text-[var(--color-text-muted)]">IBAN:</span>
+                        <span className="text-[var(--color-text-primary)] font-bold">LT60 3250 0867 2850 7633</span>
+                        <span className="text-[var(--color-text-muted)]">SWIFT/BIC:</span>
+                        <span className="text-[var(--color-text-primary)] font-bold">REVOLT21</span>
+                        <span className="text-[var(--color-text-muted)]">Memo Ref:</span>
+                        <span className="text-[var(--color-accent-gold)] font-bold">{cart?.id?.slice(-8)?.toUpperCase() || "AYNI-ORDER"}</span>
+                      </div>
+                      <p className="text-[11px] text-amber-700 dark:text-amber-300 font-medium">
+                        ⚠️ Please include reference <strong>{cart?.id?.slice(-8)?.toUpperCase() || "AYNI-ORDER"}</strong> in your bank memo. Your order will be dispatched as soon as payment is verified.
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

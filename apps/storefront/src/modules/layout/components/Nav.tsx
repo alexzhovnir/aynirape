@@ -1,11 +1,14 @@
 import { LanguageSelect } from "@components/LanguageSelect";
 import { ThemeToggle } from "@components/ThemeToggle";
+import { SearchModal } from "@components/SearchModal";
 import {
   $cartItemCount,
   $regionId,
   initCart,
   toggleCartSidebar,
 } from "@lib/stores/cart";
+import { $favoritesCount, initFavorites } from "@lib/stores/favorites";
+import { openSearch } from "@lib/stores/search";
 import { useStore } from "@nanostores/react";
 import { useEffect, useState } from "react";
 
@@ -44,6 +47,7 @@ const NAV_LINKS = (countryCode: string) => [
 
 export const Nav = ({ countryCode, regionId }: NavProps) => {
   const cartItemCount = useStore($cartItemCount);
+  const favCount = useStore($favoritesCount);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navLinks = NAV_LINKS(countryCode);
 
@@ -52,6 +56,7 @@ export const Nav = ({ countryCode, regionId }: NavProps) => {
       $regionId.set(regionId);
       initCart();
     }
+    initFavorites();
   }, [regionId]);
 
   useEffect(() => {
@@ -67,114 +72,176 @@ export const Nav = ({ countryCode, regionId }: NavProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-40 glass-nav w-full transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-20 flex items-center justify-between">
-        {/* Desktop left links */}
-        <div className="hidden md:flex items-center gap-6 flex-1">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-[15px] font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] transition-colors flex items-center gap-2"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d={link.icon} />
-              </svg>
-              <span>{link.label}</span>
-            </a>
-          ))}
-        </div>
-
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMobileMenuOpen((v) => !v)}
-          className="md:hidden flex items-center justify-center w-10 h-10 -ml-2 text-[var(--color-text-primary)] cursor-pointer"
-          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileMenuOpen}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7">
-            {mobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
-            )}
-          </svg>
-        </button>
-
-        <a
-          href={`/${countryCode}`}
-          className="hover:opacity-80 transition-opacity flex items-center gap-3 shrink-0 mx-auto md:mx-0"
-        >
-          <img src="/logo.svg" alt="Ayni Rapé" className="h-9 w-auto object-contain" />
-        </a>
-
-        <div className="flex items-center gap-3 md:gap-4 flex-1 justify-end">
-          <div className="hidden md:flex items-center gap-3 md:gap-4">
-            <LanguageSelect countryCode={countryCode} />
-            <ThemeToggle />
-
-            <a
-              href={`/${countryCode}/profile`}
-              className="text-[13px] font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] bg-[var(--color-bg-surface-elevated)] hover:bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] h-10 px-3.5 rounded-full transition-all duration-300 flex items-center gap-2 shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]"
-              aria-label="View user profile account"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-              </svg>
-              <span className="hidden lg:inline">Account</span>
-            </a>
-          </div>
-
-          <button
-            onClick={handleCartClick}
-            className="text-[13px] font-bold text-[var(--color-bg-primary)] bg-[var(--color-text-primary)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-bg-primary)] h-10 px-4 rounded-full transition-all duration-300 flex items-center gap-2 cursor-pointer shrink-0 shadow-md border border-[var(--color-border-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]"
-            aria-label={`Shopping cart with ${cartItemCount} item${cartItemCount !== 1 ? "s" : ""}`}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-            </svg>
-            <span aria-live="polite" aria-atomic="true">
-              Cart ({cartItemCount})
-            </span>
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] px-4 py-4">
-          <div className="flex flex-col gap-1">
+    <>
+      <header className="sticky top-0 z-40 glass-nav w-full transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-20 flex items-center justify-between">
+          {/* Desktop left links */}
+          <div className="hidden md:flex items-center gap-6 flex-1">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors flex items-center gap-2.5 py-2.5"
+                className="text-[15px] font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] transition-colors flex items-center gap-2"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d={link.icon} />
                 </svg>
                 <span>{link.label}</span>
               </a>
             ))}
-            <a
-              href={`/${countryCode}/profile`}
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors flex items-center gap-2.5 py-2.5"
-              aria-label="View user profile account"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-              </svg>
-              <span>Account</span>
-            </a>
           </div>
-          <div className="flex items-center gap-4 pt-3 mt-2 border-t border-[var(--color-border-subtle)]">
-            <LanguageSelect countryCode={countryCode} />
-            <ThemeToggle />
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen((v) => !v)}
+            className="md:hidden flex items-center justify-center w-10 h-10 -ml-2 text-[var(--color-text-primary)] cursor-pointer"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7">
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+              )}
+            </svg>
+          </button>
+
+          <a
+            href={`/${countryCode}`}
+            className="hover:opacity-80 transition-opacity flex items-center gap-3 shrink-0 mx-auto md:mx-0"
+          >
+            <img src="/logo.svg" alt="Ayni Rapé" className="h-9 w-auto object-contain" />
+          </a>
+
+          <div className="flex items-center gap-2.5 sm:gap-3 md:gap-4 flex-1 justify-end">
+            {/* Search Trigger */}
+            <button
+              onClick={openSearch}
+              className="text-[13px] font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] bg-[var(--color-bg-surface-elevated)] hover:bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] h-10 px-3 rounded-full transition-all duration-300 flex items-center gap-2 shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]"
+              aria-label="Search site (Press Cmd+K)"
+              title="Search (Cmd+K)"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>
+              <span className="hidden lg:inline text-xs font-mono text-[var(--color-text-tertiary)] bg-[var(--color-bg-surface)] px-1.5 py-0.5 rounded border border-[var(--color-border-subtle)]">
+                ⌘K
+              </span>
+            </button>
+
+            {/* Wishlist / Favorites Button */}
+            <a
+              href={`/${countryCode}/profile?tab=favorites`}
+              className="text-[13px] font-bold text-[var(--color-text-primary)] hover:text-red-500 bg-[var(--color-bg-surface-elevated)] hover:bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] h-10 px-3 rounded-full transition-all duration-300 flex items-center gap-1.5 shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)] relative"
+              aria-label={`Favorites (${favCount} items)`}
+              title="Favorites"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+              </svg>
+              {favCount > 0 && (
+                <span className="bg-red-500 text-white text-[10px] font-bold rounded-full h-4 min-w-[16px] px-1 flex items-center justify-center">
+                  {favCount}
+                </span>
+              )}
+            </a>
+
+            <div className="hidden md:flex items-center gap-3 md:gap-4">
+              <LanguageSelect countryCode={countryCode} />
+              <ThemeToggle />
+
+              <a
+                href={`/${countryCode}/profile`}
+                className="text-[13px] font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent-gold)] bg-[var(--color-bg-surface-elevated)] hover:bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] h-10 px-3.5 rounded-full transition-all duration-300 flex items-center gap-2 shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]"
+                aria-label="View user profile account"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+                <span className="hidden lg:inline">Account</span>
+              </a>
+            </div>
+
+            <button
+              onClick={handleCartClick}
+              className="text-[13px] font-bold text-[var(--color-bg-primary)] bg-[var(--color-text-primary)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-bg-primary)] h-10 px-4 rounded-full transition-all duration-300 flex items-center gap-2 cursor-pointer shrink-0 shadow-md border border-[var(--color-border-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]"
+              aria-label={`Shopping cart with ${cartItemCount} item${cartItemCount !== 1 ? "s" : ""}`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+              </svg>
+              <span aria-live="polite" aria-atomic="true">
+                Cart ({cartItemCount})
+              </span>
+            </button>
           </div>
         </div>
-      )}
-    </header>
+
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] px-4 py-4">
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openSearch();
+                }}
+                className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors flex items-center gap-2.5 py-2.5 cursor-pointer text-left"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+                <span>Search catalog...</span>
+              </button>
+
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors flex items-center gap-2.5 py-2.5"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d={link.icon} />
+                  </svg>
+                  <span>{link.label}</span>
+                </a>
+              ))}
+
+              <a
+                href={`/${countryCode}/profile?tab=favorites`}
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors flex items-center gap-2.5 py-2.5"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+                <span>Favorites ({favCount})</span>
+              </a>
+
+              <a
+                href={`/${countryCode}/profile`}
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-accent-gold)] transition-colors flex items-center gap-2.5 py-2.5"
+                aria-label="View user profile account"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+                <span>Account</span>
+              </a>
+            </div>
+            <div className="flex items-center gap-4 pt-3 mt-2 border-t border-[var(--color-border-subtle)]">
+              <LanguageSelect countryCode={countryCode} />
+              <ThemeToggle />
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Global Search Modal */}
+      <SearchModal countryCode={countryCode} />
+    </>
   );
 };

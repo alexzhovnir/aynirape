@@ -1046,6 +1046,56 @@ const displaySku = rawSku || generatedSku;
 
 </div>
 
+{/* Schema.org Product & Breadcrumb Structured Data */}
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": title,
+  "description": description || getFallbackDescription(title, product.handle, countryCode),
+  "image": thumbnail ? [thumbnail] : (images?.map((i: any) => i.url) || []),
+  "sku": product.id || product.handle,
+  "brand": {
+    "@type": "Brand",
+    "name": "Ayni Rapé"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": `https://aynirape.com/${countryCode}/store/${product.handle}`,
+    "priceCurrency": cheapestPrice?.currency_code?.toUpperCase() || "EUR",
+    "price": typeof cheapestPrice?.calculated_price === "number" ? (cheapestPrice.calculated_price / 100).toFixed(2) : "14.95",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "Ayni Rapé"
+    }
+  }
+})} />
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": `https://aynirape.com/${countryCode}`
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Shop",
+      "item": `https://aynirape.com/${countryCode}/store`
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": title,
+      "item": `https://aynirape.com/${countryCode}/store/${product.handle}`
+    }
+  ]
+})} />
+
 <script>
   // Audio Player Toggle Script
   const audioBtn = document.getElementById('btn-play-audio');
