@@ -30,13 +30,13 @@ describe("Nav Component", () => {
     mockCartCount = 0;
     render(<Nav countryCode="de" regionId="reg_123" />);
 
-    expect(screen.getByText("Cart (0)")).toBeDefined();
+    expect(screen.getByText("(0)")).toBeDefined();
   });
 
   it("updates cart count display when cart store updates", () => {
     mockCartCount = 3;
     render(<Nav countryCode="de" regionId="reg_123" />);
 
-    expect(screen.getByText("Cart (3)")).toBeDefined();
+    expect(screen.getByText("(3)")).toBeDefined();
   });
 });
