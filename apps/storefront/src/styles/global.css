@@ -124,6 +124,32 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Custom Sleek Scrollbar System for Modal & Page Scroll */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-gold) var(--color-bg-surface-elevated);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-surface-elevated);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-accent-gold);
+  border-radius: 9999px;
+  border: 1px solid var(--color-bg-surface-elevated);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-accent-gold-hover);
+}
+
 /* Prose Content Links Styling (Brand Gold) */
 .prose a {
   color: var(--color-accent-gold) !important;
