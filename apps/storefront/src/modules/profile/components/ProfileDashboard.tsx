@@ -218,158 +218,271 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
   // Not Logged In screen
   if (!user) {
     return (
-      <div className="max-w-xl mx-auto my-12 p-8 sm:p-12 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] rounded-3xl shadow-2xl transition-all duration-300">
-        <div className="text-center mb-8">
-          <span className="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-[10px] uppercase block mb-2">
-            AYNI RAPÉ &bull; MEMBER PORTAL
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight">
-            {isRegistering ? "Create Account" : "Sign In to Portal"}
-          </h1>
-          <p className="text-xs text-[var(--color-text-secondary)] mt-2 leading-relaxed max-w-sm mx-auto">
-            Access your ceremonial order history, saved sacred blends, and verified community reviews.
-          </p>
-        </div>
-
-        {/* Mode Toggle Tabs */}
-        <div className="flex bg-[var(--color-bg-surface)] p-1.5 rounded-2xl border border-[var(--color-border-subtle)] mb-8">
+      <div className="max-w-2xl mx-auto my-10 space-y-8">
+        {/* Navigation tabs for guest users */}
+        <div className="flex bg-[var(--color-bg-surface-elevated)] p-1.5 rounded-2xl border border-[var(--color-border-subtle)] shadow-sm">
           <button
             type="button"
-            onClick={() => {
-              setIsRegistering(false);
-              setError("");
-            }}
-            className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
-              !isRegistering
+            onClick={() => setActiveTab("favorites")}
+            className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              activeTab === "favorites"
                 ? "bg-[var(--color-accent-gold)] text-stone-950 shadow-md"
                 : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
             }`}
           >
-            Sign In
+            <span>❤️</span>
+            <span>Saved Favorites ({favoritesStore.length})</span>
           </button>
           <button
             type="button"
-            onClick={() => {
-              setIsRegistering(true);
-              setError("");
-            }}
-            className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
-              isRegistering
+            onClick={() => setActiveTab("orders")}
+            className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              activeTab !== "favorites"
                 ? "bg-[var(--color-accent-gold)] text-stone-950 shadow-md"
                 : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
             }`}
           >
-            Register
+            <span>👤</span>
+            <span>Sign In / Register</span>
           </button>
         </div>
 
-        {error && (
-          <div className="p-4 mb-6 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-500 text-xs text-center font-medium">
-            {error}
+        {activeTab === "favorites" ? (
+          <div className="bg-[var(--color-bg-surface-elevated)] p-6 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-2xl space-y-6">
+            <div className="flex justify-between items-center pb-4 border-b border-[var(--color-border-subtle)]">
+              <div>
+                <span className="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-[10px] uppercase block mb-1">
+                  WISHLIST
+                </span>
+                <h2 className="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
+                  My Saved Favorites
+                </h2>
+              </div>
+              <span className="text-xs text-[var(--color-text-muted)] font-bold bg-[var(--color-bg-surface)] px-3 py-1.5 rounded-full border border-[var(--color-border-subtle)]">
+                {favoritesStore.length} Items
+              </span>
+            </div>
+
+            {favoritesStore.length === 0 ? (
+              <div className="p-12 bg-[var(--color-bg-surface)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm">
+                <span className="text-4xl">❤️</span>
+                <p className="text-sm text-[var(--color-text-secondary)]">
+                  No items saved in your favorites list yet.
+                </p>
+                <a
+                  href={`/${countryCode}/store`}
+                  className="inline-block px-6 py-3 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 text-xs font-bold uppercase tracking-wider rounded-full shadow-sm"
+                >
+                  Explore Shop & Save Items &rarr;
+                </a>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {favoritesStore.map((fav) => (
+                  <div
+                    key={fav.id}
+                    className="flex items-center justify-between p-4 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl shadow-sm hover:border-[var(--color-accent-gold)] transition-colors"
+                  >
+                    <a
+                      href={`/${countryCode}/store/${fav.handle || fav.id}`}
+                      className="flex gap-4 items-center group flex-1 min-w-0"
+                    >
+                      {fav.thumbnail ? (
+                        <img
+                          src={fav.thumbnail}
+                          alt={fav.title}
+                          className="w-14 h-14 object-cover rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] shrink-0"
+                        />
+                      ) : (
+                        <div className="w-14 h-14 bg-[var(--color-bg-surface-elevated)] rounded-xl border border-[var(--color-border-subtle)] shrink-0 flex items-center justify-center text-xl">
+                          🌿
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <h4 className="font-semibold text-sm text-[var(--color-text-primary)] truncate group-hover:text-[var(--color-accent-gold)] transition-colors">
+                          {fav.title}
+                        </h4>
+                        <p className="text-xs text-[var(--color-accent-gold)] font-bold mt-0.5">
+                          {typeof fav.price === "number" ? `$${fav.price.toFixed(2)}` : fav.price || ""}
+                        </p>
+                      </div>
+                    </a>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => handleAddToCartFav(fav)}
+                        className="px-3.5 py-2 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-xl text-xs uppercase transition-colors shadow-xs cursor-pointer"
+                        title="Add to Cart"
+                      >
+                        🛒 Add
+                      </button>
+                      <button
+                        onClick={() => removeFavorite(fav.id)}
+                        className="p-2 text-stone-400 hover:text-red-500 transition-colors cursor-pointer"
+                        title="Remove from favorites"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        )}
-
-        {isRegistering ? (
-          <form onSubmit={handleRegister} className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
-                  First Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Maria"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
-                />
-              </div>
-              <div>
-                <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Santos"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
-                E-mail Address *
-              </label>
-              <input
-                type="email"
-                required
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
-                Password *
-              </label>
-              <input
-                type="password"
-                required
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer uppercase tracking-wider text-xs flex items-center justify-center gap-2 mt-2"
-            >
-              <span>Create Account & Join Ayni</span>
-              <span>&rarr;</span>
-            </button>
-          </form>
         ) : (
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
-                E-mail Address *
-              </label>
-              <input
-                type="email"
-                required
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
-                Password *
-              </label>
-              <input
-                type="password"
-                required
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
-              />
+          <div className="p-8 sm:p-12 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] rounded-3xl shadow-2xl transition-all duration-300">
+            <div className="text-center mb-8">
+              <span className="text-[var(--color-accent-gold)] font-bold tracking-[0.28em] text-[10px] uppercase block mb-2">
+                AYNI RAPÉ &bull; MEMBER PORTAL
+              </span>
+              <h1 className="text-3xl sm:text-4xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight">
+                {isRegistering ? "Create Account" : "Sign In to Portal"}
+              </h1>
+              <p className="text-xs text-[var(--color-text-secondary)] mt-2 leading-relaxed max-w-sm mx-auto">
+                Access your ceremonial order history, saved sacred blends, and verified community reviews.
+              </p>
             </div>
 
-            <button
-              type="submit"
-              className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer uppercase tracking-wider text-xs flex items-center justify-center gap-2 mt-2"
-            >
-              <span>Sign In to Account</span>
-              <span>&rarr;</span>
-            </button>
-          </form>
+            {/* Mode Toggle Tabs */}
+            <div className="flex bg-[var(--color-bg-surface)] p-1.5 rounded-2xl border border-[var(--color-border-subtle)] mb-8">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsRegistering(false);
+                  setError("");
+                }}
+                className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
+                  !isRegistering
+                    ? "bg-[var(--color-accent-gold)] text-stone-950 shadow-md"
+                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsRegistering(true);
+                  setError("");
+                }}
+                className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
+                  isRegistering
+                    ? "bg-[var(--color-accent-gold)] text-stone-950 shadow-md"
+                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+                }`}
+              >
+                Register
+              </button>
+            </div>
+
+            {error && (
+              <div className="p-4 mb-6 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-500 text-xs text-center font-medium">
+                {error}
+              </div>
+            )}
+
+            {isRegistering ? (
+              <form onSubmit={handleRegister} className="space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
+                      First Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Maria"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Santos"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
+                    E-mail Address *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
+                    Password *
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer uppercase tracking-wider text-xs flex items-center justify-center gap-2 mt-2"
+                >
+                  <span>Create Account & Join Ayni</span>
+                  <span>&rarr;</span>
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleLogin} className="space-y-5">
+                <div>
+                  <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
+                    E-mail Address *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
+                    Password *
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] rounded-2xl focus:border-[var(--color-accent-gold)] focus:outline-none text-sm transition-colors placeholder:text-[var(--color-text-muted)]"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer uppercase tracking-wider text-xs flex items-center justify-center gap-2 mt-2"
+                >
+                  <span>Sign In to Account</span>
+                  <span>&rarr;</span>
+                </button>
+              </form>
+            )}
+          </div>
         )}
       </div>
     );
