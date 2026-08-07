@@ -23,7 +23,7 @@ const NAV_LINKS = (countryCode: string) => [
   {
     href: `/${countryCode}/music`,
     label: "Music",
-    icon: "M9 9l10.5-3m0 0v12m0-12h-10.5m0 0v12m0 0a3 3 0 1 0 3-3H9.5m9.5 0a3 3 0 1 0 3-3h-2.5",
+    icon: "M9 19V6l10-2v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm10 0c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z",
   },
   {
     href: `/${countryCode}/about`,
