@@ -173,7 +173,7 @@ export const LanguageSelect = ({
         <div
           className={`absolute ${alignLeft ? "left-0" : "right-0"} ${
             openUpward ? "bottom-full mb-2" : "top-full mt-2"
-          } w-44 rounded-2xl bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] shadow-2xl z-50 overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 p-1.5 space-y-0.5`}
+          } w-44 rounded-2xl bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] shadow-2xl z-[100] overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 p-1.5 space-y-0.5`}
           role="listbox"
         >
           {allCountries.map((c) => {

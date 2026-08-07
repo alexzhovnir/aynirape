@@ -73,7 +73,7 @@ export const Nav = ({ countryCode, regionId }: NavProps) => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 glass-nav w-full transition-colors duration-300">
+      <header className="sticky top-0 z-50 glass-nav w-full transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-20 flex items-center justify-between">
           {/* Desktop left links */}
           <div className="hidden md:flex items-center gap-6 flex-1">
