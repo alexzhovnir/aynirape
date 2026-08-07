@@ -1,3 +1,9 @@
+substitutions:
+  _PUBLIC_MEDUSA_BACKEND_URL: "https://aynirape-backend-1093326509566.europe-west1.run.app"
+  _PUBLIC_MEDUSA_PUBLISHABLE_KEY: "pk_b91f9b8b65701c0000b83d80f2f74711e8d32d431fe683daf6f393930bbc4f6d"
+  _DEFAULT_REGION: "us"
+  _PUBLIC_SITE_URL: "https://aynirape.com"
+
 steps:
   - name: "gcr.io/cloud-builders/docker"
     args:
@@ -17,3 +23,4 @@ steps:
       - "."
 images:
   - "europe-west1-docker.pkg.dev/project-46ed8783-a1b4-42b9-9f5/aynirape/storefront:latest"
+
