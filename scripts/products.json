@@ -9,19 +9,19 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "10g",
+        "title": "5g",
         "price": 14.95,
+        "size": "5g"
+      },
+      {
+        "title": "10g",
+        "price": 27.95,
         "size": "10g"
       },
       {
         "title": "20g",
-        "price": 29.9,
+        "price": 49.95,
         "size": "20g"
-      },
-      {
-        "title": "50g",
-        "price": 59.8,
-        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/emburana",
@@ -71,19 +71,19 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "10g",
+        "title": "5g",
         "price": 14.95,
+        "size": "5g"
+      },
+      {
+        "title": "10g",
+        "price": 27.95,
         "size": "10g"
       },
       {
         "title": "20g",
-        "price": 29.9,
+        "price": 49.95,
         "size": "20g"
-      },
-      {
-        "title": "50g",
-        "price": 59.8,
-        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/nukini-sansara",
@@ -118,19 +118,19 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "10g",
+        "title": "5g",
         "price": 14.95,
+        "size": "5g"
+      },
+      {
+        "title": "10g",
+        "price": 27.95,
         "size": "10g"
       },
       {
         "title": "20g",
-        "price": 29.9,
+        "price": 49.95,
         "size": "20g"
-      },
-      {
-        "title": "50g",
-        "price": 59.8,
-        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/huni-kuin",
@@ -159,19 +159,19 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "10g",
+        "title": "5g",
         "price": 14.95,
+        "size": "5g"
+      },
+      {
+        "title": "10g",
+        "price": 27.95,
         "size": "10g"
       },
       {
         "title": "20g",
-        "price": 29.9,
+        "price": 49.95,
         "size": "20g"
-      },
-      {
-        "title": "50g",
-        "price": 59.8,
-        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/caboclo-parica",
@@ -207,19 +207,19 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "10g",
+        "title": "5g",
         "price": 14.95,
+        "size": "5g"
+      },
+      {
+        "title": "10g",
+        "price": 27.95,
         "size": "10g"
       },
       {
         "title": "20g",
-        "price": 29.9,
+        "price": 49.95,
         "size": "20g"
-      },
-      {
-        "title": "50g",
-        "price": 59.8,
-        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/yawanawa",
@@ -248,19 +248,19 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "10g",
+        "title": "5g",
         "price": 14.95,
+        "size": "5g"
+      },
+      {
+        "title": "10g",
+        "price": 27.95,
         "size": "10g"
       },
       {
         "title": "20g",
-        "price": 29.9,
+        "price": 49.95,
         "size": "20g"
-      },
-      {
-        "title": "50g",
-        "price": 59.8,
-        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/spiritual-cleanse-i",
@@ -289,19 +289,19 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "10g",
+        "title": "5g",
         "price": 14.95,
+        "size": "5g"
+      },
+      {
+        "title": "10g",
+        "price": 27.95,
         "size": "10g"
       },
       {
         "title": "20g",
-        "price": 29.9,
+        "price": 49.95,
         "size": "20g"
-      },
-      {
-        "title": "50g",
-        "price": 59.8,
-        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/forca-feminina",
@@ -337,19 +337,19 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "10g",
+        "title": "5g",
         "price": 14.95,
+        "size": "5g"
+      },
+      {
+        "title": "10g",
+        "price": 27.95,
         "size": "10g"
       },
       {
         "title": "20g",
-        "price": 29.9,
+        "price": 49.95,
         "size": "20g"
-      },
-      {
-        "title": "50g",
-        "price": 59.8,
-        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/katukina-eucalipto",
@@ -374,22 +374,12 @@
     "shortDescription": "Discover our range of light Râpés - Ideal for people that want to start and get to know the different healing effects of different blends. Includes: Emburana (5g) Katukina Eucalipto (5g) Yawanawa Tsun",
     "description": "Discover our range of light Râpés - Ideal for people that want to start and get to know the different healing effects of different blends. Includes: Emburana (5g) Katukina Eucalipto (5g) Yawanawa Tsunu (5g) Spiritual Cleanse (5g) Forca Feminina (5g)",
     "fullDescriptionHtml": "<p>Discover our range of light Râpés - Ideal for people that want to start and get to know the different healing effects of different blends.&nbsp;</p>\n<p>Includes:</p>\n<p>Emburana (5g)</p>\n<p>Katukina Eucalipto (5g)</p>\n<p>Yawanawa Tsunu (5g)</p>\n<p>Spiritual Cleanse (5g)</p>\n<p>Forca Feminina (5g)</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 59.8,
     "variants": [
       {
-        "title": "10g",
-        "price": 14.95,
-        "size": "10g"
-      },
-      {
-        "title": "20g",
-        "price": 29.9,
-        "size": "20g"
-      },
-      {
-        "title": "50g",
+        "title": "25g (5x5g)",
         "price": 59.8,
-        "size": "50g"
+        "size": "25g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/discovery-bundle-light",
@@ -414,22 +404,12 @@
     "shortDescription": "Discover our range of strong Râpés - Ideal for people that want to start and get to know the different healing effects of different blends. Includes: Nukini Sansara (5g) Cabocló Parica (5g) Huni Kuin ",
     "description": "Discover our range of strong Râpés - Ideal for people that want to start and get to know the different healing effects of different blends. Includes: Nukini Sansara (5g) Cabocló Parica (5g) Huni Kuin (5g) Yawanawa Tsunu (5g) Spiritual Cleanse (5g)",
     "fullDescriptionHtml": "<p>Discover our range of strong Râpés - Ideal for people that want to start and get to know the different healing effects of different blends.&nbsp;</p>\n<p>Includes:</p>\n<p>Nukini Sansara (5g)</p>\n<p>Cabocló Parica (5g)</p>\n<p>Huni Kuin (5g)</p>\n<p>Yawanawa Tsunu (5g)</p>\n<p>Spiritual Cleanse (5g)</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 59.8,
     "variants": [
       {
-        "title": "10g",
-        "price": 14.95,
-        "size": "10g"
-      },
-      {
-        "title": "20g",
-        "price": 29.9,
-        "size": "20g"
-      },
-      {
-        "title": "50g",
+        "title": "25g (5x5g)",
         "price": 59.8,
-        "size": "50g"
+        "size": "25g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/discovery-bundle-strong",
@@ -455,22 +435,22 @@
     "description": "Yawanawa ceremonial rapé is a respected sacred blend created within the traditions of the Yawanawa tribe. Produced in limited quantities, this small batch ceremonial rapé reflects the focused and intentional approach that defines their spiritual work. Each preparation carries the strength of ancestral knowledge, making this tribal rapé Yawanawa blend valued among experienced practitioners. Often described as grounding and clarifying, Yawanawa rapé ceremonial blow helps support inner balance and energetic alignment during meditation or ceremonial practice. Traditional Medicine of the Yawanawa Considered a traditional Yawanawa rapé medicine, this blend is appreciated for its steady and direct presence. The carefully prepared premium Yawanawa rapé blow offers a refined ceremonial character that encourages focus, awareness, and spiritual connection. Because of its depth and limited production, authentic Yawanawa ceremonial rapé is usually recommended for experienced users who approach the practice with respect and clear intention. Ingredients: Mapacho (Nicotiana rustica) with plant ashes, prepared using traditional Yawanawa methods. Incense to burn on charcoal.",
     "fullDescriptionHtml": "<p>Yawanawa ceremonial rapé is a respected sacred blend created within the traditions of the Yawanawa tribe. Produced in limited quantities, this small batch ceremonial rapé reflects the focused and intentional approach that defines their spiritual work. Each preparation carries the strength of ancestral knowledge, making this tribal rapé Yawanawa blend valued among experienced practitioners.</p>\n<p>Often described as grounding and clarifying, Yawanawa rapé ceremonial blow helps support inner balance and energetic alignment during meditation or ceremonial practice.</p>\n<h2><strong>Traditional Medicine of the Yawanawa</strong></h2>\n<p>Considered a traditional Yawanawa rapé medicine, this blend is appreciated for its steady and direct presence. The carefully prepared premium Yawanawa rapé blow offers a refined ceremonial character that encourages focus, awareness, and spiritual connection.</p>\n<p>Because of its depth and limited production, authentic Yawanawa ceremonial rapé is usually recommended for experienced users who approach the practice with respect and clear intention.</p>\n<p>Ingredients: Mapacho (Nicotiana rustica) with plant ashes, prepared using traditional Yawanawa methods.</p>\n<p>Incense to burn on charcoal.</p>",
     "ingredients": "Mapacho (Nicotiana rustica) with plant ashes, prepared using traditional Yawanawa methods.",
-    "price": 14.95,
+    "price": 29.95,
     "variants": [
       {
+        "title": "5g",
+        "price": 29.95,
+        "size": "5g"
+      },
+      {
         "title": "10g",
-        "price": 14.95,
+        "price": 54.95,
         "size": "10g"
       },
       {
         "title": "20g",
-        "price": 29.9,
+        "price": 99.95,
         "size": "20g"
-      },
-      {
-        "title": "50g",
-        "price": 59.8,
-        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/rape/yawanawa-ceremonial",
@@ -502,12 +482,12 @@
       "Compact 13 cm size suitable for travel and ceremonies",
       "Suitable as a best kuripe for hapé blow or personal ritual use"
     ],
-    "price": 14.95,
+    "price": 84.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 13 cm",
+        "price": 84.95,
+        "size": "13 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/jaguar",
@@ -532,12 +512,12 @@
     "shortDescription": "Jaguar head wooden Kuripe of 13 cm in Tamarind wood.",
     "description": "Jaguar head wooden Kuripe of 13 cm in Tamarind wood.",
     "fullDescriptionHtml": "<p>Jaguar head wooden Kuripe of 13 cm in Tamarind wood.</p>",
-    "price": 14.95,
+    "price": 84.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 13 cm",
+        "price": 84.95,
+        "size": "13 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-jaguar-tamarind",
@@ -562,12 +542,12 @@
     "shortDescription": "Wolf head wooden Kuripe of 13 cm in Sawo wood.",
     "description": "Wolf head wooden Kuripe of 13 cm in Sawo wood.",
     "fullDescriptionHtml": "<p>Wolf head wooden Kuripe of 13 cm in Sawo wood.</p>",
-    "price": 14.95,
+    "price": 84.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 13 cm",
+        "price": 84.95,
+        "size": "13 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-wolf-sawo",
@@ -592,12 +572,12 @@
     "shortDescription": "Colibri wooden Kuripe of 15 cm in Crocodile wood.",
     "description": "Colibri wooden Kuripe of 15 cm in Crocodile wood.",
     "fullDescriptionHtml": "<p>Colibri wooden Kuripe of 15 cm in Crocodile wood.</p>",
-    "price": 14.95,
+    "price": 84.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 15 cm",
+        "price": 84.95,
+        "size": "15 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-colibri-crocodile",
@@ -622,12 +602,12 @@
     "shortDescription": "Colibri wooden Kuripe of 15 cm in Teak wood.",
     "description": "Colibri wooden Kuripe of 15 cm in Teak wood.",
     "fullDescriptionHtml": "<p>Colibri wooden Kuripe of 15 cm in Teak wood.</p>",
-    "price": 14.95,
+    "price": 84.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 15 cm",
+        "price": 84.95,
+        "size": "15 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-colibri-teak",
@@ -652,12 +632,12 @@
     "shortDescription": "Eagle head wooden Kuripe of 13 cm in Tamarind wood.",
     "description": "Eagle head wooden Kuripe of 13 cm in Tamarind wood.",
     "fullDescriptionHtml": "<p>Eagle head wooden Kuripe of 13 cm in Tamarind wood.</p>",
-    "price": 14.95,
+    "price": 84.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 13 cm",
+        "price": 84.95,
+        "size": "13 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-eagle-tamarind",
@@ -682,12 +662,12 @@
     "shortDescription": "Eagle head wooden Kuripe of 13 cm in Teak wood.",
     "description": "Eagle head wooden Kuripe of 13 cm in Teak wood.",
     "fullDescriptionHtml": "<p>Eagle head wooden Kuripe of 13 cm in Teak wood.</p>",
-    "price": 14.95,
+    "price": 84.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 13 cm",
+        "price": 84.95,
+        "size": "13 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-eagle-teak",
@@ -712,12 +692,12 @@
     "shortDescription": "Minimalistic wooden Kuripe of 9 cm made from one block of Cemara wood.",
     "description": "Minimalistic wooden Kuripe of 9 cm made from one block of Cemara wood.",
     "fullDescriptionHtml": "<p>Minimalistic wooden Kuripe of 9 cm made from one block of Cemara wood.</p>",
-    "price": 14.95,
+    "price": 19.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 9 cm",
+        "price": 19.95,
+        "size": "9 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-minimalistic-cemara",
@@ -742,12 +722,12 @@
     "shortDescription": "Minimalistic wooden Kuripe of 8 cm with double exit in Crocodile wood.",
     "description": "Minimalistic wooden Kuripe of 8 cm with double exit in Crocodile wood.",
     "fullDescriptionHtml": "<p>Minimalistic wooden Kuripe of 8 cm with double exit in Crocodile wood.</p>",
-    "price": 14.95,
+    "price": 24.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 8 cm",
+        "price": 24.95,
+        "size": "8 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-double-crocodile",
@@ -772,12 +752,12 @@
     "shortDescription": "Wooden Kuripe of 10 cm, decorated with turquoise stone and leaf shaped green stones - equipped with a cord. Availiable in Chonta (black / grey) and Palo Sangre (red) essences.",
     "description": "Wooden Kuripe of 10 cm, decorated with turquoise stone and leaf shaped green stones - equipped with a cord. Availiable in Chonta (black / grey) and Palo Sangre (red) essences.",
     "fullDescriptionHtml": "<p>Wooden Kuripe of 10 cm, decorated with turquoise stone and leaf shaped green stones - equipped with a cord. Availiable in Chonta (black / grey) and Palo Sangre (red) essences.</p>",
-    "price": 14.95,
+    "price": 44.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Chonta",
+        "price": 44.95,
+        "size": "Chonta"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-turquoise",
@@ -802,12 +782,12 @@
     "shortDescription": "Buy authentic Amethyst Kuripe pipes. Handmade stone Kuripe available for sale, unique and durable for your collection on the website aynirape.com",
     "description": "Amethyst Kuripe is a beautifully crafted self-application tool designed for ceremonial use with hapé. This handmade amethyst kuripe measures approximately 12 cm and is decorated with natural stones, including amethyst or white quartz, complemented by turquoise accents and traditional bead ornamentation. Available in Chonta (black/grey) and Palo Sangre (red) wood, each stone kuripe amethyst pipe combines durability with elegant craftsmanship. The attached cord makes this amethyst kuripe applicator convenient to carry during ceremonies, meditation, or personal rituals. Sacred Tool for Hapé Practice Used as a ceremonial amethyst kuripe, this tool allows precise self-application while maintaining focus during ritual work. Amethyst is traditionally associated with clarity and balance, making it a meaningful element in this amethyst kuripe rapé tool. Many practitioners choose to buy amethyst kuripe as a functional and symbolic instrument for their practice. Carefully crafted and unique in design, this amethyst kuripe for hapé serves both as a practical ceremonial tool and a beautiful spiritual accessory.",
     "fullDescriptionHtml": "<p>Amethyst Kuripe is a beautifully crafted self-application tool designed for ceremonial use with hapé. This handmade amethyst kuripe measures approximately 12 cm and is decorated with natural stones, including amethyst or white quartz, complemented by turquoise accents and traditional bead ornamentation.</p>\n<p>Available in Chonta (black/grey) and Palo Sangre (red) wood, each stone kuripe amethyst pipe combines durability with elegant craftsmanship. The attached cord makes this amethyst kuripe applicator convenient to carry during ceremonies, meditation, or personal rituals.</p>\n<h2><strong>Sacred Tool for Hapé Practice</strong></h2>\n<p>&nbsp;</p>\n<p>Used as a ceremonial amethyst kuripe, this tool allows precise self-application while maintaining focus during ritual work. Amethyst is traditionally associated with clarity and balance, making it a meaningful element in this amethyst kuripe rapé tool.</p>\n<p>Many practitioners choose to buy amethyst kuripe as a functional and symbolic instrument for their practice. Carefully crafted and unique in design, this amethyst kuripe for hapé serves both as a practical ceremonial tool and a beautiful spiritual accessory.</p>",
-    "price": 14.95,
+    "price": 49.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Palo Sangre (red)",
+        "price": 49.95,
+        "size": "Palo Sangre (red)"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-amethyst",
@@ -832,12 +812,17 @@
     "shortDescription": "Wooden Tepi of 22 cm in Shipibo Style, decorated with green leaf shaped stone, Ayahuasca vine sclice and mostasilla ornament. Available in Chonta (grey / black) and Palo Santo (red).",
     "description": "Wooden Tepi of 22 cm in Shipibo Style, decorated with green leaf shaped stone, Ayahuasca vine sclice and mostasilla ornament. Available in Chonta (grey / black) and Palo Santo (red).",
     "fullDescriptionHtml": "<p>Wooden Tepi of 22 cm in Shipibo Style, decorated with green leaf shaped stone, Ayahuasca vine sclice and mostasilla ornament. Available in Chonta (grey / black) and Palo Santo (red).</p>",
-    "price": 14.95,
+    "price": 49.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Chonta",
+        "price": 49.95,
+        "size": "Chonta"
+      },
+      {
+        "title": "Palo Sangre (red)",
+        "price": 49.95,
+        "size": "Palo Sangre (red)"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-shipibo-small",
@@ -862,12 +847,17 @@
     "shortDescription": "Wooden Tepi of 38 cm in Shipibo Style, decorated with green leaf shaped stone, Ayahuasca vine sclice and mostasilla ornament. Available in Chonta (grey / black) and Palo Santo (red).",
     "description": "Wooden Tepi of 38 cm in Shipibo Style, decorated with green leaf shaped stone, Ayahuasca vine sclice and mostasilla ornament. Available in Chonta (grey / black) and Palo Santo (red).",
     "fullDescriptionHtml": "<p>Wooden Tepi of 38 cm in Shipibo Style, decorated with green leaf shaped stone, Ayahuasca vine sclice and mostasilla ornament. Available in Chonta (grey / black) and Palo Santo (red).</p>",
-    "price": 14.95,
+    "price": 59.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Chonta",
+        "price": 59.95,
+        "size": "Chonta"
+      },
+      {
+        "title": "Palo Sangre (red)",
+        "price": 59.95,
+        "size": "Palo Sangre (red)"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-shipibo-large",
@@ -892,12 +882,12 @@
     "shortDescription": "Double Jaguar head wooden Tepi of 25 cm in Waru wood.",
     "description": "Double Jaguar head wooden Tepi of 25 cm in Waru wood.",
     "fullDescriptionHtml": "<p>Double Jaguar head wooden Tepi of 25 cm in Waru wood.</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 99.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 25 cm",
+        "price": 99.95,
+        "size": "25 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-double-jaguar-waru",
@@ -922,12 +912,12 @@
     "shortDescription": "Double Jaguar head wooden Tepi of 25 cm in Crocodile wood.",
     "description": "Double Jaguar head wooden Tepi of 25 cm in Crocodile wood.",
     "fullDescriptionHtml": "<p>Double Jaguar head wooden Tepi of 25 cm in Crocodile wood.</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 99.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 25 cm",
+        "price": 99.95,
+        "size": "25 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-double-jaguar-crocodile",
@@ -952,12 +942,12 @@
     "shortDescription": "Colibri wooden Tepi of 23 cm in Crocodile wood.",
     "description": "Colibri wooden Tepi of 23 cm in Crocodile wood.",
     "fullDescriptionHtml": "<p>Colibri wooden Tepi of 23 cm in Crocodile wood.</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 99.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 23 cm",
+        "price": 99.95,
+        "size": "23 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-colibri-crocodile",
@@ -982,12 +972,12 @@
     "shortDescription": "Colibri wooden Tepi of 23 cm in Teak wood.",
     "description": "Colibri wooden Tepi of 23 cm in Teak wood.",
     "fullDescriptionHtml": "<p>Colibri wooden Tepi of 23 cm in Teak wood.</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 99.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 23 cm",
+        "price": 99.95,
+        "size": "23 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-colibri-teak",
@@ -1012,12 +1002,12 @@
     "shortDescription": "Minimalistic wooden Tepi of 22 cm in Sawo wood.",
     "description": "Minimalistic wooden Tepi of 22 cm in Sawo wood.",
     "fullDescriptionHtml": "<p>Minimalistic wooden Tepi of 22 cm in Sawo wood.</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 39.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 22 cm",
+        "price": 39.95,
+        "size": "22 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/tepi-minimalistic-sawo",
@@ -1042,12 +1032,17 @@
     "shortDescription": "Standard wooden Kuripe of 9 cm made in Peru and avaliable in Chonta (black / grey) and Palo Sangre (red) wood essences.",
     "description": "Standard wooden Kuripe of 9 cm made in Peru and avaliable in Chonta (black / grey) and Palo Sangre (red) wood essences.",
     "fullDescriptionHtml": "<p>Standard wooden Kuripe of 9 cm made in Peru and avaliable in Chonta (black / grey)&nbsp; and Palo Sangre (red) wood essences.</p>",
-    "price": 14.95,
+    "price": 9.99,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Chonta",
+        "price": 9.99,
+        "size": "Chonta"
+      },
+      {
+        "title": "Palo Sangre (red)",
+        "price": 9.99,
+        "size": "Palo Sangre (red)"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-standard",
@@ -1072,12 +1067,12 @@
     "shortDescription": "Wolf head wooden Kuripe of 13 cm in Crocodile wood.",
     "description": "Wolf head wooden Kuripe of 13 cm in Crocodile wood.",
     "fullDescriptionHtml": "<p>Wolf head wooden Kuripe of 13 cm in Crocodile wood.</p>",
-    "price": 14.95,
+    "price": 84.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Standard 13 cm",
+        "price": 84.95,
+        "size": "13 cm"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/kuripe-wolf-crocodile-i",
@@ -1102,12 +1097,12 @@
     "shortDescription": "This sliver kuripe is the most refined product in our range. This is a piece for collectionneurs. It is completely handmade by goldsmiths people of the Scandinavian region, experts in shaping silver. ",
     "description": "This sliver kuripe is the most refined product in our range. This is a piece for collectionneurs. It is completely handmade by goldsmiths people of the Scandinavian region, experts in shaping silver. Silver has been used for millenials in a variety of ceremonies, across cultures. It is recognized as one of the best material to conduct energies. The cobra motives, extended in the chain of snake appearance, will provide you with a strong base to connect during your Râpé ceremony. In addition, the Kyanite stone placed at the center of the piece will enhance the power of your ritual. Kyanite is known as a stone for harmony, well-being and ability to clean negative energies.",
     "fullDescriptionHtml": "<p>This sliver kuripe is the most refined product in our range.</p>\n<p>This is a piece for collectionneurs. It is completely handmade by goldsmiths people of the Scandinavian region, experts in shaping silver.&nbsp;</p>\n<p>Silver has been used for millenials in a variety of ceremonies, across cultures. It is recognized as one of the best material to conduct energies.&nbsp;</p>\n<p>The cobra motives, extended in the chain of snake appearance, will provide you with a strong base to connect during your Râpé ceremony. &nbsp;</p>\n<p>In addition, the Kyanite stone placed at the center of the piece will enhance the power of your ritual. Kyanite is known as a stone for harmony, well-being and ability to clean negative energies.&nbsp;</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 129.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Sterling Silver 925",
+        "price": 129.95,
+        "size": "Sterling Silver 925"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/silver-kuripe-double-cobra-with-chain-and-kyanite-stone",
@@ -1135,12 +1130,12 @@
     "shortDescription": "This sliver kuripe is completely handmade by goldsmiths people of the Scandinavian region, experts in shaping silver. Silver has been used for millenials in a variety of ceremonies, across cultures. I",
     "description": "This sliver kuripe is completely handmade by goldsmiths people of the Scandinavian region, experts in shaping silver. Silver has been used for millenials in a variety of ceremonies, across cultures. It is recognized as one of the best material to conduct energies. The cobra motive will provide you with a strong base to connect during your Râpé ceremony. In addition, the Turquoise stone placed at the center of the piece will enhance the power of your ritual. Turquoise is known as a stone for well-being, supporting emotional integrity and spiritual development.",
     "fullDescriptionHtml": "<p>This sliver kuripe&nbsp;is completely handmade by goldsmiths people of the Scandinavian region, experts in shaping silver.&nbsp;</p>\n<p>Silver has been used for millenials in a variety of ceremonies, across cultures. It is recognized as one of the best material to conduct energies.&nbsp;</p>\n<p>The cobra motive will provide you with a strong base to connect during your Râpé ceremony. &nbsp;</p>\n<p>In addition, the Turquoise stone placed at the center of the piece will enhance the power of your ritual. Turquoise is known as a stone for well-being, supporting emotional integrity and spiritual development.&nbsp;</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 119.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Sterling Silver 925",
+        "price": 119.95,
+        "size": "Sterling Silver 925"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/silver-kuripe-single-cobra-with-turquoise",
@@ -1167,12 +1162,12 @@
     "shortDescription": "This sliver kuripe is completely handmade by goldsmiths people of the Scandinavian region, experts in shaping silver. Silver has been used for millenials in a variety of ceremonies, across cultures. I",
     "description": "This sliver kuripe is completely handmade by goldsmiths people of the Scandinavian region, experts in shaping silver. Silver has been used for millenials in a variety of ceremonies, across cultures. It is recognized as one of the best material to conduct energies. The leaves and natural motives will inspire you to dive into your Râpé ceremony. In addition, the Labradorite stone placed at the center of the piece will enhance the power of your ritual. Labradorite is known as a stone which gives strenght and increase perseverance.",
     "fullDescriptionHtml": "<p>This sliver kuripe&nbsp;is completely handmade by goldsmiths people of the Scandinavian region, experts in shaping silver.&nbsp;</p>\n<p>Silver has been used for millenials in a variety of ceremonies, across cultures. It is recognized as one of the best material to conduct energies.&nbsp;</p>\n<p>The leaves and natural motives will inspire you to dive into your Râpé ceremony. &nbsp;</p>\n<p>In addition, the Labradorite stone placed at the center of the piece will enhance the power of your ritual. Labradorite is known as a stone which gives strenght and increase perseverance.&nbsp;</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 119.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Sterling Silver 925",
+        "price": 119.95,
+        "size": "Sterling Silver 925"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/silver-kuripe-leaves-with-labradorite",
@@ -1199,12 +1194,12 @@
     "shortDescription": "Silver tepi double cobra is a premium handmade silver tepi pipe for rapé. This double cobra tepi applicator is perfect for ceremonial use and collectors on the website aynirape.com",
     "description": "This silver tepi is one of the most refined products in our range, designed for those who value craftsmanship and authenticity. The silver tepi pipe stands out as a premium ceremonial tool, combining aesthetic detail with functional precision. This silver tepi double cobra design reflects both symbolic depth and artisanal mastery, making it a unique cobra tepi applicator for serious collectors and practitioners. Craftsmanship and Symbolism This is a piece for collectors, a truly handmade silver tepi applicator created by skilled goldsmiths from the Scandinavian region, experts in shaping silver into precise and meaningful forms. As an artisan silver tepi pipe, it represents a high level of attention to detail and traditional metalworking techniques. The structure of this double cobra tepi pipe is carefully balanced, ensuring both durability and comfort during ceremonial use. Silver has been used for millennia in a variety of ceremonies across cultures. It is widely recognized as one of the best materials to conduct and amplify subtle energies, which is why a silver tepi pipe for rapé is often chosen by experienced practitioners. This double cobra tepi for ceremonial use enhances the ritual experience through both its material and symbolic design. The cobra motifs integrated into this double cobra tepi provide the receiver of the Sacred Blend with a strong energetic base, supporting focus and connection during the ritual. This cobra tepi applicator is not only a functional tool but also a statement piece within any collection of ceremonial items. For those looking to buy silver tepi, this piece offers a rare combination of craftsmanship, symbolism, and material quality.",
     "fullDescriptionHtml": "<p>This silver tepi is one of the most refined products in our range, designed for those who value craftsmanship and authenticity. The silver tepi pipe stands out as a premium ceremonial tool, combining aesthetic detail with functional precision. This silver tepi double cobra design reflects both symbolic depth and artisanal mastery, making it a unique cobra tepi applicator for serious collectors and practitioners.</p>\n<h2><strong>Craftsmanship and Symbolism</strong></h2>\n<p>This is a piece for collectors, a truly handmade silver tepi applicator created by skilled goldsmiths from the Scandinavian region, experts in shaping silver into precise and meaningful forms. As an artisan silver tepi pipe, it represents a high level of attention to detail and traditional metalworking techniques. The structure of this double cobra tepi pipe is carefully balanced, ensuring both durability and comfort during ceremonial use.</p>\n<p>Silver has been used for millennia in a variety of ceremonies across cultures. It is widely recognized as one of the best materials to conduct and amplify subtle energies, which is why a silver tepi pipe for rapé is often chosen by experienced practitioners. This double cobra tepi for ceremonial use enhances the ritual experience through both its material and symbolic design.</p>\n<p>The cobra motifs integrated into this double cobra tepi provide the receiver of the Sacred Blend with a strong energetic base, supporting focus and connection during the ritual. This cobra tepi applicator is not only a functional tool but also a statement piece within any collection of ceremonial items.</p>\n<p>For those looking to buy silver tepi, this piece offers a rare combination of craftsmanship, symbolism, and material quality.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>",
-    "price": 14.95,
+    "price": 149.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Sterling Silver 925",
+        "price": 149.95,
+        "size": "Sterling Silver 925"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/tepi-and-kuripe/silver-tepi-double-cobra",
@@ -1233,12 +1228,12 @@
     "shortDescription": "Shop Agua de Florida cologne for sale. Authentic Peru Florida Water for rituals and cleansing. Buy Agua de Florida online with the best price and guaranteed quality on the website aynirape.com",
     "description": "Authentic Agua de Florida from Murray & Lanman - 270ml Made in Arequipa, Peru, this cologne has been traditionally used for spiritual, energetic and ritual purposes for centuries. Authentic agua de florida from Murray & Lanman - 270ml. This agua de florida original is produced in Arequipa, Peru, and is widely recognized as a traditional Florida Water cologne used for spiritual, energetic, and ritual purposes for centuries. Known as peruvian agua de florida or agua florida peruana, this classic formula has become a staple among practitioners seeking authentic Agua de Florida with a rich cultural background. This agua de florida cologne is valued not only for its refreshing citrus-herbal scent but also for its versatility in spiritual practices. Many choose to buy Agua de Florida online to access this iconic product, often referred to as peru agua de florida or agua de florida peru, known for its consistent quality and traditional preparation. Uses and Benefits of Agua de Florida What are the uses of agua de florida ritual water? Purification and Cleansing: Agua de Florida cologne for sale is often used to purify and cleanse the energy of people, objects, and spaces. This agua florida original is commonly applied during ceremonies, energy cleansing rituals, or simply used by spraying or placing a few drops on the body. Protection: Agua de la florida is known for its protective properties. Many people use this Florida Water cologne to create an energetic barrier and shield themselves from negative influences, unwanted energies, or disturbances. Energy Elevation: This agua de florida original is frequently used to elevate energy during rituals and ceremonies. As a peru florida water, it is believed to support meditation, enhance spiritual awareness, and strengthen connection with higher states of consciousness. Fragrance and Refreshment: Beyond its ceremonial role, agua florida de peru is appreciated for its pleasant aroma. Some use this acqua di florida simply as a refreshing fragrance or eau de toilette to feel revitalized throughout the day. The popularity of peru agua de florida stems from its ability to create a harmonious atmosphere, balance energies, and foster a deeper spiritual connection. Whether you are looking to buy agua de florida for ritual use or simply exploring its other qualities, this flor de florida essence remains one of the most respected and widely used blends. Today, it is easy to find agua de florida best price options in any trusted source where you can confidently buy Agua de Florida online and experience the benefits of this timeless aguas de florida tradition.",
     "fullDescriptionHtml": "<p>Authentic <em>Agua de Florida</em> from <em>Murray &amp; Lanman - 270ml</em></p>\n<p id=\"tw-target-text\" dir=\"ltr\" data-placeholder=\"Traduction\" data-ved=\"2ahUKEwi99MPh__WNAxUuRKQEHYfcKkMQ3ewLegQICRAV\" aria-label=\"Texte traduit&nbsp;: Made in Arequipa, Peru, it is the one that has been traditionally used for spiritual, energetic and ritual purposes for centuries.\">Made in Arequipa, Peru, this cologne has been traditionally used for spiritual, energetic and ritual purposes for centuries.</p>\n<p>Authentic agua de florida from Murray &amp; Lanman - 270ml. This agua de florida original is produced in Arequipa, Peru, and is widely recognized as a traditional Florida Water cologne used for spiritual, energetic, and ritual purposes for centuries. Known as peruvian agua de florida or agua florida peruana, this classic formula has become a staple among practitioners seeking authentic Agua de Florida with a rich cultural background.</p>\n<p>This agua de florida cologne is valued not only for its refreshing citrus-herbal scent but also for its versatility in spiritual practices. Many choose to buy Agua de Florida online to access this iconic product, often referred to as peru agua de florida or agua de florida peru, known for its consistent quality and traditional preparation.</p>\n<h2><strong>Uses and Benefits of Agua de Florida</strong></h2>\n<p>What are the uses of agua de florida ritual water?</p>\n<p><strong>Purification and Cleansing:</strong> Agua de Florida cologne for sale is often used to purify and cleanse the energy of people, objects, and spaces. This agua florida original is commonly applied during ceremonies, energy cleansing rituals, or simply used by spraying or placing a few drops on the body.</p>\n<p><strong>Protection:</strong> Agua de la florida is known for its protective properties. Many people use this Florida Water cologne to create an energetic barrier and shield themselves from negative influences, unwanted energies, or disturbances.</p>\n<p><strong>Energy Elevation:</strong> This agua de florida original is frequently used to elevate energy during rituals and ceremonies. As a peru florida water, it is believed to support meditation, enhance spiritual awareness, and strengthen connection with higher states of consciousness.</p>\n<p><strong>Fragrance and Refreshment:</strong> Beyond its ceremonial role, agua florida de peru is appreciated for its pleasant aroma. Some use this acqua di florida simply as a refreshing fragrance or eau de toilette to feel revitalized throughout the day.</p>\n<p>The popularity of peru agua de florida stems from its ability to create a harmonious atmosphere, balance energies, and foster a deeper spiritual connection. Whether you are looking to buy agua de florida for ritual use or simply exploring its other qualities, this flor de florida essence remains one of the most respected and widely used blends.</p>\n<p>Today, it is easy to find agua de florida best price options in any trusted source where you can confidently buy Agua de Florida online and experience the benefits of this timeless aguas de florida tradition.</p>",
-    "price": 14.95,
+    "price": 19.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Bottle 270ml",
+        "price": 19.95,
+        "size": "270ml"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/aromatics/agua-de-florida-2",
@@ -1260,12 +1255,12 @@
       "When experiencing headaches or mental fatigue",
       "Upon arriving in a new place, hotel, or apartment"
     ],
-    "price": 14.95,
+    "price": 9.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Bundle 50g",
+        "price": 9.95,
+        "size": "50g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/aromatics/palo-santo",
@@ -1291,9 +1286,9 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "Standard",
+        "title": "100g",
         "price": 14.95,
-        "size": "Standard"
+        "size": "100g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/supplements/pure-a%C3%A7a%C3%AD-powder",
@@ -1321,9 +1316,9 @@
     "price": 14.95,
     "variants": [
       {
-        "title": "Standard",
+        "title": "100g",
         "price": 14.95,
-        "size": "Standard"
+        "size": "100g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/supplements/guaran%C3%A1-seed-powder",
@@ -1348,12 +1343,12 @@
         "content": "• 100% pure maca root powder\n\n• No additives or preservatives\n\n• Naturally rich in fiber and plant nutrients\n\n• Easy to mix in smoothies, cereals and drinks\n\n• Sourced from Peru\n\nMaca powder is a traditional Andean food ingredient that can be conveniently included in everyday recipes as part of a balanced diet.\n\n"
       }
     ],
-    "price": 14.95,
+    "price": 9.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "100g",
+        "price": 9.95,
+        "size": "100g"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/supplements/maca-root-powder",
@@ -1371,11 +1366,11 @@
     "shortDescription": "Adjustable bracelet with ten Huayruro seeds on a black cord. The vibrant Huayruro seeds are known and celebrated by the people of Peru for bringing good fortune and warding off negative energy. Deep r",
     "description": "Adjustable bracelet with ten Huayruro seeds on a black cord. The vibrant Huayruro seeds are known and celebrated by the people of Peru for bringing good fortune and warding off negative energy. Deep red with contrasting black or white marks, these seeds are indeed more than just nature’s jewels. It is very common for shamans to wear them as jewelry during sacred rituals. Those singular seeds are definitely full of symbolism.",
     "fullDescriptionHtml": "<p>Adjustable bracelet with ten Huayruro seeds on a black cord.</p>\n<p>The vibrant Huayruro seeds are known and celebrated by the people of Peru for bringing good fortune and warding off negative energy. Deep red with contrasting black or white marks, these seeds are indeed more than just nature’s jewels.</p>\n<p>It is very common for shamans to wear them as jewelry during sacred rituals. Those singular seeds are definitely full of symbolism.&nbsp;</p>",
-    "price": 14.95,
+    "price": 9.95,
     "variants": [
       {
         "title": "Standard",
-        "price": 14.95,
+        "price": 9.95,
         "size": "Standard"
       }
     ],
@@ -1394,12 +1389,12 @@
     "shortDescription": "Unique handmade piece 50 x 50 cm This ceremomial carpet in light tones was designed and handmade by a peruvian woman, based on visions she acquired through a ceremony. The carpet can be used on person",
     "description": "Unique handmade piece 50 x 50 cm This ceremomial carpet in light tones was designed and handmade by a peruvian woman, based on visions she acquired through a ceremony. The carpet can be used on personal altars, during Râpé practices or simply as a decoration element. In Râpé ceremonies, the shamanic motives will help you tune into the ritual and prepare yourself for receiving the best of the sacred blends’ benefits. Also, if you happen to connect with the motives, they might accompany you through your experience and help you in their own way.",
     "fullDescriptionHtml": "<p>Unique handmade piece 50 x 50 cm</p>\n<p>This ceremomial carpet in light tones was designed and handmade by a peruvian woman, based on visions she acquired through a ceremony.</p>\n<p>The carpet can be used on personal altars, during&nbsp;Râpé practices or simply as a decoration element.&nbsp;</p>\n<p>In Râpé ceremonies, the shamanic motives will help you tune into the ritual and prepare yourself for receiving the best of the sacred blends’ benefits. Also, if you happen to connect with the motives, they might accompany you through your experience and help you in their own way.</p>",
-    "price": 14.95,
+    "price": 89.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Handwoven",
+        "price": 89.95,
+        "size": "Handwoven"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/ornaments-and-decoration/ceremonial-carpet-snake",
@@ -1417,12 +1412,12 @@
     "shortDescription": "Unique handmade piece 70 x 50 cm This ceremomial carpet in dark tones, picturing two sacred animals in conversation, was deisgned and handmade by a peruvian woman, based on visions she acquired throug",
     "description": "Unique handmade piece 70 x 50 cm This ceremomial carpet in dark tones, picturing two sacred animals in conversation, was deisgned and handmade by a peruvian woman, based on visions she acquired through a ceremony. The carpet can be used on personal altars, during Râpé practices or simply as a decoration element. In Râpé ceremonies, the shamanic motives will help you tune into the ritual and prepare yourself for receiving the best of the sacred blends’ benefits. Also, if you happen to connect with the motives, they might accompany you through your experience and help you in their own way.",
     "fullDescriptionHtml": "<p>Unique handmade piece 70 x 50 cm</p>\n<p>This ceremomial carpet in dark tones, picturing two sacred animals in conversation, was deisgned and handmade by a peruvian woman, based on visions she acquired through a ceremony.</p>\n<p>The carpet can be used on personal altars, during&nbsp;Râpé practices or simply as a decoration element.&nbsp;</p>\n<p>In Râpé ceremonies, the shamanic motives will help you tune into the ritual and prepare yourself for receiving the best of the sacred blends’ benefits. Also, if you happen to connect with the motives, they might accompany you through your experience and help you in their own way.</p>",
-    "price": 14.95,
+    "price": 89.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Handwoven",
+        "price": 89.95,
+        "size": "Handwoven"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/ornaments-and-decoration/ceremonial-carpet-snake-and-parrot",
@@ -1440,12 +1435,12 @@
     "shortDescription": "Unique handmade piece 70 x 50 cm This ceremomial carpet in dark tones, picturing the Sacred Plant, was deisgned and handmade by a peruvian woman, based on visions she acquired through a ceremony. The ",
     "description": "Unique handmade piece 70 x 50 cm This ceremomial carpet in dark tones, picturing the Sacred Plant, was deisgned and handmade by a peruvian woman, based on visions she acquired through a ceremony. The carpet can be used on personal altars, during Râpé practices or simply as a decoration element. In Râpé ceremonies, the shamanic motives will help you tune into the ritual and prepare yourself for receiving the best of the sacred blends’ benefits. Also, if you happen to connect with the motives, they might accompany you through your experience and help you in their own way.",
     "fullDescriptionHtml": "<p>Unique handmade piece 70 x 50 cm</p>\n<p>This ceremomial carpet in dark tones, picturing the Sacred Plant, was deisgned and handmade by a peruvian woman, based on visions she acquired through a ceremony.</p>\n<p>The carpet can be used on personal altars, during&nbsp;Râpé practices or simply as a decoration element.&nbsp;</p>\n<p>In Râpé ceremonies, the shamanic motives will help you tune into the ritual and prepare yourself for receiving the best of the sacred blends’ benefits. Also, if you happen to connect with the motives, they might accompany you through your experience and help you in their own way.</p>",
-    "price": 14.95,
+    "price": 89.95,
     "variants": [
       {
-        "title": "Standard",
-        "price": 14.95,
-        "size": "Standard"
+        "title": "Handwoven",
+        "price": 89.95,
+        "size": "Handwoven"
       }
     ],
     "originalUrl": "https://aynirape.com/shop/ornaments-and-decoration/ceremonial-carpet-sacred-plant",

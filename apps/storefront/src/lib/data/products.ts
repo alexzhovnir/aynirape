@@ -12,7 +12,7 @@ function mapFallbackProduct(p: any) {
   const optionValues = (p.variants && p.variants.length > 0)
     ? p.variants.map((v: any, index: number) => ({
         id: `optval_${p.handle}_${index}`,
-        value: v.title || v.size || (index === 0 ? "5g" : index === 1 ? "10g" : "15g"),
+        value: v.title || v.size || (index === 0 ? "5g" : index === 1 ? "10g" : "20g"),
         option_id: optionId,
       }))
     : [
