@@ -107,8 +107,10 @@ export const ConfirmedFallbackPage = ({
                         loading="lazy"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-[var(--color-bg-surface)] rounded-xl border border-[var(--color-border-subtle)] shrink-0 flex items-center justify-center text-lg">
-                        🌿
+                      <div className="w-16 h-16 bg-[var(--color-bg-surface)] rounded-xl border border-[var(--color-border-subtle)] shrink-0 flex items-center justify-center text-[var(--color-accent-gold)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925-3.546 5.974 5.974 0 0 0-2.133-1A3.75 3.75 0 0 0 4.5 12a3.75 3.75 0 0 0 3.75 3.75h3.75Z" />
+                        </svg>
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
@@ -285,7 +287,11 @@ export const ConfirmedFallbackPage = ({
                   {paymentProviderId === "bank-transfer" && (
                     <div className="mt-4 p-4 bg-[var(--color-bg-surface)] border border-[var(--color-accent-gold)]/40 rounded-2xl space-y-3">
                       <div className="flex items-center gap-2.5">
-                        <span className="text-xl">🏦</span>
+                        <div className="w-7 h-7 rounded-lg bg-[var(--color-accent-gold)]/15 text-[var(--color-accent-gold)] flex items-center justify-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.5m-15 10.5V10.5M3 21h18M4.5 10.5h15" />
+                          </svg>
+                        </div>
                         <h4 className="text-xs font-bold text-[var(--color-text-primary)] uppercase tracking-wider">
                           Bank Transfer Details (SEPA / SWIFT)
                         </h4>
@@ -302,8 +308,11 @@ export const ConfirmedFallbackPage = ({
                         <span className="text-[var(--color-text-muted)]">Memo Ref:</span>
                         <span className="text-[var(--color-accent-gold)] font-bold">{cart?.id?.slice(-8)?.toUpperCase() || "AYNI-ORDER"}</span>
                       </div>
-                      <p className="text-[11px] text-amber-700 dark:text-amber-300 font-medium">
-                        ⚠️ Please include reference <strong>{cart?.id?.slice(-8)?.toUpperCase() || "AYNI-ORDER"}</strong> in your bank memo. Your order will be dispatched as soon as payment is verified.
+                      <p className="text-[11px] text-amber-700 dark:text-amber-300 font-medium flex items-start gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-amber-500 shrink-0 mt-0.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                        </svg>
+                        <span>Please include reference <strong>{cart?.id?.slice(-8)?.toUpperCase() || "AYNI-ORDER"}</strong> in your bank memo. Your order will be dispatched as soon as payment is verified.</span>
                       </p>
                     </div>
                   )}

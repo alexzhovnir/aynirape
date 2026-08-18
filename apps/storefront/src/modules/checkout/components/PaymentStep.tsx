@@ -2,8 +2,9 @@ import { sdk } from "@lib/sdk";
 import { completeCart, initPaymentSession } from "@lib/stores/cart";
 import { convertToLocale } from "@lib/utils/money";
 import type { StoreCart, StorePaymentProvider } from "@medusajs/types";
-import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { LucideIcon, type IconName } from "@components/icons/LucideIcons";
+import { PayPalCardFields } from "./PayPalCardFields";
 import { useEffect, useState } from "react";
 
 interface PaymentStepProps {
@@ -14,14 +15,14 @@ interface PaymentStepProps {
 }
 
 const ALL_PAYMENT_PROVIDERS: StorePaymentProvider[] = [
-  { id: "pp_stripe_stripe", is_enabled: true } as StorePaymentProvider,
+  { id: "paypal_card", is_enabled: true } as StorePaymentProvider,
   { id: "paypal", is_enabled: true } as StorePaymentProvider,
   { id: "bank-transfer", is_enabled: true } as StorePaymentProvider,
   { id: "pp_system_default", is_enabled: true } as StorePaymentProvider,
 ];
 
-function isStripeProvider(providerId: string): boolean {
-  return providerId.startsWith("pp_stripe_");
+function isPayPalCardProvider(providerId: string): boolean {
+  return providerId === "paypal_card" || providerId.startsWith("pp_stripe_");
 }
 
 function isPayPalProvider(providerId: string): boolean {
@@ -37,8 +38,8 @@ function isSystemDefaultProvider(providerId: string): boolean {
 }
 
 function formatProviderName(providerId: string): string {
-  if (isStripeProvider(providerId)) return "Credit / Debit Card (Stripe, Visa, Mastercard, Apple Pay)";
-  if (isPayPalProvider(providerId)) return "PayPal Express Checkout";
+  if (isPayPalCardProvider(providerId)) return "Credit / Debit Card (Visa, Mastercard, Amex)";
+  if (isPayPalProvider(providerId)) return "PayPal Express (Account & Pay Later)";
   if (isBankTransferProvider(providerId)) return "Bank Transfer (SEPA / SWIFT)";
   if (isSystemDefaultProvider(providerId)) return "Direct Order / Invoice Payment";
   return providerId
@@ -48,12 +49,12 @@ function formatProviderName(providerId: string): string {
     .join(" ");
 }
 
-function getProviderIcon(providerId: string) {
-  if (isStripeProvider(providerId)) return "💳";
-  if (isPayPalProvider(providerId)) return "🅿️";
-  if (isBankTransferProvider(providerId)) return "🏦";
-  if (isSystemDefaultProvider(providerId)) return "📜";
-  return "💰";
+function getProviderIconName(providerId: string): IconName {
+  if (isPayPalCardProvider(providerId)) return "credit-card";
+  if (isPayPalProvider(providerId)) return "wallet";
+  if (isBankTransferProvider(providerId)) return "landmark";
+  if (isSystemDefaultProvider(providerId)) return "file-text";
+  return "credit-card";
 }
 
 export const PaymentStep = ({
@@ -62,13 +63,17 @@ export const PaymentStep = ({
   mode,
 }: PaymentStepProps) => {
   const [paymentProviders, setPaymentProviders] = useState<StorePaymentProvider[]>(ALL_PAYMENT_PROVIDERS);
-  const [selectedProviderId, setSelectedProviderId] = useState<string>("pp_stripe_stripe");
+  const [selectedProviderId, setSelectedProviderId] = useState<string>("paypal_card");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isPlacing, setIsPlacing] = useState(false);
   const [error, setError] = useState("");
-  const stripe = useStripe();
-  const elements = useElements();
+
+  const paypalClientId =
+    import.meta.env.PUBLIC_PAYPAL_CLIENT_ID ||
+    import.meta.env.PAYPAL_CLIENT_ID ||
+    "test";
+  const currencyCode = (cart.currency_code || "EUR").toUpperCase();
 
   useEffect(() => {
     if (mode !== "edit") return;
@@ -81,7 +86,6 @@ export const PaymentStep = ({
           region_id: cart.region_id!,
         });
 
-        // Always display all 4 primary payment options for complete customer choice
         setPaymentProviders(ALL_PAYMENT_PROVIDERS);
 
         const existingProviderId =
@@ -89,13 +93,13 @@ export const PaymentStep = ({
         if (existingProviderId && ALL_PAYMENT_PROVIDERS.some((p) => p.id === existingProviderId)) {
           setSelectedProviderId(existingProviderId);
         } else {
-          setSelectedProviderId("pp_stripe_stripe");
-          handleProviderChange("pp_stripe_stripe");
+          setSelectedProviderId("paypal_card");
+          handleProviderChange("paypal_card");
         }
       } catch (err) {
         console.warn("Using standard payment options:", err);
         setPaymentProviders(ALL_PAYMENT_PROVIDERS);
-        setSelectedProviderId("pp_stripe_stripe");
+        setSelectedProviderId("paypal_card");
       } finally {
         setIsLoading(false);
       }
@@ -110,7 +114,7 @@ export const PaymentStep = ({
     setIsSaving(true);
     setError("");
     try {
-      const targetProvider = (isBankTransferProvider(providerId) || isPayPalProvider(providerId))
+      const targetProvider = (isBankTransferProvider(providerId) || isPayPalProvider(providerId) || isPayPalCardProvider(providerId))
         ? "pp_system_default"
         : providerId;
       await initPaymentSession(targetProvider);
@@ -121,21 +125,10 @@ export const PaymentStep = ({
     }
   };
 
-  const handlePlaceOrder = async (skipStripe = false) => {
+  const handlePlaceOrder = async (skipValidation = false) => {
     setIsPlacing(true);
     setError("");
     try {
-      if (!skipStripe && isStripeProvider(selectedProviderId) && stripe && elements) {
-        const { error: stripeError } = await stripe.confirmPayment({
-          elements,
-          redirect: "if_required",
-        });
-        if (stripeError) {
-          setError(stripeError.message ?? "Payment failed. Please try again.");
-          return;
-        }
-      }
-
       if (!cart.payment_collection?.payment_sessions?.length) {
         try {
           await initPaymentSession("pp_system_default");
@@ -225,39 +218,72 @@ export const PaymentStep = ({
                       {formatProviderName(provider.id)}
                     </span>
                   </div>
-                  <span className="text-xl shrink-0" aria-hidden="true">{getProviderIcon(provider.id)}</span>
+                  <LucideIcon name={getProviderIconName(provider.id)} size={20} className="text-[var(--color-text-secondary)] shrink-0" />
                 </label>
               );
             })}
           </div>
         )}
 
-        {isStripeProvider(selectedProviderId) &&
-          cart.payment_collection?.payment_sessions?.some(
-            (s) => s.provider_id === selectedProviderId,
-          ) && (
-            <div className="p-5 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl">
-              <PaymentElement />
+        {/* Option 1: Credit / Debit Card via PayPal Hosted Fields */}
+        {isPayPalCardProvider(selectedProviderId) && (
+          <div className="p-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center shrink-0 border border-[var(--color-accent-gold)]/20">
+                  <LucideIcon name="credit-card" size={20} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-[var(--color-text-primary)]">
+                    Card Payment (Visa, Mastercard, Amex)
+                  </h3>
+                  <p className="text-xs text-[var(--color-text-muted)]">
+                    Enter your card details securely directly on this page
+                  </p>
+                </div>
+              </div>
             </div>
-          )}
 
+            <PayPalScriptProvider
+              options={{
+                clientId: paypalClientId,
+                currency: currencyCode,
+                intent: "capture",
+                components: "buttons,card-fields",
+              }}
+            >
+              <PayPalCardFields
+                cartTotal={cart.total || 0}
+                currencyCode={currencyCode}
+                isPlacing={isPlacing}
+                onPlaceOrder={handlePlaceOrder}
+                onError={(msg) => setError(msg)}
+              />
+            </PayPalScriptProvider>
+          </div>
+        )}
+
+        {/* Option 2: PayPal Express Checkout (Smart Buttons) */}
         {isPayPalProvider(selectedProviderId) && (
           <div className="p-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">🅿️</span>
+                <div className="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center shrink-0 border border-[var(--color-accent-gold)]/20">
+                  <LucideIcon name="wallet" size={20} />
+                </div>
                 <div>
                   <h3 className="text-sm font-bold text-[var(--color-text-primary)]">PayPal Express Checkout</h3>
-                  <p className="text-xs text-[var(--color-text-muted)]">Pay securely using your PayPal account or linked cards</p>
+                  <p className="text-xs text-[var(--color-text-muted)]">Pay securely using your PayPal account, balance or linked cards</p>
                 </div>
               </div>
             </div>
             <div className="pt-2">
               <PayPalScriptProvider
                 options={{
-                  clientId: import.meta.env.PUBLIC_PAYPAL_CLIENT_ID || "test",
-                  currency: (cart.currency_code || "EUR").toUpperCase(),
-                  intent: "capture"
+                  clientId: paypalClientId,
+                  currency: currencyCode,
+                  intent: "capture",
+                  components: "buttons,card-fields",
                 }}
               >
                 <PayPalButtons
@@ -268,7 +294,7 @@ export const PaymentStep = ({
                       purchase_units: [
                         {
                           amount: {
-                            currency_code: (cart.currency_code || "EUR").toUpperCase(),
+                            currency_code: currencyCode,
                             value: Number(cart.total || 0).toFixed(2),
                           },
                         },
@@ -291,10 +317,13 @@ export const PaymentStep = ({
           </div>
         )}
 
+        {/* Option 3: Bank Transfer (SEPA / SWIFT) */}
         {isBankTransferProvider(selectedProviderId) && (
           <div className="p-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-5 shadow-sm">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">🏦</span>
+              <div className="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center shrink-0 border border-[var(--color-accent-gold)]/20">
+                <LucideIcon name="landmark" size={20} />
+              </div>
               <div>
                 <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Bank Transfer (SEPA / SWIFT)</h3>
                 <p className="text-xs text-[var(--color-text-muted)]">Transfer payment directly to our Revolut Business account</p>
@@ -309,10 +338,10 @@ export const PaymentStep = ({
               <span className="text-[var(--color-text-primary)] font-bold">Ayni Rapé</span>
 
               <span className="text-[var(--color-text-muted)] font-medium">IBAN:</span>
-              <span className="text-[var(--color-text-primary)] font-bold tracking-wide">LT60 3250 0867 2850 7633</span>
+              <span className="text-[var(--color-text-primary)] font-mono font-bold tracking-wide">LT60 3250 0867 2850 7633</span>
 
               <span className="text-[var(--color-text-muted)] font-medium">SWIFT / BIC:</span>
-              <span className="text-[var(--color-text-primary)] font-bold">REVOLT21</span>
+              <span className="text-[var(--color-text-primary)] font-mono font-bold">REVOLT21</span>
 
               <span className="text-[var(--color-text-muted)] font-medium">Total Amount:</span>
               <span className="text-[var(--color-accent-gold)] font-extrabold text-sm">
@@ -320,11 +349,11 @@ export const PaymentStep = ({
               </span>
 
               <span className="text-[var(--color-text-muted)] font-medium">Payment Reference:</span>
-              <span className="text-[var(--color-text-primary)] font-bold">{cart.id?.slice(-8)?.toUpperCase() || "—"}</span>
+              <span className="text-[var(--color-text-primary)] font-mono font-bold">{cart.id?.slice(-8)?.toUpperCase() || "—"}</span>
             </div>
 
             <div className="flex items-start gap-2.5 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-900 dark:text-amber-200">
-              <span className="text-amber-500 text-base mt-0.5 shrink-0">⚠️</span>
+              <LucideIcon name="alert-triangle" size={16} className="text-amber-500 shrink-0 mt-0.5" />
               <p className="text-xs leading-relaxed font-medium">
                 <strong>Important:</strong> Please include the reference number <strong>{cart.id?.slice(-8)?.toUpperCase() || "—"}</strong> in your transfer memo. Orders ship upon payment verification.
               </p>
@@ -332,10 +361,13 @@ export const PaymentStep = ({
           </div>
         )}
 
+        {/* Option 4: Direct Order / Invoice Payment */}
         {isSystemDefaultProvider(selectedProviderId) && (
           <div className="p-6 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl space-y-2 shadow-sm">
             <div className="flex items-center gap-3 mb-1">
-              <span className="text-2xl">📜</span>
+              <div className="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center shrink-0 border border-[var(--color-accent-gold)]/20">
+                <LucideIcon name="file-text" size={20} />
+              </div>
               <div>
                 <h3 className="text-sm font-bold text-[var(--color-text-primary)]">Direct Order / Invoice Payment</h3>
                 <p className="text-xs text-[var(--color-text-muted)]">Place your order directly and receive payment instructions by email</p>
@@ -350,15 +382,18 @@ export const PaymentStep = ({
           </div>
         )}
 
-        <button
-          type="button"
-          disabled={!selectedProviderId || isSaving || isPlacing}
-          onClick={() => handlePlaceOrder(false)}
-          className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs flex items-center justify-center gap-2"
-        >
-          <span>{isPlacing ? "Processing Order..." : "Place Sacred Order"}</span>
-          <span>&rarr;</span>
-        </button>
+        {/* Main CTA button for non-card methods (or manual fallback) */}
+        {!isPayPalCardProvider(selectedProviderId) && (
+          <button
+            type="button"
+            disabled={!selectedProviderId || isSaving || isPlacing}
+            onClick={() => handlePlaceOrder(false)}
+            className="w-full py-4 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-full transition-all duration-300 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs flex items-center justify-center gap-2"
+          >
+            <span>{isPlacing ? "Processing Order..." : "Place Sacred Order"}</span>
+            <span>&rarr;</span>
+          </button>
+        )}
       </div>
     </div>
   );

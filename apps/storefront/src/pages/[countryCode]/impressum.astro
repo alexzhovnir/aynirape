@@ -2,6 +2,7 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import Icon from "@components/icons/Icon.astro";
 import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
@@ -40,8 +41,8 @@ const t = useTranslations(countryCode);
     <!-- Quick Company Stats Cards -->
     <div class="grid sm:grid-cols-3 gap-6 mb-16">
       <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl shrink-0 border border-[var(--color-accent-gold)]/20">
-          🏛️
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center shrink-0 border border-[var(--color-accent-gold)]/20">
+          <Icon name="landmark" class="w-6 h-6" />
         </div>
         <div>
           <strong class="block text-sm font-bold text-[var(--color-text-primary)]">{t("impressum_page.card_registered")}</strong>
@@ -50,8 +51,8 @@ const t = useTranslations(countryCode);
       </div>
 
       <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl shrink-0 border border-[var(--color-accent-gold)]/20">
-          ✉️
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center shrink-0 border border-[var(--color-accent-gold)]/20">
+          <Icon name="mail" class="w-6 h-6" />
         </div>
         <div>
           <strong class="block text-sm font-bold text-[var(--color-text-primary)]">{t("impressum_page.card_inquiry")}</strong>
@@ -60,8 +61,8 @@ const t = useTranslations(countryCode);
       </div>
 
       <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl shrink-0 border border-[var(--color-accent-gold)]/20">
-          ⚖️
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center shrink-0 border border-[var(--color-accent-gold)]/20">
+          <Icon name="scale" class="w-6 h-6" />
         </div>
         <div>
           <strong class="block text-sm font-bold text-[var(--color-text-primary)]">{t("impressum_page.card_odr")}</strong>
@@ -117,8 +118,8 @@ const t = useTranslations(countryCode);
       <div class="lg:col-span-5 space-y-8">
         <!-- ODR Dispute Resolution Card -->
         <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4 hover:border-[var(--color-accent-gold)] transition-colors">
-          <div class="w-10 h-10 rounded-2xl bg-[var(--color-accent-gold)]/15 text-[var(--color-accent-gold)] flex items-center justify-center text-lg border border-[var(--color-accent-gold)]/30">
-            ⚖️
+          <div class="w-10 h-10 rounded-2xl bg-[var(--color-accent-gold)]/15 text-[var(--color-accent-gold)] flex items-center justify-center border border-[var(--color-accent-gold)]/30">
+            <Icon name="scale" class="w-5 h-5" />
           </div>
           <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)]">
             Online Dispute Resolution (ODR)
@@ -143,7 +144,7 @@ const t = useTranslations(countryCode);
         <!-- Botanical Disclaimer Card -->
         <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-3">
           <div class="flex items-center gap-2 text-xs font-bold text-[var(--color-accent-gold)] uppercase tracking-wider">
-            <span>🌿</span>
+            <Icon name="leaf" class="w-4 h-4 text-emerald-500 shrink-0" />
             <span>Botanical Sample Notice</span>
           </div>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">

@@ -88,6 +88,11 @@ function mapFallbackProduct(p: any) {
     title: p.title,
     handle: p.handle,
     description: p.description,
+    fullDescriptionHtml: p.fullDescriptionHtml,
+    shortDescription: p.shortDescription,
+    ingredients: p.ingredients,
+    keyCharacteristics: p.keyCharacteristics,
+    sections: p.sections,
     thumbnail: thumbnailUrl,
     images: imageUrls.map((url: string, i: number) => ({ id: `img_${i}`, url })),
     options,
@@ -98,21 +103,54 @@ function mapFallbackProduct(p: any) {
         name: categoryName,
         handle: p.category
       }
-    ]
+    ],
+    metadata: {
+      fullDescriptionHtml: p.fullDescriptionHtml,
+      shortDescription: p.shortDescription,
+      ingredients: p.ingredients,
+      keyCharacteristics: p.keyCharacteristics,
+      sections: p.sections,
+      originalUrl: p.originalUrl,
+    }
   };
 }
 
 const fallbackProducts: any[] = (fallbackProductsData as any[]).map(mapFallbackProduct);
 
+function enrichProductWithRichData(prod: any) {
+  if (!prod) return prod;
+  const cleanHandle = prod.handle?.replace(/^prod_/, "") || prod.id?.replace(/^prod_/, "");
+  const fallback = (fallbackProductsData as any[]).find(
+    (f: any) => f.handle === cleanHandle || f.handle === prod.handle
+  );
+
+  if (fallback) {
+    prod.metadata = {
+      ...(prod.metadata || {}),
+      fullDescriptionHtml: prod.metadata?.fullDescriptionHtml || fallback.fullDescriptionHtml,
+      shortDescription: prod.metadata?.shortDescription || fallback.shortDescription,
+      ingredients: prod.metadata?.ingredients || fallback.ingredients,
+      keyCharacteristics: prod.metadata?.keyCharacteristics || fallback.keyCharacteristics,
+      sections: prod.metadata?.sections || fallback.sections,
+      originalUrl: prod.metadata?.originalUrl || fallback.originalUrl,
+    };
+    if (!prod.fullDescriptionHtml) prod.fullDescriptionHtml = fallback.fullDescriptionHtml;
+    if (!prod.ingredients) prod.ingredients = fallback.ingredients;
+    if (!prod.keyCharacteristics) prod.keyCharacteristics = fallback.keyCharacteristics;
+    if (!prod.sections) prod.sections = fallback.sections;
+  }
+  return prod;
+}
+
 export const listProducts = async (regionId: string, categoryId?: string) => {
   try {
     const { products } = await sdk.store.product.list({
       region_id: regionId,
-      fields: "*variants.calculated_price,*variants.options,*options,*options.values,*categories,*images",
+      fields: "*variants.calculated_price,*variants.options,*options,*options.values,*categories,*images,+metadata",
       ...(categoryId ? { category_id: [categoryId] } : {}),
     });
     if (products && products.length > 0) {
-      return products;
+      return products.map(enrichProductWithRichData);
     }
   } catch (error) {
     console.error("listProducts fetch error:", error);
@@ -166,7 +204,7 @@ export const retrieveProduct = async (
     });
 
     if (products && products.length > 0) {
-      return products[0];
+      return enrichProductWithRichData(products[0]);
     }
 
     const { product } = await sdk.store.product.retrieve(idOrHandle, {
@@ -174,7 +212,7 @@ export const retrieveProduct = async (
       fields:
         "*variants.calculated_price,+variants.inventory_quantity,*variants.images,*variants.options,*options,*options.values,+metadata,+tags,*categories,*images",
     });
-    if (product) return product;
+    if (product) return enrichProductWithRichData(product);
   } catch (error) {
     console.error("retrieveProduct fetch error:", error);
   }

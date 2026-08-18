@@ -2,6 +2,7 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import Icon from "@components/icons/Icon.astro";
 import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
@@ -40,8 +41,8 @@ const t = useTranslations(countryCode);
     <!-- 4 Trust Pillars Cards Grid -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
       <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
-          🔒
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+          <Icon name="lock" class="w-6 h-6" />
         </div>
         <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">{t("privacy_page.card1_title")}</h3>
         <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -50,8 +51,8 @@ const t = useTranslations(countryCode);
       </div>
 
       <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
-          🚫
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+          <Icon name="ban" class="w-6 h-6" />
         </div>
         <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">{t("privacy_page.card2_title")}</h3>
         <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -60,8 +61,8 @@ const t = useTranslations(countryCode);
       </div>
 
       <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
-          🇪🇺
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+          <Icon name="globe" class="w-6 h-6" />
         </div>
         <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">{t("privacy_page.card3_title")}</h3>
         <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -70,8 +71,8 @@ const t = useTranslations(countryCode);
       </div>
 
       <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
-          🗑️
+        <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+          <Icon name="trash-2" class="w-6 h-6" />
         </div>
         <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">Right to Erasure</h3>
         <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -85,7 +86,7 @@ const t = useTranslations(countryCode);
       <!-- Section 1: Data Collection -->
       <div class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
         <div class="flex items-center gap-3">
-          <span class="text-2xl">📋</span>
+          <Icon name="file-text" class="w-6 h-6 text-[var(--color-accent-gold)] shrink-0" />
           <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
             1. Information We Collect
           </h2>
@@ -119,7 +120,7 @@ const t = useTranslations(countryCode);
       <!-- Section 2: Data Usage & Sharing -->
       <div class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
         <div class="flex items-center gap-3">
-          <span class="text-2xl">🤝</span>
+          <Icon name="heart-handshake" class="w-6 h-6 text-[var(--color-accent-gold)] shrink-0" />
           <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
             2. How We Use & Share Your Data
           </h2>
@@ -142,7 +143,7 @@ const t = useTranslations(countryCode);
       <!-- Section 3: Your Rights -->
       <div class="bg-[var(--color-bg-surface-elevated)] p-8 sm:p-10 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm space-y-4">
         <div class="flex items-center gap-3">
-          <span class="text-2xl">🛡️</span>
+          <Icon name="shield-check" class="w-6 h-6 text-[var(--color-accent-gold)] shrink-0" />
           <h2 class="text-2xl font-serif-heading font-bold text-[var(--color-text-primary)]">
             3. Your GDPR Rights & Data Requests
           </h2>

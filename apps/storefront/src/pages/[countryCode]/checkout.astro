@@ -56,7 +56,7 @@ const t = useTranslations(countryCode);
         { label: String(t("seo.checkout.title")) }
       ]}
     />
-    <CheckoutPage client:load countryCode={countryCode} countries={countries} />
+    <CheckoutPage client:only="react" countryCode={countryCode} countries={countries} />
     <InPostGeoWidget />
   </div>
 </Layout>

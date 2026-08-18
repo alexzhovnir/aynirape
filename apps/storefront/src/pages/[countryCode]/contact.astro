@@ -2,6 +2,7 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import Icon from "@components/icons/Icon.astro";
 import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
@@ -43,8 +44,8 @@ const t = useTranslations(countryCode);
       <div class="lg:col-span-5 flex flex-col gap-6">
         <!-- Email Support Card -->
         <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
-            ✉️
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+            <Icon name="mail" class="w-6 h-6" />
           </div>
           <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">{t("contact.cards.email_title")}</h2>
           <p class="text-xs text-[var(--color-text-secondary)] mb-4 leading-relaxed">
@@ -60,8 +61,8 @@ const t = useTranslations(countryCode);
 
         <!-- Social Channels Card -->
         <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
-            📷
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+            <Icon name="instagram" class="w-6 h-6" />
           </div>
           <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">{t("contact.cards.social_title")}</h2>
           <p class="text-xs text-[var(--color-text-secondary)] mb-4 leading-relaxed">
@@ -79,8 +80,8 @@ const t = useTranslations(countryCode);
 
         <!-- Custom Orders & Wholesale Card -->
         <div class="bg-[var(--color-bg-surface-elevated)] p-8 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
-          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl mb-4 border border-[var(--color-accent-gold)]/20">
-            🤝
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+            <Icon name="heart-handshake" class="w-6 h-6" />
           </div>
           <h2 class="text-xl font-serif-heading font-bold text-[var(--color-text-primary)] mb-1">{t("contact.cards.wholesale_title")}</h2>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">

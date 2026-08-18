@@ -85,7 +85,10 @@ export const MusicPlaylistContent: React.FC<MusicPlaylistContentProps> = ({ coun
                 href={`/${countryCode}/store`}
                 className="h-12 px-6 rounded-full bg-[var(--color-bg-surface-elevated)] hover:bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] font-bold text-sm border border-[var(--color-border-subtle)] transition-all duration-300 flex items-center gap-2"
               >
-                <span>Explore Rapé Blends 🌿</span>
+                <span>Explore Rapé Blends</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-[var(--color-accent-gold)]">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
               </a>
             </div>
           </div>
@@ -358,8 +361,11 @@ export const MusicPlaylistContent: React.FC<MusicPlaylistContentProps> = ({ coun
 
       {/* 4. Educational Rapé Sound Ceremony Guide */}
       <div className="mt-8 rounded-3xl glass-panel p-8 border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)]/50 flex flex-col gap-6">
-        <h2 className="text-xl sm:text-2xl font-serif font-bold text-[var(--color-text-primary)] flex items-center gap-2">
-          <span>🌿 The Sacred Synergy of Rapé & Sound Frequencies</span>
+        <h2 className="text-xl sm:text-2xl font-serif font-bold text-[var(--color-text-primary)] flex items-center gap-2.5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-[var(--color-accent-gold)]">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925-3.546 5.974 5.974 0 0 0-2.133-1A3.75 3.75 0 0 0 4.5 12a3.75 3.75 0 0 0 3.75 3.75h3.75Z" />
+          </svg>
+          <span>The Sacred Synergy of Rapé & Sound Frequencies</span>
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

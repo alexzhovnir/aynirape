@@ -1,6 +1,7 @@
 import { useStore } from "@nanostores/react";
 import { $favorites, initFavorites, removeFavorite, type FavoriteItem } from "@lib/stores/favorites";
 import { addToCart } from "@lib/stores/cart";
+import { LucideIcon } from "@components/icons/LucideIcons";
 import { useEffect, useState } from "react";
 
 interface ProfileDashboardProps {
@@ -230,7 +231,9 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
             }`}
           >
-            <span>❤️</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-4 h-4 text-red-500">
+              <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+            </svg>
             <span>Saved Favorites ({favoritesStore.length})</span>
           </button>
           <button
@@ -242,7 +245,9 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                 : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
             }`}
           >
-            <span>👤</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
             <span>Sign In / Register</span>
           </button>
         </div>
@@ -264,8 +269,12 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
             </div>
 
             {favoritesStore.length === 0 ? (
-              <div className="p-12 bg-[var(--color-bg-surface)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm">
-                <span className="text-4xl">❤️</span>
+              <div className="p-12 bg-[var(--color-bg-surface)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm flex flex-col items-center">
+                <div className="w-14 h-14 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                  </svg>
+                </div>
                 <p className="text-sm text-[var(--color-text-secondary)]">
                   No items saved in your favorites list yet.
                 </p>
@@ -294,8 +303,8 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                           className="w-14 h-14 object-cover rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] shrink-0"
                         />
                       ) : (
-                        <div className="w-14 h-14 bg-[var(--color-bg-surface-elevated)] rounded-xl border border-[var(--color-border-subtle)] shrink-0 flex items-center justify-center text-xl">
-                          🌿
+                        <div className="w-14 h-14 bg-[var(--color-bg-surface-elevated)] rounded-xl border border-[var(--color-border-subtle)] shrink-0 flex items-center justify-center text-emerald-500">
+                          <LucideIcon name="leaf" size={20} />
                         </div>
                       )}
                       <div className="min-w-0 flex-1">
@@ -310,17 +319,18 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => handleAddToCartFav(fav)}
-                        className="px-3.5 py-2 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-xl text-xs uppercase transition-colors shadow-xs cursor-pointer"
+                        className="px-3.5 py-2 bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-hover)] text-stone-950 font-bold rounded-xl text-xs uppercase transition-colors shadow-xs cursor-pointer flex items-center gap-1.5"
                         title="Add to Cart"
                       >
-                        🛒 Add
+                        <LucideIcon name="shopping-bag" size={13} />
+                        <span>Add</span>
                       </button>
                       <button
                         onClick={() => removeFavorite(fav.id)}
                         className="p-2 text-stone-400 hover:text-red-500 transition-colors cursor-pointer"
                         title="Remove from favorites"
                       >
-                        ✕
+                        <LucideIcon name="x" size={16} />
                       </button>
                     </div>
                   </div>
@@ -528,8 +538,10 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
             </span>
             <strong className="text-2xl font-serif-heading text-[var(--color-text-primary)]">{orders.length}</strong>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl border border-[var(--color-accent-gold)]/20">
-            📦
+          <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center border border-[var(--color-accent-gold)]/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+            </svg>
           </div>
         </div>
 
@@ -542,8 +554,10 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
               {favoritesStore.length}
             </strong>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl border border-[var(--color-accent-gold)]/20">
-            ❤️
+          <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center border border-[var(--color-accent-gold)]/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-5 h-5 text-red-500">
+              <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+            </svg>
           </div>
         </div>
 
@@ -554,8 +568,10 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
             </span>
             <strong className="text-2xl font-serif-heading text-[var(--color-text-primary)]">{feedbacks.length}</strong>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center text-xl border border-[var(--color-accent-gold)]/20">
-            ★
+          <div className="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center border border-[var(--color-accent-gold)]/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-5 h-5 text-[var(--color-accent-gold)]">
+              <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+            </svg>
           </div>
         </div>
       </div>
@@ -573,7 +589,9 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
             }`}
           >
             <div className="flex items-center gap-3">
-              <span>📦</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+              </svg>
               <span>Order History</span>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-950/15">{orders.length}</span>
@@ -588,7 +606,9 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
             }`}
           >
             <div className="flex items-center gap-3">
-              <span>❤️</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-4 h-4 text-red-500">
+                <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+              </svg>
               <span>My Favorites</span>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-950/15">
@@ -605,7 +625,9 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
             }`}
           >
             <div className="flex items-center gap-3">
-              <span>★</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-4 h-4 text-[var(--color-accent-gold)]">
+                <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+              </svg>
               <span>My Reviews</span>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-950/15">{feedbacks.length}</span>
@@ -620,7 +642,9 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
             }`}
           >
             <div className="flex items-center gap-3">
-              <span>🏠</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+              </svg>
               <span>Profile & Address</span>
             </div>
           </button>
@@ -638,8 +662,10 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
               </div>
 
               {orders.length === 0 ? (
-                <div className="p-12 bg-[var(--color-bg-surface-elevated)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm">
-                  <span className="text-4xl">🛍️</span>
+                <div className="p-12 bg-[var(--color-bg-surface-elevated)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm flex flex-col items-center">
+                  <div className="w-16 h-16 rounded-full bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center border border-[var(--color-accent-gold)]/20">
+                    <LucideIcon name="shopping-bag" size={28} />
+                  </div>
                   <p className="text-sm text-[var(--color-text-secondary)]">
                     You haven't placed any ceremonial orders yet.
                   </p>
@@ -705,8 +731,8 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                                 className="w-14 h-14 object-cover rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface-elevated)] shrink-0"
                               />
                             ) : (
-                              <div className="w-14 h-14 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-xl shrink-0 flex items-center justify-center text-lg">
-                                🌿
+                              <div className="w-14 h-14 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-xl shrink-0 flex items-center justify-center text-emerald-500">
+                                <LucideIcon name="leaf" size={20} />
                               </div>
                             )}
                             <div className="flex-1 min-w-0">
@@ -737,8 +763,12 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
               </div>
 
               {favoritesStore.length === 0 ? (
-                <div className="p-12 bg-[var(--color-bg-surface-elevated)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm">
-                  <span className="text-4xl">❤️</span>
+                <div className="p-12 bg-[var(--color-bg-surface-elevated)] rounded-3xl border border-[var(--color-border-subtle)] text-center space-y-4 shadow-sm flex flex-col items-center">
+                  <div className="w-14 h-14 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                  </div>
                   <p className="text-sm text-[var(--color-text-secondary)]">
                     No items saved in your favorites list yet.
                   </p>
@@ -767,8 +797,8 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                             className="w-14 h-14 object-cover rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] shrink-0"
                           />
                         ) : (
-                          <div className="w-14 h-14 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-xl shrink-0 flex items-center justify-center text-lg">
-                            🌿
+                          <div className="w-14 h-14 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-xl shrink-0 flex items-center justify-center text-emerald-500">
+                            <LucideIcon name="leaf" size={20} />
                           </div>
                         )}
                         <div className="flex-1 min-w-0">

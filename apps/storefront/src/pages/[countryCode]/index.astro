@@ -6,6 +6,7 @@ import { getRegionParams } from "@lib/params/region-params";
 import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
 import CeremonyGuide from "@components/CeremonyGuide.astro";
 import { FaqAccordion } from "@components/FaqAccordion";
+import Icon from "@components/icons/Icon.astro";
 import { getCollection } from "astro:content";
 import { useTranslations } from "@lib/i18n/utils";
 import { getLangFromRegion } from "@lib/i18n/config";
@@ -330,28 +331,36 @@ const schemaData = {
     <!-- Value Proposition / Trust Bar -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
       <div class="flex items-center gap-3 bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)]">
-        <span class="text-2xl">🌿</span>
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+          <Icon name="leaf" class="w-5 h-5" />
+        </div>
         <div class="text-xs">
           <strong class="block text-[var(--color-text-primary)]">{t("home.trust.ethical.title")}</strong>
           <span class="text-[var(--color-text-muted)]">{t("home.trust.ethical.desc")}</span>
         </div>
       </div>
       <div class="flex items-center gap-3 bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)]">
-        <span class="text-2xl">🪵</span>
+        <div class="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] border border-[var(--color-accent-gold)]/20 flex items-center justify-center shrink-0">
+          <Icon name="wand" class="w-5 h-5" />
+        </div>
         <div class="text-xs">
           <strong class="block text-[var(--color-text-primary)]">{t("home.trust.authentic.title")}</strong>
           <span class="text-[var(--color-text-muted)]">{t("home.trust.authentic.desc")}</span>
         </div>
       </div>
       <div class="flex items-center gap-3 bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)]">
-        <span class="text-2xl">🌱</span>
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+          <Icon name="sprout" class="w-5 h-5" />
+        </div>
         <div class="text-xs">
           <strong class="block text-[var(--color-text-primary)]">{t("home.trust.pledge.title")}</strong>
           <span class="text-[var(--color-text-muted)]">{t("home.trust.pledge.desc")}</span>
         </div>
       </div>
       <div class="flex items-center gap-3 bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)]">
-        <span class="text-2xl">📦</span>
+        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center shrink-0">
+          <Icon name="truck" class="w-5 h-5" />
+        </div>
         <div class="text-xs">
           <strong class="block text-[var(--color-text-primary)]">{t("home.trust.delivery.title")}</strong>
           <span class="text-[var(--color-text-muted)]">{t("home.trust.delivery.desc")}</span>
@@ -389,8 +398,8 @@ const schemaData = {
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
-                    <div class="w-full h-full flex items-center justify-center text-4xl text-[var(--color-accent-gold)]">
-                      🌿
+                    <div class="w-full h-full flex items-center justify-center text-[var(--color-accent-gold)]">
+                      <Icon name="leaf" class="w-12 h-12 opacity-60" />
                     </div>
                   )}
                 </div>
@@ -523,13 +532,13 @@ const schemaData = {
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
                       />
-                      <div class="w-full h-full items-center justify-center text-3xl text-[var(--color-accent-gold)]" style="display:none">
-                        📜
+                      <div class="w-full h-full items-center justify-center text-[var(--color-accent-gold)]" style="display:none">
+                        <Icon name="book-open" class="w-8 h-8 opacity-60" />
                       </div>
                     </>
                   ) : (
-                    <div class="w-full h-full flex items-center justify-center text-3xl text-[var(--color-accent-gold)]">
-                      📜
+                    <div class="w-full h-full flex items-center justify-center text-[var(--color-accent-gold)]">
+                      <Icon name="book-open" class="w-8 h-8 opacity-60" />
                     </div>
                   )}
                 </div>

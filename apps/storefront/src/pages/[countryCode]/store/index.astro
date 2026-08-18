@@ -5,6 +5,7 @@ import { listProducts, listCategories } from "@lib/data/products";
 import { getRegionParams } from "@lib/params/region-params";
 import ProductPreview from "@modules/products/components/product-preview/ProductPreview.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import Icon from "@components/icons/Icon.astro";
 import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
@@ -140,11 +141,11 @@ function getCategoryIcon(name: string, handle: string) {
           <!-- Sidebar Trust Banner -->
           <div class="pt-4 border-t border-[var(--color-border-subtle)] space-y-2 text-[10px] text-[var(--color-text-muted)]">
             <div class="flex items-center gap-2">
-              <span>🌿</span>
+              <Icon name="leaf" class="w-3.5 h-3.5 text-emerald-500 shrink-0" />
               <span>{t("store.trust_authentic")}</span>
             </div>
             <div class="flex items-center gap-2">
-              <span>📦</span>
+              <Icon name="package" class="w-3.5 h-3.5 text-[var(--color-accent-gold)] shrink-0" />
               <span>{t("store.trust_shipping")}</span>
             </div>
           </div>

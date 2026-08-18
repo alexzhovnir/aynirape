@@ -2,6 +2,7 @@
 import Layout from "@layouts/Layout.astro";
 import { getRegionParams } from "@lib/params/region-params";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import Icon from "@components/icons/Icon.astro";
 import { useTranslations } from "@lib/i18n/utils";
 
 export const getStaticPaths = getRegionParams;
@@ -97,7 +98,9 @@ const t = useTranslations(countryCode);
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
-          <div class="text-3xl mb-3">🏹</div>
+          <div class="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-3">
+            <Icon name="compass" class="w-5 h-5" />
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Huni Kuin (Kaxinawá)</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Acre, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -106,7 +109,9 @@ const t = useTranslations(countryCode);
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
-          <div class="text-3xl mb-3">🔥</div>
+          <div class="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-3">
+            <Icon name="flame" class="w-5 h-5" />
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Yawanawá</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Gregório River, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -115,7 +120,9 @@ const t = useTranslations(countryCode);
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
-          <div class="text-3xl mb-3">🦋</div>
+          <div class="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-3">
+            <Icon name="sparkles" class="w-5 h-5" />
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Nukini</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Juruá Valley, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -124,7 +131,9 @@ const t = useTranslations(countryCode);
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
-          <div class="text-3xl mb-3">🌿</div>
+          <div class="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-3">
+            <Icon name="leaf" class="w-5 h-5" />
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Katukina</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Panoan Nation, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -133,7 +142,9 @@ const t = useTranslations(countryCode);
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300">
-          <div class="text-3xl mb-3">🌸</div>
+          <div class="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-3">
+            <Icon name="flower-2" class="w-5 h-5" />
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-1">Shanenawa</h3>
           <span class="text-[10px] font-bold text-[var(--color-accent-gold)] uppercase tracking-wider block mb-2">Feijó, Brazil</span>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -142,7 +153,9 @@ const t = useTranslations(countryCode);
         </div>
 
         <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-all duration-300 flex flex-col justify-center text-center">
-          <span class="text-3xl mb-2">🤝</span>
+          <div class="w-10 h-10 rounded-xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mx-auto mb-3">
+            <Icon name="heart-handshake" class="w-5 h-5" />
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-base mb-1">{t("about_page.tribes.fair_trade_title")}</h3>
           <p class="text-xs text-[var(--color-text-muted)]">
             {t("about_page.tribes.fair_trade_desc")}
@@ -201,32 +214,48 @@ const t = useTranslations(countryCode);
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-          <span class="text-3xl mb-3 block">🤝</span>
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors flex flex-col items-start">
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+            </svg>
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">{t("about_page.pillars.p1_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
             {t("about_page.pillars.p1_desc")}
           </p>
         </div>
 
-        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-          <span class="text-3xl mb-3 block">🏹</span>
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors flex flex-col items-start">
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+            </svg>
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">{t("about_page.pillars.p2_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
             {t("about_page.pillars.p2_desc")}
           </p>
         </div>
 
-        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-          <span class="text-3xl mb-3 block">🪶</span>
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors flex flex-col items-start">
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 21l8.982-1.173L17 15l-7.187.904zM21 9.813L15.904 9 15 17.982 21 17l-.904-7.187z" />
+            </svg>
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">{t("about_page.pillars.p3_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
             {t("about_page.pillars.p3_desc")}
           </p>
         </div>
 
-        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors">
-          <span class="text-3xl mb-3 block">🌱</span>
+        <div class="bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm hover:border-[var(--color-accent-gold)] transition-colors flex flex-col items-start">
+          <div class="w-12 h-12 rounded-2xl bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mb-4 border border-[var(--color-accent-gold)]/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925-3.546 5.974 5.974 0 0 0-2.133-1A3.75 3.75 0 0 0 4.5 12a3.75 3.75 0 0 0 3.75 3.75h3.75Z" />
+            </svg>
+          </div>
           <h3 class="font-serif-heading font-bold text-[var(--color-text-primary)] text-lg mb-2">{t("about_page.pillars.p4_title")}</h3>
           <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
             {t("about_page.pillars.p4_desc")}

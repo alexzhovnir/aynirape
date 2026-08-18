@@ -8,14 +8,18 @@ import { useEffect, useMemo, useState } from "react";
 
 type Variant = {
   id: string;
-  options:
+  title?: string | null;
+  sku?: string | null;
+  size?: string | null;
+  options?:
     | {
         id: string;
         option_id?: string | null;
+        value?: string;
       }[]
     | null;
-  manage_inventory: boolean | null;
-  allow_backorder: boolean | null;
+  manage_inventory?: boolean | null;
+  allow_backorder?: boolean | null;
   inventory_quantity?: number | null;
   calculated_price?: {
     calculated_amount: number;

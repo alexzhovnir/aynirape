@@ -8,6 +8,7 @@ import { DeliveryStep } from "./DeliveryStep";
 import { OrderSummary } from "./OrderSummary";
 import { PaymentStep } from "./PaymentStep";
 import { ShippingAddressStep } from "./ShippingAddressStep";
+import { LucideIcon } from "@components/icons/LucideIcons";
 
 interface CheckoutPageProps {
   countryCode: string;
@@ -67,7 +68,9 @@ export const CheckoutPage = ({ countryCode, countries }: CheckoutPageProps) => {
   if (!cart || !cart.items?.length) {
     return (
       <div className="max-w-md mx-auto my-16 p-12 bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl shadow-xl text-center space-y-4">
-        <span className="text-4xl">🛍️</span>
+        <div className="w-16 h-16 rounded-full bg-[var(--color-accent-gold)]/10 text-[var(--color-accent-gold)] flex items-center justify-center mx-auto mb-2 border border-[var(--color-accent-gold)]/20">
+          <LucideIcon name="shopping-bag" size={32} />
+        </div>
         <h1 className="text-3xl font-serif-heading font-bold text-[var(--color-text-primary)]">Your Cart is Empty</h1>
         <p className="text-xs text-[var(--color-text-muted)]">Please add sacred items to your cart before checking out.</p>
         <a
