@@ -290,7 +290,7 @@ export const ConfirmedFallbackPage = ({
                           Bank Transfer Details (SEPA / SWIFT)
                         </h4>
                       </div>
-                      <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-xs bg-[var(--color-bg-surface-elevated)] p-3.5 rounded-xl border border-[var(--color-border-subtle)] font-mono">
+                      <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-xs bg-[var(--color-bg-surface-elevated)] p-3.5 rounded-xl border border-[var(--color-border-subtle)]">
                         <span className="text-[var(--color-text-muted)]">Bank Name:</span>
                         <span className="text-[var(--color-text-primary)] font-bold">Revolut Business</span>
                         <span className="text-[var(--color-text-muted)]">Holder:</span>

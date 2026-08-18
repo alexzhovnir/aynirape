@@ -5,13 +5,47 @@ function mapFallbackProduct(p: any) {
   const imageUrls = p.images && p.images.length > 0 ? p.images : [`/images/products/${p.handle}-0.webp`];
   const thumbnailUrl = imageUrls[0];
 
+  const optionId = `opt_${p.handle}_size`;
+  const isMultipleVariants = p.variants && p.variants.length > 1;
+  const optionTitle = p.category === "tepi-and-kuripe" || p.category === "ornaments-and-decoration" ? "Style" : "Weight";
+
+  const optionValues = (p.variants && p.variants.length > 0)
+    ? p.variants.map((v: any, index: number) => ({
+        id: `optval_${p.handle}_${index}`,
+        value: v.title || v.size || (index === 0 ? "10g" : index === 1 ? "20g" : "50g"),
+        option_id: optionId,
+      }))
+    : [
+        {
+          id: `optval_${p.handle}_0`,
+          value: "Standard",
+          option_id: optionId,
+        }
+      ];
+
+  const options = [
+    {
+      id: optionId,
+      title: optionTitle,
+      values: optionValues,
+    }
+  ];
+
   const variants = (p.variants && p.variants.length > 0)
     ? p.variants.map((v: any, index: number) => {
         const price = v.price || p.price || 14.95;
+        const optVal = optionValues[index] || { id: `optval_${p.handle}_${index}`, value: v.title || v.size || "10g", option_id: optionId };
         return {
           id: `var_${p.handle}_${index}`,
           title: v.title || v.size || "10g",
-          sku: `${p.handle}-${v.size || index}`,
+          sku: `${p.handle.toUpperCase()}-${(v.size || v.title || `${index + 1}`).toUpperCase()}`,
+          options: [
+            {
+              id: optVal.id,
+              option_id: optionId,
+              value: optVal.value,
+            }
+          ],
           calculated_price: {
             calculated_amount: price,
             original_amount: price,
@@ -27,7 +61,14 @@ function mapFallbackProduct(p: any) {
         {
           id: `var_${p.handle}_0`,
           title: "Standard",
-          sku: `${p.handle}-std`,
+          sku: `${p.handle.toUpperCase()}-STD`,
+          options: [
+            {
+              id: optionValues[0].id,
+              option_id: optionId,
+              value: optionValues[0].value,
+            }
+          ],
           calculated_price: {
             calculated_amount: p.price || 14.95,
             original_amount: p.price || 14.95,
@@ -49,6 +90,7 @@ function mapFallbackProduct(p: any) {
     description: p.description,
     thumbnail: thumbnailUrl,
     images: imageUrls.map((url: string, i: number) => ({ id: `img_${i}`, url })),
+    options,
     variants,
     categories: [
       {
@@ -66,7 +108,7 @@ export const listProducts = async (regionId: string, categoryId?: string) => {
   try {
     const { products } = await sdk.store.product.list({
       region_id: regionId,
-      fields: "*variants.calculated_price,*categories,*images",
+      fields: "*variants.calculated_price,*variants.options,*options,*options.values,*categories,*images",
       ...(categoryId ? { category_id: [categoryId] } : {}),
     });
     if (products && products.length > 0) {
@@ -120,7 +162,7 @@ export const retrieveProduct = async (
       handle: cleanHandle,
       region_id: regionId,
       fields:
-        "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,*categories,*images",
+        "*variants.calculated_price,+variants.inventory_quantity,*variants.images,*variants.options,*options,*options.values,+metadata,+tags,*categories,*images",
     });
 
     if (products && products.length > 0) {
@@ -130,7 +172,7 @@ export const retrieveProduct = async (
     const { product } = await sdk.store.product.retrieve(idOrHandle, {
       region_id: regionId,
       fields:
-        "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,*categories,*images",
+        "*variants.calculated_price,+variants.inventory_quantity,*variants.images,*variants.options,*options,*options.values,+metadata,+tags,*categories,*images",
     });
     if (product) return product;
   } catch (error) {

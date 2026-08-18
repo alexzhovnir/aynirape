@@ -141,12 +141,12 @@ const intensityLabel = metadata.intensity_label || (
 
 // Tribal Lineage Info
 const tribalName = metadata.tribal_lineage || (
-  titleLower.includes("yawanawa") ? "Yawanawá Tribe (Acre, Brazil)" :
-  titleLower.includes("huni kuin") ? "Huni Kuin / Kaxinawá Tribe (Brazil/Peru)" :
-  titleLower.includes("nukini") ? "Nukini Tribe (Serra do Divisor)" :
-  titleLower.includes("katukina") ? "Katukina Tribe (Amazonas)" :
-  titleLower.includes("shipibo") ? "Shipibo-Conibo Tradition (Pucallpa, Peru)" :
-  "Amazonian Sacred Lineage (Peru & Brazil)"
+  titleLower.includes("yawanawa") ? "Yawanawá Artisans (Acre, Brazil)" :
+  titleLower.includes("huni kuin") ? "Huni Kuin / Kaxinawá Artisans (Brazil & Peru)" :
+  titleLower.includes("nukini") ? "Nukini Artisans (Serra do Divisor, Brazil)" :
+  titleLower.includes("katukina") ? "Katukina Artisans (Amazonas, Brazil)" :
+  titleLower.includes("shipibo") ? "Shipibo-Conibo Artisans (Pucallpa, Peru)" :
+  "Indigenous Amazonian Tribes (Peru & Brazil)"
 );
 
 // Category-Tailored USPs
@@ -465,8 +465,8 @@ const displaySku = rawSku || generatedSku;
           <h1 class="text-3xl sm:text-4xl lg:text-4xl font-serif-heading font-bold text-[var(--color-text-primary)] leading-tight tracking-tight">
             {title}
           </h1>
-          <div class="text-[11px] font-mono text-[var(--color-text-muted)] tracking-wider mt-1.5 uppercase">
-            SKU: <span class="text-[var(--color-accent-gold)] font-bold">{displaySku}</span>
+          <div class="text-[11px] text-[var(--color-text-muted)] tracking-wider mt-1.5 uppercase font-medium">
+            SKU: <span id="product-sku" class="text-[var(--color-accent-gold)] font-bold">{displaySku}</span>
           </div>
         </div>
 
@@ -628,10 +628,10 @@ const displaySku = rawSku || generatedSku;
             <span class="text-[var(--color-accent-gold)] font-extrabold tracking-[0.2em] text-xs uppercase">{t("product_ui.heritage_title") || "Indigenous Ancestral Heritage"}</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-serif-heading font-bold text-[var(--color-text-primary)]">
-            {(t("product_ui.crafted_tribe") || "Crafted in Alignment with {0} Tribe").replace("{0}", tribalName)}
+            {(t("product_ui.crafted_tribe") || "Handcrafted Directly by {0}").replace("{0}", tribalName)}
           </h2>
           <p class="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed">
-            Every item in our collection is prepared or hand-carved in strict respect of sacred Amazonian tradition. Proceeds directly support indigenous artisan families, forest stewardship, and the preservation of ancestral shamanic knowledge.
+            {t("product_ui.heritage_desc") || "Every sacred blend, applicator, and artifact in our collection is 100% original, handcrafted directly by indigenous tribal artisans and master tabaqueiros in Peru and Brazil. Every purchase provides direct fair trade support, preserving ancestral forest wisdom."}
           </p>
         </div>
 
@@ -731,7 +731,7 @@ const displaySku = rawSku || generatedSku;
 
           <div class="bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)] space-y-1">
             <span class="text-[var(--color-text-muted)] font-medium">SKU / Item Code</span>
-            <p class="font-bold text-[var(--color-accent-gold)] text-sm font-mono">{displaySku}</p>
+            <p class="font-bold text-[var(--color-accent-gold)] text-sm">{displaySku}</p>
           </div>
 
           <div class="bg-[var(--color-bg-surface-elevated)] p-4 rounded-2xl border border-[var(--color-border-subtle)] space-y-1">

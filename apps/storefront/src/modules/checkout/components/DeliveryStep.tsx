@@ -177,7 +177,7 @@ export const DeliveryStep = ({
               const data = method.data as Record<string, unknown> | undefined;
               const targetPoint = data?.target_point as string | undefined;
               return targetPoint ? (
-                <p className="text-[var(--color-text-muted)] mt-1 font-mono">Locker Point: {targetPoint}</p>
+                <p className="text-[var(--color-text-muted)] mt-1">Locker Point: {targetPoint}</p>
               ) : null;
             })()}
           </div>
@@ -253,7 +253,7 @@ export const DeliveryStep = ({
                       {selectedLockerPoint ? (
                         <div className="flex items-center gap-2 text-xs text-[var(--color-text-primary)] mb-2">
                           <span className="font-bold">Selected Locker:</span>
-                          <span className="font-mono">{selectedLockerPoint.name}</span>
+                          <span>{selectedLockerPoint.name}</span>
                         </div>
                       ) : null}
                       <button

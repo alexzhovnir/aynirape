@@ -576,7 +576,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
               <span>📦</span>
               <span>Order History</span>
             </div>
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-stone-950/15">{orders.length}</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-950/15">{orders.length}</span>
           </button>
 
           <button
@@ -591,7 +591,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
               <span>❤️</span>
               <span>My Favorites</span>
             </div>
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-stone-950/15">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-950/15">
               {favoritesStore.length}
             </span>
           </button>
@@ -608,7 +608,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
               <span>★</span>
               <span>My Reviews</span>
             </div>
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-stone-950/15">{feedbacks.length}</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-950/15">{feedbacks.length}</span>
           </button>
 
           <button
@@ -662,7 +662,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                           <span className="text-[var(--color-text-muted)] font-medium block uppercase tracking-wider text-[10px]">
                             Order ID
                           </span>
-                          <span className="font-mono font-bold text-[var(--color-text-primary)] mt-1 block">
+                          <span className="font-bold text-[var(--color-text-primary)] mt-1 block">
                             {order.id}
                           </span>
                         </div>
@@ -846,7 +846,7 @@ export const ProfileDashboard = ({ countryCode }: ProfileDashboardProps) => {
                             <span key={i}>{i < fb.rating ? "★" : "☆"}</span>
                           ))}
                         </div>
-                        <span className="text-[10px] text-[var(--color-text-muted)] font-mono">
+                        <span className="text-[10px] text-[var(--color-text-muted)] font-medium">
                           {new Date(fb.created_at).toLocaleDateString()}
                         </span>
                       </div>

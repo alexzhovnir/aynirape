@@ -183,7 +183,7 @@ export const FloatingPlayer: React.FC<FloatingPlayerProps> = ({ countryCode = 'u
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
-            <div className="flex items-center justify-between text-[11px] font-mono text-[var(--color-text-muted)]">
+            <div className="flex items-center justify-between text-[11px] text-[var(--color-text-muted)] font-medium">
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>

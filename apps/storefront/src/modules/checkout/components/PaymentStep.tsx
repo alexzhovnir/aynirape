@@ -309,10 +309,10 @@ export const PaymentStep = ({
               <span className="text-[var(--color-text-primary)] font-bold">Ayni Rapé</span>
 
               <span className="text-[var(--color-text-muted)] font-medium">IBAN:</span>
-              <span className="text-[var(--color-text-primary)] font-mono font-bold tracking-wide">LT60 3250 0867 2850 7633</span>
+              <span className="text-[var(--color-text-primary)] font-bold tracking-wide">LT60 3250 0867 2850 7633</span>
 
               <span className="text-[var(--color-text-muted)] font-medium">SWIFT / BIC:</span>
-              <span className="text-[var(--color-text-primary)] font-mono font-bold">REVOLT21</span>
+              <span className="text-[var(--color-text-primary)] font-bold">REVOLT21</span>
 
               <span className="text-[var(--color-text-muted)] font-medium">Total Amount:</span>
               <span className="text-[var(--color-accent-gold)] font-extrabold text-sm">
@@ -320,7 +320,7 @@ export const PaymentStep = ({
               </span>
 
               <span className="text-[var(--color-text-muted)] font-medium">Payment Reference:</span>
-              <span className="text-[var(--color-text-primary)] font-mono font-bold">{cart.id?.slice(-8)?.toUpperCase() || "—"}</span>
+              <span className="text-[var(--color-text-primary)] font-bold">{cart.id?.slice(-8)?.toUpperCase() || "—"}</span>
             </div>
 
             <div className="flex items-start gap-2.5 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-900 dark:text-amber-200">

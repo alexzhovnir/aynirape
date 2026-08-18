@@ -108,7 +108,7 @@ function getCategoryIcon(name: string, handle: string) {
         <div class="hidden lg:flex flex-col gap-6 sticky top-28 bg-[var(--color-bg-surface-elevated)] p-6 rounded-3xl border border-[var(--color-border-subtle)] shadow-sm">
           <div class="flex justify-between items-center pb-3 border-b border-[var(--color-border-subtle)]">
             <h2 class="text-xs font-bold text-[var(--color-accent-gold)] uppercase tracking-wider">{t("store.categories")}</h2>
-            <span class="text-[10px] text-[var(--color-text-muted)] font-mono">{categories.length}</span>
+            <span class="text-[10px] text-[var(--color-text-muted)] font-medium">{categories.length}</span>
           </div>
 
           <nav class="flex flex-col gap-2">
@@ -120,7 +120,7 @@ function getCategoryIcon(name: string, handle: string) {
                 <Fragment set:html={getCategoryIcon("all", "all")} />
                 <span>{t("store.all_products")}</span>
               </div>
-              <span class="text-xs font-mono bg-stone-950/20 px-2 py-0.5 rounded-full">{products.length}</span>
+              <span class="text-xs font-bold bg-stone-950/20 px-2 py-0.5 rounded-full">{products.length}</span>
             </a>
             {
               categories?.map((cat) => (

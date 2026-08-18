@@ -148,7 +148,7 @@ export const SearchModal = ({ countryCode }: SearchModalProps) => {
               </svg>
             </button>
           ) : (
-            <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-xs text-[var(--color-text-tertiary)] bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-md font-mono">
+            <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-xs text-[var(--color-text-tertiary)] bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-md font-medium">
               ESC
             </kbd>
           )}

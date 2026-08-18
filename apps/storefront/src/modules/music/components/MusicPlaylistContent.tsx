@@ -112,7 +112,7 @@ export const MusicPlaylistContent: React.FC<MusicPlaylistContentProps> = ({ coun
               </div>
 
               <div className="flex items-center justify-between pt-2 border-t border-[var(--color-border-subtle)]">
-                <span className="text-xs font-mono text-[var(--color-text-muted)]">
+                <span className="text-xs text-[var(--color-text-muted)] font-medium">
                   {formatTime(currentTime)} / {formatTime(duration)}
                 </span>
 
@@ -228,7 +228,7 @@ export const MusicPlaylistContent: React.FC<MusicPlaylistContentProps> = ({ coun
               >
                 <div className="flex items-center gap-4 min-w-0 flex-1">
                   {/* Track Index / Play Indicator */}
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-mono font-bold text-[var(--color-text-muted)] group-hover:text-[var(--color-accent-gold)]">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold text-[var(--color-text-muted)] group-hover:text-[var(--color-accent-gold)]">
                     {isCurrentPlaying ? (
                       <div className="flex items-end gap-0.5 h-4">
                         <span className="w-1 bg-[var(--color-accent-gold)] rounded-full animate-bounce h-full" style={{ animationDelay: '0ms' }} />
@@ -266,7 +266,7 @@ export const MusicPlaylistContent: React.FC<MusicPlaylistContentProps> = ({ coun
                   <span className="hidden sm:inline-block px-2.5 py-1 rounded-full text-[10px] font-bold bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-secondary)] border border-[var(--color-border-subtle)]">
                     {track.categoryLabel}
                   </span>
-                  <span className="text-xs font-mono text-[var(--color-text-muted)]">{track.durationFormatted}</span>
+                  <span className="text-xs text-[var(--color-text-muted)] font-medium">{track.durationFormatted}</span>
 
                   <button
                     onClick={(e) => {
@@ -342,7 +342,7 @@ export const MusicPlaylistContent: React.FC<MusicPlaylistContentProps> = ({ coun
                     <span className="text-[10px] font-bold text-[var(--color-accent-emerald)] uppercase">
                       {track.categoryLabel}
                     </span>
-                    <span className="text-xs font-mono text-[var(--color-text-muted)]">{track.durationFormatted}</span>
+                    <span className="text-xs text-[var(--color-text-muted)] font-medium">{track.durationFormatted}</span>
                   </div>
 
                   <h3 className="text-base font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-gold)] transition-colors line-clamp-1">

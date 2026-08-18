@@ -193,7 +193,7 @@ const ReadOnlyView = ({
 
         <div>
           <p className="font-bold text-[var(--color-text-primary)] uppercase tracking-wider text-[10px] mb-2">Contact Info</p>
-          {cart.email && <p className="leading-relaxed font-mono">{cart.email}</p>}
+          {cart.email && <p className="leading-relaxed">{cart.email}</p>}
         </div>
 
         <div>

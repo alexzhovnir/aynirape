@@ -343,7 +343,8 @@ export const dictionaries: Record<string, any> = {
       guide_title: "Recommended Facilitation Guide:",
       guide_desc: "Start with a small pea-sized amount per nostril. Take a deep breath, ground your body, and observe the immediate clearing sensation.",
       heritage_title: "INDIGENOUS ANCESTRAL HERITAGE",
-      crafted_tribe: "Crafted in Alignment with {0} Tribe",
+      crafted_tribe: "Handcrafted Directly by {0}",
+      heritage_desc: "Every sacred blend, applicator, and artifact in our collection is 100% original, handcrafted directly by indigenous tribal artisans and master tabaqueiros in Peru and Brazil. Every purchase provides direct fair trade support, preserving ancestral forest wisdom.",
       weight: "Weight",
       share: "Share",
       featured_products: "FEATURED PRODUCTS"
@@ -754,7 +755,8 @@ export const dictionaries: Record<string, any> = {
       guide_title: "Empfohlene Anwendungsempfehlung:",
       guide_desc: "Beginnen Sie mit einer kleinen erbsengroßen Menge pro Nasenloch. Nehmen Sie einen tiefen Atemzug, erden Sie Ihren Körper und spüren Sie die sofortige klärende Wirkung.",
       heritage_title: "INDIGENES ERBE DER AHNEN",
-      crafted_tribe: "Hergestellt in Abstimmung mit dem {0}-Stamm",
+      crafted_tribe: "Direkt handgefertigt von {0}",
+      heritage_desc: "Jede heilige Mischung, jeder Applikator und jedes Artefakt in unserer Kollektion ist 100% Originalhandwerk, das direkt von indigenen Kunsthandwerkern und Tabaqueiro-Meistern in Peru und Brasilien hergestellt wird. Jeder Kauf unterstützt den fairen Direktkontakt und bewahrt das indigene Wissen des Regenwaldes.",
       weight: "Gewicht",
       share: "Teilen",
       featured_products: "EMPFOHLENE PRODUKTE"
@@ -1165,7 +1167,8 @@ export const dictionaries: Record<string, any> = {
       guide_title: "Guide de Facilitation Recommandé:",
       guide_desc: "Commencez par une petite quantité de la taille d'un pois par narine. Prenez une profonde inspiration, ancrez votre corps et observez la sensation de purification immédiate.",
       heritage_title: "HÉRITAGE ANCESTRAL INDIGÈNE",
-      crafted_tribe: "Fabriqué en harmonie avec la tribu {0}",
+      crafted_tribe: "Fait main directement par {0}",
+      heritage_desc: "Chaque mélange sacré, applicateur et artefact de notre collection est 100% original, fabriqué à la main directement par des artisans indigènes et des maîtres tabaqueiros au Pérou et au Brésil. Chaque achat offre un soutien équitable direct, préservant la sagesse ancestrale de la forêt.",
       weight: "Poids",
       share: "Partager",
       featured_products: "PRODUITS EN VEDETTE"
@@ -1576,7 +1579,8 @@ export const dictionaries: Record<string, any> = {
       guide_title: "Guía de Facilitación Recomendada:",
       guide_desc: "Comienza con una pequeña cantidad del tamaño de un guisante por fosa nasal. Inhala profundamente, enraíza tu cuerpo y observa la sensación inmediata de limpieza.",
       heritage_title: "HERENCIA ANCESTRAL INDÍGENA",
-      crafted_tribe: "Elaborado en alineación con la tribu {0}",
+      crafted_tribe: "Hecho a mano directamente por {0}",
+      heritage_desc: "Cada mezcla sagrada, aplicador y artefacto de nuestra colección es 100% original, elaborado a mano directamente por artesanos indígenas y maestros tabaqueiros en Perú y Brasil. Cada compra proporciona apoyo de comercio justo directo, preservando la sabiduría ancestral.",
       weight: "Peso",
       share: "Compartir",
       featured_products: "PRODUCTOS DESTACADOS"
@@ -1987,7 +1991,8 @@ export const dictionaries: Record<string, any> = {
       guide_title: "Guida di Facilitazione Consigliata:",
       guide_desc: "Inizia con una piccola quantità delle dimensioni di un pisello per narice. Fai un respiro profondo, radica il tuo corpo e osserva l'immediata sensazione di purificazione.",
       heritage_title: "EREDITÀ ANCESTRALE INDIGENA",
-      crafted_tribe: "Realizzato in armonia con la tribù {0}",
+      crafted_tribe: "Fatto a mano direttamente da {0}",
+      heritage_desc: "Ogni miscela sacra, applicatore e artefatto della nostra collezione è 100% originale, realizzato a mano direttamente da artigiani indigeni e maestri tabaqueiros in Perù e Brasile. Ogni acquisto offre supporto diretto e libero, preservando la saggezza ancestrale della foresta.",
       weight: "Peso",
       share: "Condividi",
       featured_products: "PRODOTTI IN EVIDENZA"
