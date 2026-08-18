@@ -4,6 +4,7 @@ import { ProductActions } from "./product-details/ProductActions";
 import ProductPreview from "./product-preview/ProductPreview.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import ShareButtons from "@components/ShareButtons.astro";
+import { ProductDescriptionDrawer } from "@components/ProductDescriptionDrawer";
 import Icon from "@components/icons/Icon.astro";
 import { getLangFromRegion } from "@lib/i18n/config";
 
@@ -494,17 +495,21 @@ const displaySku = rawSku || generatedSku;
           </span>
         </div>
 
-        <!-- Short Selling Excerpt -->
-        <div class="bg-[var(--color-bg-surface)] p-5 rounded-2xl border border-[var(--color-border-subtle)] space-y-3 shadow-inner">
-          <p class="font-medium text-xs sm:text-sm text-[var(--color-text-primary)] leading-relaxed">
-            {shortSellingDescription}
-          </p>
-          {secondaryDescription && (
-            <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border-subtle)] pt-2">
-              {secondaryDescription}
-            </p>
-          )}
-        </div>
+        <!-- Short Selling Excerpt with Read More Drawer Trigger -->
+        <ProductDescriptionDrawer
+          title={title}
+          thumbnail={thumbnail}
+          price={cheapestPrice?.calculated_price}
+          shortDescription={shortSellingDescription}
+          fullDescription={description || ""}
+          fullDescriptionHtml={fullDescriptionHtml}
+          ingredients={ingredients}
+          keyCharacteristics={keyCharacteristics}
+          tribalName={tribalName}
+          readMoreText={t("product_ui.read_more") || "Read full description..."}
+          drawerTitle={t("product_ui.drawer_title") || "Product Description & Sacred Wisdom"}
+          client:load
+        />
 
         <!-- Add to Cart & Favorites -->
         <div class="space-y-4 pt-2">

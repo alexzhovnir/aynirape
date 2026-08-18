@@ -347,6 +347,8 @@ export const dictionaries: Record<string, any> = {
       heritage_desc: "Every sacred blend, applicator, and artifact in our collection is 100% original, handcrafted directly by indigenous tribal artisans and master tabaqueiros in Peru and Brazil. Every purchase provides direct fair trade support, preserving ancestral forest wisdom.",
       weight: "Weight",
       share: "Share",
+      read_more: "Read full description...",
+      drawer_title: "Product Description & Sacred Wisdom",
       featured_products: "FEATURED PRODUCTS"
     },
     about_page: {
@@ -759,6 +761,8 @@ export const dictionaries: Record<string, any> = {
       heritage_desc: "Jede heilige Mischung, jeder Applikator und jedes Artefakt in unserer Kollektion ist 100% Originalhandwerk, das direkt von indigenen Kunsthandwerkern und Tabaqueiro-Meistern in Peru und Brasilien hergestellt wird. Jeder Kauf unterstützt den fairen Direktkontakt und bewahrt das indigene Wissen des Regenwaldes.",
       weight: "Gewicht",
       share: "Teilen",
+      read_more: "Vollständige Beschreibung lesen...",
+      drawer_title: "Produktbeschreibung & Zeremonielle Details",
       featured_products: "EMPFOHLENE PRODUKTE"
     },
     about_page: {
@@ -1171,6 +1175,8 @@ export const dictionaries: Record<string, any> = {
       heritage_desc: "Chaque mélange sacré, applicateur et artefact de notre collection est 100% original, fabriqué à la main directement par des artisans indigènes et des maîtres tabaqueiros au Pérou et au Brésil. Chaque achat offre un soutien équitable direct, préservant la sagesse ancestrale de la forêt.",
       weight: "Poids",
       share: "Partager",
+      read_more: "Lire la description complète...",
+      drawer_title: "Description du produit & Détails cérémoniels",
       featured_products: "PRODUITS EN VEDETTE"
     },
     about_page: {
@@ -1583,6 +1589,8 @@ export const dictionaries: Record<string, any> = {
       heritage_desc: "Cada mezcla sagrada, aplicador y artefacto de nuestra colección es 100% original, elaborado a mano directamente por artesanos indígenas y maestros tabaqueiros en Perú y Brasil. Cada compra proporciona apoyo de comercio justo directo, preservando la sabiduría ancestral.",
       weight: "Peso",
       share: "Compartir",
+      read_more: "Leer descripción completa...",
+      drawer_title: "Descripción del producto y detalles ceremoniales",
       featured_products: "PRODUCTOS DESTACADOS"
     },
     about_page: {
@@ -1995,6 +2003,8 @@ export const dictionaries: Record<string, any> = {
       heritage_desc: "Ogni miscela sacra, applicatore e artefatto della nostra collezione è 100% originale, realizzato a mano direttamente da artigiani indigeni e maestri tabaqueiros in Perù e Brasile. Ogni acquisto offre supporto diretto e libero, preservando la saggezza ancestrale della foresta.",
       weight: "Peso",
       share: "Condividi",
+      read_more: "Leggi la descrizione completa...",
+      drawer_title: "Descrizione del prodotto e dettagli cerimoniali",
       featured_products: "PRODOTTI IN EVIDENZA"
     },
     about_page: {
