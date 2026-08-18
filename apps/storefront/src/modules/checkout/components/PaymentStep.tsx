@@ -5,6 +5,7 @@ import type { StoreCart, StorePaymentProvider } from "@medusajs/types";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { LucideIcon, type IconName } from "@components/icons/LucideIcons";
 import { PayPalCardFields } from "./PayPalCardFields";
+import { PayPalApplePay } from "./PayPalApplePay";
 import { useEffect, useState } from "react";
 
 interface PaymentStepProps {
@@ -249,9 +250,16 @@ export const PaymentStep = ({
                 clientId: paypalClientId,
                 currency: currencyCode,
                 intent: "capture",
-                components: "buttons,card-fields",
+                components: "buttons,card-fields,applepay",
               }}
             >
+              <PayPalApplePay
+                cart={cart}
+                countryCode={countryCode}
+                isPlacing={isPlacing}
+                onPlaceOrder={handlePlaceOrder}
+                onError={(msg) => setError(msg)}
+              />
               <PayPalCardFields
                 cartTotal={cart.total || 0}
                 currencyCode={currencyCode}
