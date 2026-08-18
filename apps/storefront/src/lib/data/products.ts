@@ -12,7 +12,7 @@ function mapFallbackProduct(p: any) {
   const optionValues = (p.variants && p.variants.length > 0)
     ? p.variants.map((v: any, index: number) => ({
         id: `optval_${p.handle}_${index}`,
-        value: v.title || v.size || (index === 0 ? "10g" : index === 1 ? "20g" : "50g"),
+        value: v.title || v.size || (index === 0 ? "5g" : index === 1 ? "10g" : "15g"),
         option_id: optionId,
       }))
     : [
@@ -34,10 +34,10 @@ function mapFallbackProduct(p: any) {
   const variants = (p.variants && p.variants.length > 0)
     ? p.variants.map((v: any, index: number) => {
         const price = v.price || p.price || 14.95;
-        const optVal = optionValues[index] || { id: `optval_${p.handle}_${index}`, value: v.title || v.size || "10g", option_id: optionId };
+        const optVal = optionValues[index] || { id: `optval_${p.handle}_${index}`, value: v.title || v.size || "5g", option_id: optionId };
         return {
           id: `var_${p.handle}_${index}`,
-          title: v.title || v.size || "10g",
+          title: v.title || v.size || "5g",
           sku: `${p.handle.toUpperCase()}-${(v.size || v.title || `${index + 1}`).toUpperCase()}`,
           options: [
             {
