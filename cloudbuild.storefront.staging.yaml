@@ -1,7 +1,7 @@
 substitutions:
   _PUBLIC_MEDUSA_BACKEND_URL: "https://staging---aynirape-backend-w5w74qgecq-ew.a.run.app"
-  _PUBLIC_MEDUSA_PUBLISHABLE_KEY: "pk_b91f9b8b65701c0000b83d80f2f74711e8d32d431fe683daf6f393930bbc4f6d"
-  _DEFAULT_REGION: "us"
+  _PUBLIC_MEDUSA_PUBLISHABLE_KEY: "pk_c6b24335377cb6f54c7230d121c1a81e66adbecef50c59956c0bc72838367aae"
+  _DEFAULT_REGION: "gb"
   _PUBLIC_SITE_URL: "https://staging---aynirape-storefront-w5w74qgecq-ew.a.run.app"
   _PUBLIC_PAYPAL_CLIENT_ID: "ARspqmc1uS0d-DJ70ERG9FBN4-dfaKHjZaMvdoBdwRbTV8T8PeJTYEulFoVz2rHDFE26IQWmhZ4o327E"
 
