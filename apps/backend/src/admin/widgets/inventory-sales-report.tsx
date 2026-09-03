@@ -19,6 +19,7 @@ type SalesRow = {
   reserved_quantity: number;
   stocked_quantity: number;
   weight: string | null;
+  options: string;
   product_title: string | null;
   category_id: string | null;
   category_name: string | null;
@@ -156,6 +157,7 @@ const InventorySalesReportWidget = () => {
               <Table.HeaderCell>Title</Table.HeaderCell>
               <Table.HeaderCell>SKU</Table.HeaderCell>
               <Table.HeaderCell>Category</Table.HeaderCell>
+              <Table.HeaderCell>Options</Table.HeaderCell>
               <Table.HeaderCell>Weight</Table.HeaderCell>
               <Table.HeaderCell className="text-right">Reserved</Table.HeaderCell>
               <Table.HeaderCell className="text-right">In stock</Table.HeaderCell>
@@ -168,6 +170,7 @@ const InventorySalesReportWidget = () => {
                 <Table.Cell>{row.product_title ?? row.title ?? "—"}</Table.Cell>
                 <Table.Cell>{row.sku ?? "—"}</Table.Cell>
                 <Table.Cell>{row.category_name ?? "—"}</Table.Cell>
+                <Table.Cell>{row.options || "—"}</Table.Cell>
                 <Table.Cell>{row.weight ?? "—"}</Table.Cell>
                 <Table.Cell className="text-right">
                   {numberFormatter.format(row.reserved_quantity)}

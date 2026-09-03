@@ -22,6 +22,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       "reserved_quantity",
       "stocked_quantity",
       "variants.title",
+      "variants.options.value",
+      "variants.options.option.title",
       "variants.product.title",
       "variants.product.categories.id",
       "variants.product.categories.name",

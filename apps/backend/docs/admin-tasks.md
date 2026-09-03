@@ -115,16 +115,109 @@ Reserved In stock и продано"
   список и итоги; фильтр по дате (`date_to` вчерашним днём) корректно
   занулил Sold, включение сегодняшней даты вернуло его обратно.
 
+## 7. Стоимость доставки в чекауте и бесплатная доставка от €150
+
+**Запрос:** "на этапе оформления заказа не указывать доставку free, а добавлять
+стоимость доставки после выбора способа доставки + сделать бесплатную доставку
+заказов на сумму от 150 евро"
+
+**Статус:** ✅ Готово
+
+**Часть 1 — "FREE" до выбора способа доставки.** `cart.shipping_total` равен 0
+и когда доставка бесплатна, и когда способ ещё не выбран, а сводка отличала
+только по нулю. Теперь состояние определяется наличием `cart.shipping_methods`.
+
+- [shipping-display.ts](../../storefront/src/lib/utils/shipping-display.ts) —
+  чистая функция состояния (`pending` / `free` / `amount`)
+- [OrderSummary.tsx](../../storefront/src/modules/checkout/components/OrderSummary.tsx)
+  — на шаге 1 показывает "Not selected" вместо "FREE"
+- Тесты: [shipping-display.test.ts](../../storefront/src/lib/utils/shipping-display.test.ts) — 7 тестов
+
+**Часть 2 — бесплатная доставка от €150.** Правила промоушенов в Medusa
+v2.17.2 поддерживают только Customer Group / Region / Country / Sales Channel /
+Currency Code — порога по сумме заказа среди них нет. Поэтому сделано через
+штатный воркфлоу-хук `setShippingOptionsContext` + правила shipping options:
+хук считает `free_shipping_eligible` из `cart.item_total`, а опции доставки
+отфильтрованы по этому признаку. Логика на бэкенде, обойти с фронта нельзя.
+
+- [free-shipping.ts](../src/utils/free-shipping.ts) — порог и вычисление признака
+- [free-shipping-context.ts](../src/workflows/hooks/free-shipping-context.ts) —
+  хук на обоих воркфлоу (список опций и добавление метода в корзину)
+- [free-shipping-over-threshold.ts](../src/migration-scripts/free-shipping-over-threshold.ts)
+  — миграция: ограничивает платную "Standard Shipping" корзинами до €150 и
+  создаёт "Free Shipping" (€0) для корзин от €150
+- Тесты: [free-shipping.unit.spec.ts](../src/utils/__tests__/free-shipping.unit.spec.ts) — 10 тестов
+
+Проверено вживую: корзина €42 → предлагается Standard Shipping €5 (итого €47);
+корзина €168 → платная опция скрыта, предлагается Free Shipping €0 (итого €168).
+DHL Express (€12) остаётся платным в обоих случаях.
+
+## 8. Название товара в Title и колонка Options в Inventory
+
+**Запрос:** "в тайтл добавляем название товара, добавляем options где будет все
+опции, вес, цвет, материал"
+
+**Статус:** ✅ Готово
+
+**Title.** Inventory item создаётся с названием варианта ("20g", "Default"),
+по которому не понять товар. Исправлено на уровне данных, а не UI — поэтому
+чинится и нативная таблица, и карточка товара, и резервации.
+
+- [inventory-title.ts](../src/utils/inventory-title.ts) — сборка
+  "&lt;Товар&gt; — &lt;вариант&gt;" ("Default" отбрасывается: "Palo Santo")
+- [post-seed-inventory-item-titles.ts](../src/migration-scripts/post-seed-inventory-item-titles.ts)
+  — переименование существующих позиций (28 шт. на сиде)
+
+**Options.** Нативную таблицу колонкой расширить нельзя (то же ограничение, что
+и с "Продано"), поэтому колонка добавлена в панель "Sales report" под ней.
+Показывает все опции варианта: "Weight: 20g · Color: Red · Material: Teak" —
+сейчас в каталоге заведена только опция Weight, цвет и материал появятся
+автоматически, как только их добавят в товары.
+
+- `formatVariantOptions` в [inventory-title.ts](../src/utils/inventory-title.ts)
+- Тесты: [inventory-title.unit.spec.ts](../src/utils/__tests__/inventory-title.unit.spec.ts) — 11 тестов
+
+**Попутно исправлено:** миграционные скрипты выполняются по алфавиту, из-за чего
+на чистой БД настройка бесплатной доставки отрабатывала до сида и молча
+пропускалась. Скрипты переименованы в `post-seed-*`, порядок проверен на пустой
+базе.
+
+## 9. Способ оплаты и статус оплаты в заказах
+
+**Запрос:** "в заказах добавить пеймент метод и статус оплаты в колонки заказов
+и карточку заказа"
+
+**Статус:** ✅ Готово
+
+**Статус оплаты** уже есть нативно — колонка "Payment" в списке заказов и бейдж
+в шапке карточки. Не дублировал.
+
+**Способ оплаты** нигде не выводился: в нативной секции Payments показывается
+сырой id провайдера (`Pp_system_default`), в списке заказов его нет вовсе.
+
+- [payment-method.ts](../src/utils/payment-method.ts) — `pp_paypal_paypal` →
+  "PayPal", `pp_bank-transfer_bank-transfer` → "Bank transfer",
+  `pp_system_default` → "Manual", остальные приводятся к читаемому виду
+- [custom/order-payments/route.ts](../src/api/admin/custom/order-payments/route.ts)
+  — эндпоинт: метод оплаты и статус платёжной коллекции по заказам
+- [order-payment-method.tsx](../src/admin/widgets/order-payment-method.tsx) —
+  блок "Payment" в карточке заказа (Method + Status)
+- [order-list-payment-methods.tsx](../src/admin/widgets/order-list-payment-methods.tsx)
+  — панель "Payment methods" под списком заказов (колонку в нативную таблицу
+  добавить нельзя — то же ограничение, что и раньше)
+- Тесты: [payment-method.unit.spec.ts](../src/utils/__tests__/payment-method.unit.spec.ts) — 10 тестов
+
 ## Итоговое покрытие тестами
 
 ```
-Test Suites: 6 passed, 6 total
-Tests:       44 passed, 44 total
+backend    Test Suites: 9 passed  |  Tests: 75 passed
+storefront Test Files:  4 passed  |  Tests: 25 passed
 ```
 
 Новые файлы тестов за эту сессию: `order-summary.unit.spec.ts` (4),
-`inventory-sales.unit.spec.ts` (15, включая новые тесты на маппинг),
-`sort-products.test.ts` (7, на стороне storefront).
+`inventory-sales.unit.spec.ts` (15, включая тесты на маппинг),
+`free-shipping.unit.spec.ts` (10), а на стороне storefront —
+`sort-products.test.ts` (7) и `shipping-display.test.ts` (7).
 
 ## Не сделано / вне рамок
 

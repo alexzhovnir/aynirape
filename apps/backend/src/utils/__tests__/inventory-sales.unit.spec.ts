@@ -133,6 +133,7 @@ describe("mapInventoryItemToRow", () => {
       variants: [
         {
           title: "5g",
+          options: [{ value: "5g", option: { title: "Weight" } }],
           product: {
             title: "Nukini Sansara",
             categories: [{ id: "cat_1", name: "Rapé" }],
@@ -148,6 +149,7 @@ describe("mapInventoryItemToRow", () => {
       reserved_quantity: 2,
       stocked_quantity: 100,
       weight: "5g",
+      options: "Weight: 5g",
       product_title: "Nukini Sansara",
       category_id: "cat_1",
       category_name: "Rapé",
@@ -164,6 +166,7 @@ describe("mapInventoryItemToRow", () => {
       reserved_quantity: 0,
       stocked_quantity: 0,
       weight: null,
+      options: "",
       product_title: null,
       category_id: null,
       category_name: null,

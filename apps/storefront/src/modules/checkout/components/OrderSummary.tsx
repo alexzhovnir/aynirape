@@ -1,4 +1,5 @@
 import { convertToLocale } from "@lib/utils/money";
+import { getShippingDisplay } from "@lib/utils/shipping-display";
 import type { StoreCart } from "@medusajs/types";
 
 interface OrderSummaryProps {
@@ -7,6 +8,7 @@ interface OrderSummaryProps {
 
 export const OrderSummary = ({ cart }: OrderSummaryProps) => {
   const currencyCode = cart.currency_code || "USD";
+  const shipping = getShippingDisplay(cart);
 
   return (
     <div className="bg-[var(--color-bg-surface-elevated)] border border-[var(--color-border-subtle)] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 sticky top-8">
@@ -30,14 +32,16 @@ export const OrderSummary = ({ cart }: OrderSummaryProps) => {
         <div className="flex justify-between text-[var(--color-text-secondary)]">
           <span>Shipping</span>
           <span className="font-semibold text-[var(--color-text-primary)]">
-            {cart.shipping_total === 0 ? (
-              <span className="text-[var(--color-accent-gold)] font-bold">FREE</span>
-            ) : (
-              convertToLocale({
-                amount: cart.shipping_total || 0,
-                currencyCode,
-              })
+            {shipping.kind === "pending" && (
+              <span className="text-[var(--color-text-muted)] font-normal">
+                Not selected
+              </span>
             )}
+            {shipping.kind === "free" && (
+              <span className="text-[var(--color-accent-gold)] font-bold">FREE</span>
+            )}
+            {shipping.kind === "amount" &&
+              convertToLocale({ amount: shipping.amount, currencyCode })}
           </span>
         </div>
 

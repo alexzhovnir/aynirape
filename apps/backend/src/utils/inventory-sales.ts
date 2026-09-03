@@ -1,3 +1,5 @@
+import { formatVariantOptions, type VariantOption } from "./inventory-title";
+
 export type InventoryItemRow = {
   id: string;
   sku: string | null;
@@ -5,6 +7,7 @@ export type InventoryItemRow = {
   reserved_quantity: number;
   stocked_quantity: number;
   weight: string | null;
+  options: string;
   product_title: string | null;
   category_id: string | null;
   category_name: string | null;
@@ -36,6 +39,7 @@ export type RawInventoryItem = {
   stocked_quantity?: number | null;
   variants?: Array<{
     title?: string | null;
+    options?: VariantOption[] | null;
     product?: {
       title?: string | null;
       categories?: Array<{ id?: string | null; name?: string | null }> | null;
@@ -54,6 +58,7 @@ export function mapInventoryItemToRow(item: RawInventoryItem): InventoryItemRow 
     reserved_quantity: item.reserved_quantity ?? 0,
     stocked_quantity: item.stocked_quantity ?? 0,
     weight: variant?.title ?? null,
+    options: formatVariantOptions(variant?.options),
     product_title: variant?.product?.title ?? null,
     category_id: category?.id ?? null,
     category_name: category?.name ?? null,
