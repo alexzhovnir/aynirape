@@ -53,8 +53,8 @@ const bestsellersList = bestsellers.length > 0 ? bestsellers : products;
 const rapeProduct = products.find(p => p.handle === 'nukini-sansara' || p.categories?.some(c => c.handle?.includes('rape')));
 const tepiProduct = products.find(p => p.handle === 'kuripe-colibri-teak' || p.categories?.some(c => c.handle?.includes('tepi')));
 const aromaticsProduct = products.find(p => p.handle === 'agua-de-florida' || p.categories?.some(c => c.handle?.includes('aromatics')));
-const supplementsProduct = products.find(p => p.categories?.some(c => c.handle?.includes('supplements'))) || products[3];
-const ornamentsProduct = products.find(p => p.categories?.some(c => c.handle?.includes('ornament'))) || products[4];
+const supplementsProduct = products.find(p => p.handle === 'maca-root-powder' || p.categories?.some(c => c.handle?.includes('supplements')));
+const ornamentsProduct = products.find(p => p.handle === 'huayruro-seeds-bracelet' || p.categories?.some(c => c.handle?.includes('ornament')));
 
 const featuredCategories = [
   {

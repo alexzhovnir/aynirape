@@ -1,0 +1,11 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-f"
+      - "apps/backend/Dockerfile"
+      - "-t"
+      - "europe-west1-docker.pkg.dev/project-46ed8783-a1b4-42b9-9f5/aynirape/backend:staging"
+      - "."
+images:
+  - "europe-west1-docker.pkg.dev/project-46ed8783-a1b4-42b9-9f5/aynirape/backend:staging"

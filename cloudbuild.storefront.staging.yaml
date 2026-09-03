@@ -1,0 +1,28 @@
+substitutions:
+  _PUBLIC_MEDUSA_BACKEND_URL: "https://staging---aynirape-backend-w5w74qgecq-ew.a.run.app"
+  _PUBLIC_MEDUSA_PUBLISHABLE_KEY: "pk_b91f9b8b65701c0000b83d80f2f74711e8d32d431fe683daf6f393930bbc4f6d"
+  _DEFAULT_REGION: "us"
+  _PUBLIC_SITE_URL: "https://staging---aynirape-storefront-w5w74qgecq-ew.a.run.app"
+  _PUBLIC_PAYPAL_CLIENT_ID: "ARspqmc1uS0d-DJ70ERG9FBN4-dfaKHjZaMvdoBdwRbTV8T8PeJTYEulFoVz2rHDFE26IQWmhZ4o327E"
+
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-f"
+      - "apps/storefront/Dockerfile"
+      - "-t"
+      - "europe-west1-docker.pkg.dev/project-46ed8783-a1b4-42b9-9f5/aynirape/storefront:staging"
+      - "--build-arg"
+      - "PUBLIC_MEDUSA_BACKEND_URL=${_PUBLIC_MEDUSA_BACKEND_URL}"
+      - "--build-arg"
+      - "PUBLIC_MEDUSA_PUBLISHABLE_KEY=${_PUBLIC_MEDUSA_PUBLISHABLE_KEY}"
+      - "--build-arg"
+      - "DEFAULT_REGION=${_DEFAULT_REGION}"
+      - "--build-arg"
+      - "PUBLIC_SITE_URL=${_PUBLIC_SITE_URL}"
+      - "--build-arg"
+      - "PUBLIC_PAYPAL_CLIENT_ID=${_PUBLIC_PAYPAL_CLIENT_ID}"
+      - "."
+images:
+  - "europe-west1-docker.pkg.dev/project-46ed8783-a1b4-42b9-9f5/aynirape/storefront:staging"

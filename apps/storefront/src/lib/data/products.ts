@@ -1,4 +1,5 @@
 import { sdk } from "@lib/sdk";
+import { sortProductsByDisplayOrder } from "@lib/utils/sort-products";
 import fallbackProductsData from "./products.json";
 
 function mapFallbackProduct(p: any) {
@@ -150,7 +151,7 @@ export const listProducts = async (regionId: string, categoryId?: string) => {
       ...(categoryId ? { category_id: [categoryId] } : {}),
     });
     if (products && products.length > 0) {
-      return products.map(enrichProductWithRichData);
+      return sortProductsByDisplayOrder(products.map(enrichProductWithRichData));
     }
   } catch (error) {
     console.error("listProducts fetch error:", error);
