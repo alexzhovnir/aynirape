@@ -13,6 +13,7 @@ const item = (overrides: Partial<InventoryItemRow> = {}): InventoryItemRow => ({
   reserved_quantity: 0,
   stocked_quantity: 100,
   weight: "10g",
+  options: "Weight: 10g",
   product_title: "Product",
   category_id: "cat_1",
   category_name: "Category",
